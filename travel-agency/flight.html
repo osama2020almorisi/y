@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>حجز الطيران - أمان للسفريات</title>
+  <meta name="description" content="احجز رحلتك بأفضل الأسعار والعروض الحصرية مع خدمة حجز الطيران لدينا">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3a4bdc;
+      --secondary-color: #5f2caa;
+      --accent-color: #ff6b35;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Tajawal', sans-serif;
+      margin: 0;
+      background: var(--light-color);
+      color: var(--dark-color);
+      line-height: 1.6;
+    }
+    
+    /* Header Styles */
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      padding: 20px;
+      color: white;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo i {
+      margin-left: 10px;
+    }
+    
+    .back-button {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: var(--transition);
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .back-button i {
+      margin-right: 5px;
+    }
+    
+    /* Search Section */
+    .search-container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+    
+    .search-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 20px;
+      position: relative;
+      top: -20px;
+    }
+    
+    .search-tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 20px;
+    }
+    
+    .search-tab {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 16px;
+      color: #666;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .search-tab.active {
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+    
+    .search-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--primary-color);
+    }
+    
+    .search-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 16px;
+      transition: var(--transition);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(58, 75, 220, 0.1);
+    }
+    
+    .search-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: var(--border-radius);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      grid-column: span 2;
+    }
+    
+    .search-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(58, 75, 220, 0.2);
+    }
+    
+    .search-btn i {
+      margin-left: 8px;
+    }
+    
+    /* Filters Section */
+    .filters-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+      align-items: center;
+    }
+    
+    .filter-tag {
+      padding: 8px 15px;
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+    }
+    
+    .filter-tag:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    .filter-tag.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    
+    .filter-tag i {
+      margin-left: 5px;
+    }
+    
+    .sort-by {
+      margin-right: auto;
+      display: flex;
+      align-items: center;
+    }
+    
+    .sort-by select {
+      border: none;
+      background: none;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 14px;
+      color: #555;
+      padding: 5px;
+    }
+    
+    /* Flights List */
+    .flights-container {
+      max-width: 1200px;
+      margin: 0 auto 100px;
+      padding: 0 15px;
+    }
+    
+    .flight-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+    
+    .flight-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .flight-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .airline-info {
+      display: flex;
+      align-items: center;
+    }
+    
+    .airline-logo {
+      width: 40px;
+      height: 40px;
+      margin-left: 10px;
+      object-fit: contain;
+    }
+    
+    .flight-duration {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .duration-time {
+      font-size: 18px;
+      font-weight: 500;
+    }
+    
+    .duration-stops {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .flight-price {
+      text-align: left;
+      min-width: 120px;
+    }
+    
+    .price-amount {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    
+    .price-details {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .flight-details {
+      display: flex;
+      padding: 15px 20px;
+    }
+    
+    .flight-segment {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .segment-time {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .segment-date {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .segment-airport {
+      font-size: 14px;
+      color: #555;
+      margin-top: 5px;
+    }
+    
+    .flight-arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+    }
+    
+    .flight-arrow i {
+      color: var(--primary-color);
+    }
+    
+    .flight-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-top: 1px solid #eee;
+    }
+    
+    .flight-badges {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .flight-badge {
+      background: #f5f5f5;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .flight-badge i {
+      margin-left: 5px;
+      color: var(--primary-color);
+    }
+    
+    .book-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: var(--border-radius);
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+    }
+    
+    .book-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    .book-btn i {
+      margin-left: 8px;
+    }
+    
+    /* Flight Details Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1;
+    }
+    
+    /* Footer Navigation */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #eee;
+      padding: 10px 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+      z-index: 100;
+    }
+    
+    footer .nav-item {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 10px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    footer .nav-item:hover {
+      color: var(--primary-color);
+    }
+    
+    footer .nav-item.active {
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+    
+    footer .nav-item i {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+    
+    footer .nav-item.active i {
+      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .flight-details {
+        flex-direction: column;
+      }
+      
+      .flight-segment {
+        margin-bottom: 15px;
+      }
+      
+      .flight-arrow {
+        transform: rotate(90deg);
+        padding: 10px 0;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .search-form {
+        grid-template-columns: 1fr;
+      }
+      
+      .search-btn {
+        grid-column: span 1;
+      }
+      
+      .filters-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .sort-by {
+        margin-right: 0;
+        margin-top: 10px;
+      }
+      
+      .flight-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .flight-duration {
+        margin: 10px 0;
+        text-align: right;
+      }
+      
+      .flight-price {
+        width: 100%;
+        text-align: right;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      footer .nav-item span {
+        display: none;
+      }
+      
+      footer .nav-item i {
+        margin-bottom: 0;
+        font-size: 24px;
+      }
+      
+      .flight-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .book-btn {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <button class="back-button" onclick="window.history.back()">
+      <i class="fas fa-arrow-right"></i>
+      رجوع
+    </button>
+    <div class="logo">
+      <i class="fas fa-plane"></i>
+      حجز الطيران
+    </div>
+    <div></div> <!-- Empty div for balance -->
+  </div>
+</header>
+
+<div class="search-container">
+  <div class="search-card">
+    <div class="search-tabs">
+      <button class="search-tab active">ذهاب وعودة</button>
+      <button class="search-tab">ذهاب فقط</button>
+      <button class="search-tab">رحلات متعددة</button>
+    </div>
+    
+    <form class="search-form">
+      <div class="form-group">
+        <label for="origin">من</label>
+        <input type="text" id="origin" class="form-control" placeholder="المدينة أو المطار">
+      </div>
+      
+      <div class="form-group">
+        <label for="destination">إلى</label>
+        <input type="text" id="destination" class="form-control" placeholder="المدينة أو المطار">
+      </div>
+      
+      <div class="form-group">
+        <label for="departure">تاريخ المغادرة</label>
+        <input type="date" id="departure" class="form-control">
+      </div>
+      
+      <div class="form-group">
+        <label for="return">تاريخ العودة</label>
+        <input type="date" id="return" class="form-control">
+      </div>
+      
+      <div class="form-group">
+        <label for="passengers">الركاب</label>
+        <select id="passengers" class="form-control">
+          <option value="1">1 راكب</option>
+          <option value="2">2 ركاب</option>
+          <option value="3">3 ركاب</option>
+          <option value="4">4 ركاب</option>
+          <option value="family">عائلة</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="class">فئة السفر</label>
+        <select id="class" class="form-control">
+          <option value="economy">اقتصادية</option>
+          <option value="business">رجال الأعمال</option>
+          <option value="first">الأولى</option>
+        </select>
+      </div>
+      
+      <button type="submit" class="search-btn">
+        بحث عن الرحلات
+        <i class="fas fa-search"></i>
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="flights-container">
+  <div class="filters-container">
+    <div class="filter-tag active"><i class="fas fa-clock"></i> الأقرب</div>
+    <div class="filter-tag"><i class="fas fa-dollar-sign"></i> الأرخص</div>
+    <div class="filter-tag"><i class="fas fa-star"></i> الأفضل تقييماً</div>
+    <div class="filter-tag"><i class="fas fa-clock"></i> أقل مدة</div>
+    <div class="filter-tag"><i class="fas fa-exchange-alt"></i> بدون توقف</div>
+    
+    <div class="sort-by">
+      <span>ترتيب حسب:</span>
+      <select>
+        <option>السعر (من الأقل)</option>
+        <option>السعر (من الأعلى)</option>
+        <option>وقت المغادرة</option>
+        <option>وقت الوصول</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="flight-card" onclick="showFlightModal()">
+    <div class="flight-header">
+      <div class="airline-info">
+        <img src="https://logo.clearbit.com/saudia.com" alt="الخطوط السعودية" class="airline-logo">
+        <span>الخطوط السعودية</span>
+      </div>
+      
+      <div class="flight-duration">
+        <div class="duration-time">2h 45m</div>
+        <div class="duration-stops">رحلة مباشرة</div>
+      </div>
+      
+      <div class="flight-price">
+        <div class="price-amount">650 ريال</div>
+        <div class="price-details">شامل الضرائب</div>
+      </div>
+    </div>
+    
+    <div class="flight-details">
+      <div class="flight-segment">
+        <div class="segment-time">08:00 ص</div>
+        <div class="segment-date">10 يونيو 2023</div>
+        <div class="segment-airport">RUH - الرياض</div>
+      </div>
+      
+      <div class="flight-arrow">
+        <i class="fas fa-long-arrow-alt-left"></i>
+      </div>
+      
+      <div class="flight-segment">
+        <div class="segment-time">10:45 ص</div>
+        <div class="segment-date">10 يونيو 2023</div>
+        <div class="segment-airport">DXB - دبي</div>
+      </div>
+    </div>
+    
+    <div class="flight-footer">
+      <div class="flight-badges">
+        <div class="flight-badge"><i class="fas fa-utensils"></i> وجبة</div>
+        <div class="flight-badge"><i class="fas fa-suitcase"></i> 30kg</div>
+        <div class="flight-badge"><i class="fas fa-tv"></i> ترفيه</div>
+      </div>
+      
+      <button class="book-btn">
+        احجز الآن
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="flight-card" onclick="showFlightModal()">
+    <div class="flight-header">
+      <div class="airline-info">
+        <img src="https://logo.clearbit.com/emirates.com" alt="طيران الإمارات" class="airline-logo">
+        <span>طيران الإمارات</span>
+      </div>
+      
+      <div class="flight-duration">
+        <div class="duration-time">3h 15m</div>
+        <div class="duration-stops">رحلة مباشرة</div>
+      </div>
+      
+      <div class="flight-price">
+        <div class="price-amount">720 ريال</div>
+        <div class="price-details">شامل الضرائب</div>
+      </div>
+    </div>
+    
+    <div class="flight-details">
+      <div class="flight-segment">
+        <div class="segment-time">14:30 م</div>
+        <div class="segment-date">10 يونيو 2023</div>
+        <div class="segment-airport">RUH - الرياض</div>
+      </div>
+      
+      <div class="flight-arrow">
+        <i class="fas fa-long-arrow-alt-left"></i>
+      </div>
+      
+      <div class="flight-segment">
+        <div class="segment-time">17:45 م</div>
+        <div class="segment-date">10 يونيو 2023</div>
+        <div class="segment-airport">DXB - دبي</div>
+      </div>
+    </div>
+    
+    <div class="flight-footer">
+      <div class="flight-badges">
+        <div class="flight-badge"><i class="fas fa-utensils"></i> وجبة</div>
+        <div class="flight-badge"><i class="fas fa-suitcase"></i> 35kg</div>
+        <div class="flight-badge"><i class="fas fa-tv"></i> ترفيه</div>
+        <div class="flight-badge"><i class="fas fa-wifi"></i> واي فاي</div>
+      </div>
+      
+      <button class="book-btn">
+        احجز الآن
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="flight-card" onclick="showFlightModal()">
+    <div class="flight-header">
+      <div class="airline-info">
+        <img src="https://logo.clearbit.com/flynas.com" alt="طيران ناس" class="airline-logo">
+        <span>طيران ناس</span>
+      </div>
+      
+      <div class="flight-duration">
+        <div class="duration-time">3h 30m</div>
+        <div class="duration-stops">توقف واحد</div>
+      </div>
+      
+      <div class="flight-price">
+        <div class="price-amount">580 ريال</div>
+        <div class="price-details">شامل الضرائب</div>
+      </div>
+    </div>
+    
+    <div class="flight-details">
+      <div class="flight-segment">
+        <div class="segment-time">11:15 ص</div>
+        <div class="segment-date">10 يونيو 2023</div>
+        <div class="segment-airport">RUH - الرياض</div>
+      </div>
+      
+      <div class="flight-arrow">
+        <i class="fas fa-long-arrow-alt-left"></i>
+      </div>
+      
+      <div class="flight-segment">
+        <div class="segment-time">14:45 م</div>
+        <div class="segment-date">10 يونيو 2023</div>
+        <div class="segment-airport">DXB - دبي</div>
+      </div>
+    </div>
+    
+    <div class="flight-footer">
+      <div class="flight-badges">
+        <div class="flight-badge"><i class="fas fa-suitcase"></i> 25kg</div>
+      </div>
+      
+      <button class="book-btn">
+        احجز الآن
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Flight Details Modal -->
+<div class="modal-overlay" id="flightModal">
+  <div class="modal-content">
+    <div class="modal-close" onclick="closeFlightModal()">
+      <i class="fas fa-times"></i>
+    </div>
+    
+    <!-- Modal content would be loaded dynamically in a real app -->
+    <div style="padding: 20px;">
+      <h2>تفاصيل الرحلة</h2>
+      <p>هذه صفحة تفاصيل الرحلة التي ستظهر عند النقر على أي رحلة. في التطبيق الحقيقي، سيتم تحميل هذه البيانات بشكل ديناميكي بناءً على الرحلة المحددة.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="nav-item">
+    <i class="fas fa-home"></i>
+    <span>الرئيسية</span>
+  </div>
+  <div class="nav-item">
+    <i class="fas fa-compass"></i>
+    <span>استكشف</span>
+  </div>
+  <div class="nav-item active">
+    <i class="fas fa-plane"></i>
+    <span>حجوزاتي</span>
+  </div>
+  <div class="nav-item">
+    <i class="fas fa-user"></i>
+    <span>حسابي</span>
+  </div>
+</footer>
+
+<script>
+  // Flight Modal Functions
+  function showFlightModal() {
+    document.getElementById('flightModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeFlightModal() {
+    document.getElementById('flightModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+  
+  // Close modal when clicking outside
+  document.getElementById('flightModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeFlightModal();
+    }
+  });
+  
+  // Filter tags functionality
+  document.querySelectorAll('.filter-tag').forEach(tag => {
+    tag.addEventListener('click', function() {
+      document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+  
+  // Search tabs functionality
+  document.querySelectorAll('.search-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

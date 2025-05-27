@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>أمان للسفريات - بوابة سفرك الشاملة</title>
+  <meta name="description" content="خدمات السفر والتأشيرات والحجوزات الفندقية والطيران بلمسة واحدة">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3a4bdc;
+      --secondary-color: #5f2caa;
+      --accent-color: #ff6b35;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Tajawal', sans-serif;
+      margin: 0;
+      background: var(--light-color);
+      color: var(--dark-color);
+      line-height: 1.6;
+    }
+    
+    /* Header Styles */
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      padding: 20px;
+      color: white;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo i {
+      margin-left: 10px;
+    }
+    
+    .user-actions {
+      display: flex;
+      align-items: center;
+    }
+    
+    .notification-bell, .user-profile {
+      margin-right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .notification-bell::after {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-color);
+      border-radius: 50%;
+      border: 2px solid var(--primary-color);
+    }
+    
+    /* Search Bar */
+    .search-container {
+      padding: 15px;
+      background: white;
+      box-shadow: var(--box-shadow);
+      margin: 0 auto 20px;
+      max-width: 1200px;
+      border-radius: var(--border-radius);
+      position: relative;
+      top: -15px;
+    }
+    
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: var(--light-color);
+      border-radius: 30px;
+      padding: 8px 15px;
+      border: 1px solid #ddd;
+    }
+    
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 16px;
+    }
+    
+    .search-bar input:focus {
+      outline: none;
+    }
+    
+    .search-bar button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .search-bar button:hover {
+      background: var(--secondary-color);
+    }
+    
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    
+    /* Quick Actions Grid */
+    .section-title {
+      margin: 25px 0 15px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark-color);
+      display: flex;
+      align-items: center;
+    }
+    
+    .section-title i {
+      margin-left: 10px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 15px;
+      padding: 15px;
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 25px;
+    }
+    
+    .grid-item {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 15px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .grid-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary-color);
+    }
+    
+    .grid-item i {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .grid-item .label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+    
+    /* Alert Banner */
+    .alert {
+      background: linear-gradient(to right, var(--danger-color), #e83e8c);
+      color: white;
+      padding: 15px;
+      text-align: center;
+      border-radius: var(--border-radius);
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--box-shadow);
+    }
+    
+    .alert i {
+      margin-left: 10px;
+      font-size: 20px;
+    }
+    
+    .alert .close-btn {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    
+    /* Destinations Section */
+    .destinations {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      padding-bottom: 100px;
+    }
+    
+    .destination-card {
+      position: relative;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      background: white;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    .destination-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .destination-card .image-container {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+    }
+    
+    .destination-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+    
+    .destination-card:hover img {
+      transform: scale(1.05);
+    }
+    
+    .destination-card .label {
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      color: white;
+      text-align: center;
+    }
+    
+    .destination-card .description {
+      padding: 15px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    .destination-card .price {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: 700;
+      color: var(--primary-color);
+      font-size: 14px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .destination-card .rating {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .destination-card .rating i {
+      color: var(--warning-color);
+      margin-left: 3px;
+      font-size: 12px;
+    }
+    
+    /* Offers Section */
+    .offers-slider {
+      margin: 30px 0;
+      position: relative;
+    }
+    
+    .offer-card {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      color: white;
+      margin: 0 10px;
+      box-shadow: var(--box-shadow);
+    }
+    
+    .offer-card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .offer-card h3 i {
+      margin-left: 10px;
+    }
+    
+    .offer-card p {
+      font-size: 14px;
+      margin-bottom: 15px;
+      opacity: 0.9;
+    }
+    
+    .offer-card .offer-code {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      display: inline-block;
+    }
+    
+    /* Footer Navigation */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #eee;
+      padding: 10px 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+      z-index: 100;
+    }
+    
+    footer .nav-item {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 10px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    
+    footer .nav-item:hover {
+      color: var(--primary-color);
+    }
+    
+    footer .nav-item.active {
+      color: var(--primary-color);
+      font-weight: 700;
+      transform: translateY(-5px);
+    }
+    
+    footer .nav-item i {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+    
+    footer .nav-item.active i {
+      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .destinations {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .header-content {
+        flex-direction: column;
+      }
+      
+      .logo {
+        margin-bottom: 10px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .destinations {
+        grid-template-columns: 1fr;
+      }
+      
+      footer .nav-item span {
+        display: none;
+      }
+      
+      footer .nav-item i {
+        margin-bottom: 0;
+        font-size: 24px;
+      }
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <div class="logo">
+      <i class="fas fa-plane"></i>
+      أمان للسفريات
+    </div>
+    <div class="user-actions">
+      <div class="notification-bell">
+        <i class="fas fa-bell"></i>
+      </div>
+      <div class="user-profile">
+        <i class="fas fa-user-circle"></i>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="search-container fade-in">
+  <div class="search-bar">
+    <input type="text" placeholder="ابحث عن وجهة، فندق، رحلة...">
+    <button><i class="fas fa-search"></i></button>
+  </div>
+</div>
+
+<div class="container">
+  <h2 class="section-title fade-in">
+    <i class="fas fa-bolt"></i>
+    خدمات سريعة
+  </h2>
+  
+  <div class="grid">
+    <div class="grid-item fade-in delay-1" onclick="location.href='insurance.html'">
+      <i class="fas fa-umbrella-beach"></i>
+      <div class="label">تأمين سفر</div>
+    </div>
+    <div class="grid-item fade-in delay-2" onclick="location.href='visa-req.html'">
+      <i class="fas fa-passport"></i>
+      <div class="label">متطلبات التأشيرة</div>
+    </div>
+    <div class="grid-item fade-in delay-3" onclick="location.href='evisa.html'">
+      <i class="fas fa-file-alt"></i>
+      <div class="label">تأشيرة إلكترونية</div>
+    </div>
+    <div class="grid-item fade-in delay-4" onclick="location.href='hotel.html'">
+      <i class="fas fa-hotel"></i>
+      <div class="label">حجز فندقي</div>
+    </div>
+    <div class="grid-item fade-in delay-1" onclick="location.href='sim.html'">
+      <i class="fas fa-sim-card"></i>
+      <div class="label">شريحة إلكترونية</div>
+    </div>
+    <div class="grid-item fade-in delay-2" onclick="location.href='flight.html'">
+      <i class="fas fa-plane-departure"></i>
+      <div class="label">حجز طيران</div>
+    </div>
+    <div class="grid-item fade-in delay-3" onclick="location.href='embassy.html'">
+      <i class="fas fa-landmark"></i>
+      <div class="label">السفارات</div>
+    </div>
+    <div class="grid-item fade-in delay-4" onclick="location.href='itinerary.html'">
+      <i class="fas fa-route"></i>
+      <div class="label">خط سير رحلة</div>
+    </div>
+    <div class="grid-item fade-in delay-1" onclick="location.href='visa-packages.html'">
+      <i class="fas fa-suitcase-rolling"></i>
+      <div class="label">باقات التأشيرة</div>
+    </div>
+  </div>
+
+  <div class="alert fade-in">
+    <i class="fas fa-exclamation-circle"></i>
+    ملفك الشخصي غير مكتمل - أكمل معلوماتك الآن واحصل على خصم 10% على أول حجز
+    <span class="close-btn"><i class="fas fa-times"></i></span>
+  </div>
+
+  <div class="offers-slider fade-in">
+    <div class="offer-card">
+      <h3><i class="fas fa-gift"></i> عرض خاص!</h3>
+      <p>احصل على خصم 20% على حجوزات الفنادق في دبي عند استخدام الكود</p>
+      <div class="offer-code">DUBAI20</div>
+    </div>
+  </div>
+
+  <h2 class="section-title fade-in">
+    <i class="fas fa-globe-asia"></i>
+    أشهر الوجهات
+  </h2>
+  
+  <div class="destinations">
+    <div class="destination-card fade-in delay-1">
+      <div class="image-container">
+        <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="نيويورك">
+        <div class="price">$1200+</div>
+        <div class="rating">4.8 <i class="fas fa-star"></i></div>
+      </div>
+      <div class="label">نيويورك - شمال أمريكا</div>
+      <div class="description">مدينة نابضة بالحياة، موطن للمعالم الشهيرة مثل تمثال الحرية وسنترال بارك. وجهة مثالية للتسوق والفن والترفيه.</div>
+    </div>
+    
+    <div class="destination-card fade-in delay-2">
+      <div class="image-container">
+        <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="لندن">
+        <div class="price">$950+</div>
+        <div class="rating">4.7 <i class="fas fa-star"></i></div>
+      </div>
+      <div class="label">لندن - أوروبا</div>
+      <div class="description">تاريخ عريق وحداثة فريدة، لندن تجمع بين القصور الملكية، المتاحف، والأزياء العالمية.</div>
+    </div>
+    
+    <div class="destination-card fade-in delay-3">
+      <div class="image-container">
+        <img src="https://images.unsplash.com/photo-1572252009286-268acec5ca0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="القاهرة">
+        <div class="price">$600+</div>
+        <div class="rating">4.5 <i class="fas fa-star"></i></div>
+      </div>
+      <div class="label">القاهرة - أفريقيا</div>
+      <div class="description">عاصمة التاريخ والحضارة، حيث الأهرامات والنيل والأسواق التقليدية الغنية بالثقافة.</div>
+    </div>
+    
+    <div class="destination-card fade-in delay-4">
+      <div class="image-container">
+        <img src="https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="دبي">
+        <div class="price">$850+</div>
+        <div class="rating">4.9 <i class="fas fa-star"></i></div>
+      </div>
+      <div class="label">دبي - آسيا</div>
+      <div class="description">مزيج من الفخامة والحداثة، تقدم ناطحات السحاب والتسوق الفاخر والمغامرات الصحراوية.</div>
+    </div>
+    
+    <div class="destination-card fade-in delay-1">
+      <div class="image-container">
+        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1350&q=80" alt="برج إيفل - باريس">
+        <div class="price">$1100+</div>
+        <div class="rating">4.8 <i class="fas fa-star"></i></div>
+      </div>
+      <div class="label">باريس - أوروبا</div>
+      <div class="description">مدينة الأنوار وعاصمة الموضة، تشتهر ببرج إيفل ومتاحفها العالمية ومطاعمها الراقية.</div>
+    </div>
+    
+    <div class="destination-card fade-in delay-2">
+      <div class="image-container">
+        <img src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="طوكيو">
+        <div class="price">$1300+</div>
+        <div class="rating">4.7 <i class="fas fa-star"></i></div>
+      </div>
+      <div class="label">طوكيو - آسيا</div>
+      <div class="description">مزيج ساحر من التقاليد القديمة والتكنولوجيا الحديثة، مع معالم ثقافية فريدة ومأكولات لذيذة.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="nav-item active">
+    <i class="fas fa-home"></i>
+    <span>الرئيسية</span>
+  </div>
+  <div class="nav-item">
+    <i class="fas fa-clipboard-list"></i>
+    <span>طلباتي</span>
+  </div>
+  <div class="nav-item">
+    <i class="fas fa-compass"></i>
+    <span>استكشف</span>
+  </div>
+  <div class="nav-item">
+    <i class="fas fa-cog"></i>
+    <span>الإعدادات</span>
+  </div>
+</footer>
+
+<script>
+  // Close alert when clicking the close button
+  document.querySelector('.close-btn').addEventListener('click', function() {
+    document.querySelector('.alert').style.display = 'none';
+  });
+  
+  // Simple animation on scroll
+  document.addEventListener('DOMContentLoaded', function() {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    
+    const fadeInOnScroll = function() {
+      fadeElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        
+        if (elementTop < windowHeight - 100) {
+          element.style.opacity = 1;
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', fadeInOnScroll);
+    fadeInOnScroll(); // Trigger on load
+  });
+</script>
+
+</body>
+</html>
