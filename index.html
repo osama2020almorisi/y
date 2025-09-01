@@ -2,12 +2,16 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-<title>أمان للسفريات والسياحة - خدمات التأشيرات والحجوزات والسفر</title>
-<meta name="description" content="شركة أمان للسفر والسياحة - حجز طيران، تأشيرات، حجوزات فنادق، تأمين سفر، وباقات عروض مميزة. نحن هنا لنصنع رحلتك بأمان وسلاسة.">
+  <title>أمان للسفريات والسياحة - خدمات التأشيرات والحجوزات والسفر</title>
+  <meta name="description" content="شركة أمان للسفر والسياحة - حجز طيران، تأشيرات، حجوزات فنادق، تأمين سفر، وباقات عروض مميزة. نحن هنا لنصنع رحلتك بأمان وسلاسة.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lateef:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -22,6 +26,25 @@
       --border-radius: 12px;
       --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       --transition: all 0.3s ease;
+      --current-font: 'Tajawal', sans-serif;
+      --bg-color: #f8f9fa;
+      --text-color: #212529;
+      --card-bg: #ffffff;
+      --header-bg: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      --footer-bg: #ffffff;
+      --footer-text: #777;
+      --footer-active: var(--primary-color);
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #1a1c23;
+      --text-color: #f0f0f0;
+      --card-bg: #2a2d37;
+      --header-bg: linear-gradient(135deg, #2a3bcc, #4a1caa);
+      --footer-bg: #2a2d37;
+      --footer-text: #bbbbbb;
+      --footer-active: #6a7eff;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }
     
     * {
@@ -31,16 +54,38 @@
     }
     
     body {
-      font-family: 'Tajawal', sans-serif;
+      font-family: var(--current-font);
       margin: 0;
-      background: var(--light-color);
-      color: var(--dark-color);
+      background: var(--bg-color);
+      color: var(--text-color);
       line-height: 1.6;
+      transition: var(--transition);
+      padding-bottom: 80px;
+    }
+    
+    body.font-tajawal {
+      --current-font: 'Tajawal', sans-serif;
+    }
+    
+    body.font-reem-kufi {
+      --current-font: 'Reem Kufi', sans-serif;
+    }
+    
+    body.font-lateef {
+      --current-font: 'Lateef', serif;
+    }
+    
+    body.font-messiri {
+      --current-font: 'El Messiri', sans-serif;
+    }
+    
+    body.font-changa {
+      --current-font: 'Changa', sans-serif;
     }
     
     /* Header Styles */
     header {
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      background: var(--header-bg);
       padding: 20px;
       color: white;
       text-align: center;
@@ -58,7 +103,7 @@
     
     .logo {
       font-size: 24px;
-      font-weight: 700;
+      font-weight: 800;
       display: flex;
       align-items: center;
     }
@@ -72,7 +117,7 @@
       align-items: center;
     }
     
-    .notification-bell, .user-profile {
+    .notification-bell, .user-profile, .font-selector-btn, .theme-toggle {
       margin-right: 15px;
       font-size: 20px;
       cursor: pointer;
@@ -91,10 +136,64 @@
       border: 2px solid var(--primary-color);
     }
     
+    .font-selector {
+      position: relative;
+    }
+    
+    .font-options {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 10px;
+      width: 180px;
+      z-index: 1000;
+      display: none;
+    }
+    
+    .font-options.show {
+      display: block;
+    }
+    
+    .font-option {
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-bottom: 5px;
+      transition: var(--transition);
+    }
+    
+    .font-option:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    .font-option.active {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    /* Theme Toggle */
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
     /* Search Bar */
     .search-container {
       padding: 15px;
-      background: white;
+      background: var(--card-bg);
       box-shadow: var(--box-shadow);
       margin: 0 auto 20px;
       max-width: 1200px;
@@ -106,7 +205,7 @@
     .search-bar {
       display: flex;
       align-items: center;
-      background: var(--light-color);
+      background: var(--bg-color);
       border-radius: 30px;
       padding: 8px 15px;
       border: 1px solid #ddd;
@@ -117,8 +216,9 @@
       border: none;
       background: transparent;
       padding: 8px;
-      font-family: 'Tajawal', sans-serif;
+      font-family: var(--current-font);
       font-size: 16px;
+      color: var(--text-color);
     }
     
     .search-bar input:focus {
@@ -153,15 +253,16 @@
     /* Quick Actions Grid */
     .section-title {
       margin: 25px 0 15px;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
-      color: var(--dark-color);
+      color: var(--text-color);
       display: flex;
       align-items: center;
     }
     
     .section-title i {
       margin-left: 10px;
+      color: var(--primary-color);
     }
     
     .grid {
@@ -169,20 +270,20 @@
       grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
       gap: 15px;
       padding: 15px;
-      background: white;
+      background: var(--card-bg);
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
       margin-bottom: 25px;
     }
     
     .grid-item {
-      background: white;
+      background: var(--card-bg);
       border-radius: var(--border-radius);
       padding: 15px 10px;
       text-align: center;
       cursor: pointer;
       transition: var(--transition);
-      border: 1px solid #eee;
+      border: 1px solid rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -207,7 +308,7 @@
     .grid-item .label {
       font-size: 14px;
       font-weight: 500;
-      color: var(--dark-color);
+      color: var(--text-color);
     }
     
     /* Alert Banner */
@@ -222,6 +323,7 @@
       align-items: center;
       justify-content: center;
       box-shadow: var(--box-shadow);
+      position: relative;
     }
     
     .alert i {
@@ -232,6 +334,8 @@
     .alert .close-btn {
       margin-right: 10px;
       cursor: pointer;
+      position: absolute;
+      left: 15px;
     }
     
     /* Destinations Section */
@@ -246,7 +350,7 @@
       position: relative;
       border-radius: var(--border-radius);
       overflow: hidden;
-      background: white;
+      background: var(--card-bg);
       box-shadow: var(--box-shadow);
       transition: var(--transition);
       cursor: pointer;
@@ -286,8 +390,9 @@
     .destination-card .description {
       padding: 15px;
       font-size: 14px;
-      color: #555;
+      color: var(--text-color);
       line-height: 1.5;
+      opacity: 0.8;
     }
     
     .destination-card .price {
@@ -362,25 +467,92 @@
       display: inline-block;
     }
     
-    /* Footer Navigation */
-    footer {
+    /* Contact Info Section */
+    .contact-info {
+      margin: 30px 0;
+    }
+    
+    .contact-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      line-height: 2;
+      margin-bottom: 30px;
+    }
+    
+    .contact-card strong {
+      color: var(--primary-color);
+    }
+    
+    .map-container {
+      margin-top: 20px;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+    
+    /* Bottom Navigation with Curve */
+    .bottom-nav-container {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      border-top: 1px solid #eee;
-      padding: 10px 0;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-      z-index: 100;
+      z-index: 1000;
     }
     
-    footer .nav-item {
+    .nav-curve {
+      position: relative;
+      height: 25px;
+      overflow: hidden;
+    }
+    
+    .nav-curve::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -10%;
+      right: -10%;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--footer-bg);
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .home-button {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1001;
+      transition: var(--transition);
+    }
+    
+    .home-button:hover {
+      transform: translateX(-50%) scale(1.05);
+    }
+    
+    .bottom-nav {
+      background: var(--footer-bg);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 15px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .nav-item {
       text-align: center;
       font-size: 12px;
-      color: #777;
+      color: var(--footer-text);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -390,25 +562,66 @@
       cursor: pointer;
     }
     
-    footer .nav-item:hover {
-      color: var(--primary-color);
+    .nav-item:hover {
+      color: var(--footer-active);
     }
     
-    footer .nav-item.active {
-      color: var(--primary-color);
+    .nav-item.active {
+      color: var(--footer-active);
       font-weight: 700;
-      transform: translateY(-5px);
     }
     
-    footer .nav-item i {
+    .nav-item i {
       font-size: 20px;
       margin-bottom: 5px;
     }
     
-    footer .nav-item.active i {
+    .nav-item.active i {
       background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+    }
+    
+    /* WhatsApp Button */
+    .whatsapp-button {
+      position: fixed;
+      bottom: 90px;
+      left: 20px;
+      background-color: #25D366;
+      color: white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--box-shadow);
+      z-index: 1000;
+      transition: var(--transition);
+    }
+    
+    .whatsapp-button:hover {
+      transform: scale(1.1);
+    }
+    
+    .whatsapp-button i {
+      font-size: 24px;
+    }
+    
+    /* Font Selector Button */
+    .font-selector-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .font-selector-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
     }
     
     /* Responsive Design */
@@ -428,6 +641,10 @@
       .logo {
         margin-bottom: 10px;
       }
+      
+      .user-actions {
+        margin-top: 10px;
+      }
     }
     
     @media (max-width: 480px) {
@@ -439,13 +656,17 @@
         grid-template-columns: 1fr;
       }
       
-      footer .nav-item span {
+      .nav-item span {
         display: none;
       }
       
-      footer .nav-item i {
+      .nav-item i {
         margin-bottom: 0;
         font-size: 24px;
+      }
+      
+      .alert {
+        padding: 15px 30px;
       }
     }
     
@@ -463,42 +684,32 @@
     .delay-2 { animation-delay: 0.2s; }
     .delay-3 { animation-delay: 0.3s; }
     .delay-4 { animation-delay: 0.4s; }
-  body {
-      font-family: 'Tahoma', sans-serif;
-      background-color: #f9f9f9;
-      margin: 10px;
-      line-height: 1.8;
-      direction: rtl;
-    }
-
-    .main-title, h2 {
-      font-family: 'Amiri', 'Scheherazade', serif;
-      font-size: 28px;
-      color: #000;
-    }
-
-    h2 {
-      font-size: 24px;
-      margin-top: 30px;
-    }
-
-    p {
-      font-size: 18px;
-      color: #333;
-    }
-
-
   </style>
 </head>
-<body>
+<body class="font-tajawal">
 
 <header>
   <div class="header-content">
     <div class="logo">
-      <i class="fas fa-plane"></i>
+      <i class="fas fa-shield-alt"></i>
       أمان للسفريات
     </div>
     <div class="user-actions">
+      <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </div>
+      <div class="font-selector">
+        <div class="font-selector-btn">
+          <i class="fas fa-font"></i>
+        </div>
+        <div class="font-options">
+          <div class="font-option active" data-font="tajawal">تاجوال</div>
+          <div class="font-option" data-font="reem-kufi">رقعة (ريم كوفي)</div>
+          <div class="font-option" data-font="lateef">طريقة (لطيف)</div>
+          <div class="font-option" data-font="messiri">مسيري</div>
+          <div class="font-option" data-font="changa">تغيير</div>
+        </div>
+      </div>
       <div class="notification-bell">
         <i class="fas fa-bell"></i>
       </div>
@@ -555,13 +766,12 @@
       <i class="fas fa-route"></i>
       <div class="label">خط سير رحلة</div>
     </div>
-
   </div>
 
   <div class="alert fade-in">
+    <span class="close-btn"><i class="fas fa-times"></i></span>
     <i class="fas fa-exclamation-circle"></i>
     ملفك الشخصي غير مكتمل - أكمل معلوماتك الآن واحصل على خصم 10% على أول حجز
-    <span class="close-btn"><i class="fas fa-times"></i></span>
   </div>
 
   <div class="offers-slider fade-in">
@@ -638,48 +848,40 @@
       <div class="description">مزيج ساحر من التقاليد القديمة والتكنولوجيا الحديثة، مع معالم ثقافية فريدة ومأكولات لذيذة.</div>
     </div>
   </div>
-</div>
-<section class="contact-info fade-in">
-  <h2 class="section-title"><i class="fas fa-info-circle"></i> معلومات التواصل</h2>
-  <div style="background:#fff; padding: 15px; border-radius: var(--border-radius); box-shadow: var(--box-shadow); line-height: 2;">
-    <strong>العنوان:</strong> دمت - شارع العام - عمارة فندق السفير - جوار أبو هاني العامري للصرافة<br>
-    <strong>الهاتف:</strong> 781422229 / 733336537<br>
-    <strong>اسم الشركة:</strong> AMAN TRAVEL & TOURISM
-      <div style="margin-top:20px;">
-  <iframe src="https://maps.google.com/maps?q=دمت,%20اليمن&t=&z=15&ie=UTF8&iwloc=&output=embed" 
-          width="100%" height="250" style="border:0; border-radius: var(--border-radius);" allowfullscreen="" loading="lazy">
-  </iframe>
-    <hr style="margin:30px 0; border:none; height:1px; background:#ddd;">
-
-</div>
-
-  </div>
   
-</section>
+  <section class="contact-info fade-in">
+    <h2 class="section-title"><i class="fas fa-info-circle"></i> معلومات التواصل</h2>
+    <div class="contact-card">
+      <p><strong><i class="fas fa-map-marker-alt"></i> العنوان:</strong> الضالع - دمت - الشارع العام - جوار أبو هاني العامري للصرافة (عمارة فندق السفير)</p>
+      <p><strong><i class="fas fa-phone"></i> الهاتف:</strong> 781422229 / 733336537</p>
+      <p><strong><i class="fas fa-envelope"></i> البريد الإلكتروني:</strong> info@amantravel.com</p>
+      <p><strong><i class="fas fa-building"></i> اسم الشركة:</strong> AMAN TRAVEL & TOURISM</p>
+      
+      <div class="map-container">
+        <iframe src="https://maps.google.com/maps?q=الضالع%20دمت%20الشارع%20العام%20جوار%20أبو%20هاني%20العامري%20للصرافة&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                width="100%" height="250" style="border:0; border-radius: var(--border-radius);" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </section>
+</div>
 
-<a href="https://wa.me/967781422229" target="_blank" style="position:fixed; bottom:80px; left:20px; background-color:#25D366; color:white; border-radius:50%; width:50px; height:50px; display:flex; align-items:center; justify-content:center; box-shadow:var(--box-shadow); z-index:1000;">
-  <i class="fab fa-whatsapp" style="font-size:24px;"></i>
+<a href="https://wa.me/967781422229" target="_blank" class="whatsapp-button">
+  <i class="fab fa-whatsapp"></i>
 </a>
-  
 
-<footer>
-  <div class="nav-item active">
+<div class="bottom-nav-container">
+  <div class="nav-curve"></div>
+  <a href="#" class="home-button">
     <i class="fas fa-home"></i>
-    <span>الرئيسية</span>
-  </div>
-  <div class="nav-item">
-    <i class="fas fa-clipboard-list"></i>
-    <span>طلباتي</span>
-  </div>
-  <div class="nav-item">
-    <i class="fas fa-compass"></i>
-    <span>استكشف</span>
-  </div>
-  <div class="nav-item">
-    <i class="fas fa-cog"></i>
-    <span>الإعدادات</span>
-  </div>
-</footer>
+  </a>
+  <nav class="bottom-nav">
+
+
+
+
+  </nav>
+</div>
 
 <script>
   // Close alert when clicking the close button
@@ -705,10 +907,76 @@
     
     window.addEventListener('scroll', fadeInOnScroll);
     fadeInOnScroll(); // Trigger on load
+    
+    // Font selector functionality
+    const fontSelectorBtn = document.querySelector('.font-selector-btn');
+    const fontOptions = document.querySelector('.font-options');
+    const fontOptionsItems = document.querySelectorAll('.font-option');
+    
+    fontSelectorBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      fontOptions.classList.toggle('show');
+    });
+    
+    fontOptionsItems.forEach(option => {
+      option.addEventListener('click', function() {
+        const font = this.getAttribute('data-font');
+        
+        // Remove all font classes
+        document.body.classList.remove('font-tajawal', 'font-reem-kufi', 'font-lateef', 'font-messiri', 'font-changa');
+        
+        // Add selected font class
+        document.body.classList.add(`font-${font}`);
+        
+        // Update active class
+        fontOptionsItems.forEach(item => item.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Close the options
+        fontOptions.classList.remove('show');
+      });
+    });
+    
+    // Close font options when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.font-selector')) {
+        fontOptions.classList.remove('show');
+      }
+    });
+    
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
+    
+    // Check for saved theme preference or respect OS preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', function() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      
+      if (currentTheme === 'dark') {
+        document.documentElement.removeAttribute('data-theme');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
   });
 </script>
 
 </body>
 </html>
-
-    
+  
+  
