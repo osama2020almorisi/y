@@ -421,116 +421,97 @@
     }
     
     /* Footer Navigation */
-    footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      border-top: 1px solid #eee;
-      padding: 10px 0;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-      z-index: 100;
-    }
-    
-    footer .nav-item {
-      text-align: center;
-      font-size: 12px;
-      color: #777;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 5px 10px;
-      border-radius: 10px;
-      transition: var(--transition);
-      cursor: pointer;
-    }
-    
-    footer .nav-item:hover {
-      color: var(--primary-color);
-    }
-    
-    footer .nav-item.active {
-      color: var(--primary-color);
-      font-weight: 700;
-    }
-    
-    footer .nav-item i {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-    
-    footer .nav-item.active i {
-      background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .itinerary-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .action-buttons {
-        margin-top: 15px;
-        width: 100%;
-        justify-content: flex-end;
-      }
-      
-      .trip-dates {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-      
-      .date-card {
-        flex: 1;
-        min-width: auto;
-      }
-      
-      .trip-destinations {
-        flex-direction: column;
-      }
-      
-      .trip-arrow {
-        transform: rotate(90deg);
-        margin: 10px 0;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      footer .nav-item span {
-        display: none;
-      }
-      
-      footer .nav-item i {
-        margin-bottom: 0;
-        font-size: 24px;
-      }
-      
-      .item-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .item-type {
-        margin-top: 10px;
-      }
-      
-      .item-actions {
-        justify-content: flex-start;
-      }
-    }
-    
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+/* Footer Navigation - UPDATED */
+footer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 500px;
+  padding: 0;
+  z-index: 100;
+}
+
+footer .nav-item {
+  text-align: center;
+  font-size: 13px;
+  color: #777;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  border-radius: 50%;
+  transition: var(--transition);
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  width: 60px;
+  height: 60px;
+  justify-content: center;
+}
+
+footer .nav-item:hover {
+  color: var(--primary-color);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(58, 75, 220, 0.25);
+}
+
+footer .nav-item.active {
+  color: white;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(58, 75, 220, 0.3);
+}
+
+footer .nav-item i {
+  font-size: 22px;
+  margin-bottom: 0;
+  transition: var(--transition);
+}
+
+footer .nav-item.active i {
+  color: white;
+  transform: scale(1.1);
+}
+
+footer .nav-item span {
+  display: none;
+}
+
+/* Add space at the bottom of the body for the footer */
+body {
+  padding-bottom: 80px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  footer {
+    width: 95%;
+    bottom: 15px;
+  }
+  
+  footer .nav-item {
+    width: 55px;
+    height: 55px;
+    padding: 12px;
+  }
+  
+  footer .nav-item i {
+    font-size: 20px;
+  }
+}
+
+/* Animation for buttons */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}  </style>
 </head>
 <body>
 
@@ -791,26 +772,43 @@
   </div>
 </div>
 
+<!-- Footer with only two icons -->
 <footer>
-  <div class="nav-item">
+  <div class="nav-item" id="homeButton" onclick="goToHomePage()">
     <i class="fas fa-home"></i>
     <span>الرئيسية</span>
   </div>
-  <div class="nav-item">
-    <i class="fas fa-compass"></i>
-    <span>استكشف</span>
-  </div>
-  <div class="nav-item active">
+  <div class="nav-item active" id="pageButton">
+    <!-- غيّر الأيقونة والنص حسب الصفحة -->
     <i class="fas fa-route"></i>
-    <span>رحلاتي</span>
-  </div>
-  <div class="nav-item">
-    <i class="fas fa-user"></i>
-    <span>حسابي</span>
+    <span>خط سير الرحلة</span>
   </div>
 </footer>
 
 <script>
+  // Function to navigate to home page
+function goToHomePage() {
+  window.location.href = 'index.html';
+}
+
+// Add animation effect to buttons
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function() {
+    // Remove active class from all items
+    document.querySelectorAll('.nav-item').forEach(i => {
+      i.classList.remove('active');
+    });
+    
+    // Add active class to clicked item
+    this.classList.add('active');
+    
+    // Add pulse animation
+    this.style.animation = 'pulse 0.5s';
+    setTimeout(() => {
+      this.style.animation = '';
+    }, 500);
+  });
+});
   // Add functionality for buttons (in a real app these would have actual functions)
   document.querySelectorAll('.edit-btn').forEach(btn => {
     btn.addEventListener('click', function() {
