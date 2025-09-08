@@ -14,6 +14,11 @@
             --danger: #e74c3c;
             --light: #f5f7fa;
             --dark: #2c3e50;
+            --reminder: #9b59b6;
+            --card: #ffffff;
+            --text: #333333;
+            --border: #e0e0e0;
+            --shadow: rgba(0, 0, 0, 0.1);
         }
         
         * {
@@ -24,25 +29,52 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf1 100%);
+            color: var(--text);
             line-height: 1.6;
             padding: 20px;
             min-height: 100vh;
         }
         
-        .container {
+        .app-container {
             max-width: 1400px;
             margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        @media (max-width: 992px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
         }
         
         header {
             text-align: center;
             margin-bottom: 30px;
-            width: 100%;
+            grid-column: 1 / -1;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo-icon {
+            background: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
         }
         
         h1 {
@@ -52,7 +84,6 @@
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            padding: 10px;
         }
         
         .description {
@@ -60,26 +91,34 @@
             font-size: 1.1rem;
             max-width: 800px;
             margin: 0 auto;
+            line-height: 1.8;
         }
         
-        .form-section, .preview-section {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            flex: 1;
-            min-width: 300px;
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow);
+            padding: 30px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
         }
         
         h2 {
             color: var(--primary);
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
             font-size: 1.8rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         
         h2 i {
@@ -95,144 +134,92 @@
         
         .form-group {
             margin-bottom: 20px;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary);
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: var(--secondary);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+        }
+        
+        .label-icon {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
             font-size: 16px;
             transition: all 0.3s;
+            background: #f9f9f9;
         }
         
         input:focus, select:focus, textarea:focus {
             border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background: white;
         }
         
-        .flight-route {
+        .input-row {
             display: flex;
-            gap: 10px;
-            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
         }
         
-        .flight-route input {
+        .input-row > div {
             flex: 1;
         }
         
-        .flight-route span {
-            font-weight: bold;
-            color: var(--primary);
-        }
-        
-        button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .buttons {
+        .time-period {
             display: flex;
             gap: 15px;
-            margin-top: 25px;
+            margin-top: 10px;
             flex-wrap: wrap;
         }
         
-        .copy-btn {
-            background: var(--success);
-        }
-        
-        .share-btn {
-            background: #9b59b6;
-        }
-        
-        .reset-btn {
-            background: var(--danger);
-        }
-        
-        .message-preview {
-            background: #f9f9f9;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            padding: 25px;
-            height: 600px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            font-size: 16px;
-            line-height: 1.8;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        @media (max-width: 992px) {
-            .container {
-                flex-direction: column;
-            }
-            
-            .message-preview {
-                height: 500px;
-            }
-        }
-        
-        .success-message {
-            background: var(--success);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 20px;
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-        
-        .section-title {
-            background: #f1f8ff;
-            padding: 12px;
-            border-right: 4px solid var(--primary);
-            margin: 20px 0;
-            font-weight: bold;
-            border-radius: 5px;
+        .time-option {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            padding: 10px 15px;
+            background: #f0f8ff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .time-option:hover {
+            background: #e1f0ff;
+        }
+        
+        .time-option input {
+            width: auto;
+            margin: 0;
         }
         
         .flight-card {
             background: white;
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid #eee;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border);
+            position: relative;
         }
         
         .flight-header {
@@ -241,81 +228,130 @@
             align-items: center;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 1px dashed #eee;
+            border-bottom: 1px dashed var(--border);
         }
         
         .flight-number {
             font-weight: bold;
             color: var(--primary);
-        }
-        
-        .time-inputs {
-            display: flex;
-            gap: 15px;
-            margin: 15px 0;
-        }
-        
-        .time-inputs > div {
-            flex: 1;
-        }
-        
-        .weight-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 15px 0;
-        }
-        
-        .collapse-btn {
-            background: none;
-            border: none;
-            color: var(--primary);
             font-size: 18px;
-            cursor: pointer;
-            padding: 5px;
         }
         
-        .flight-content {
-            display: block;
-        }
-        
-        .flight-content.collapsed {
-            display: none;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .tab-container {
+        .flight-actions {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
         }
         
-        .tab {
-            padding: 10px 20px;
-            background: #f1f1f1;
-            border-radius: 5px;
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .tab.active {
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .btn-primary {
             background: var(--primary);
             color: white;
         }
         
-        .tab-content {
-            display: none;
+        .btn-success {
+            background: var(--success);
+            color: white;
         }
         
-        .tab-content.active {
-            display: block;
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .message-preview {
+            background: #f9f9f9;
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            flex: 1;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 16px;
+            line-height: 1.8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .success-message {
+            background: var(--success);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
             animation: fadeIn 0.5s;
+        }
+        
+        .flight-route-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .flight-route-input input {
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .flight-route-input span {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        
+        .date-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .date-selector select {
+            text-align: center;
+        }
+        
+        .time-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
         
         .required::after {
@@ -327,271 +363,688 @@
             font-size: 0.85rem;
             color: #777;
             margin-top: 5px;
+            font-style: italic;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .flight-content {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .flights-container {
+            margin: 20px 0;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 2px dashed var(--border);
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .flight-card.collapsed .flight-content {
+            display: none;
+        }
+        
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .message-type-selector {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0;
+            gap: 20px;
+        }
+        
+        .message-type-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .message-type-btn.active {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--shadow);
+        }
+        
+        .detail-btn {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .reminder-btn {
+            background: var(--reminder);
+            color: white;
+        }
+        
+        .reminder-mode .card-header h2 {
+            color: var(--reminder);
+        }
+        
+        .reminder-mode .label-icon {
+            background: var(--reminder);
+        }
+        
+        .reminder-mode input:focus, 
+        .reminder-mode select:focus, 
+        .reminder-mode textarea:focus {
+            border-color: var(--reminder);
+            box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
+        }
+        
+        .reminder-mode .btn-primary {
+            background: var(--reminder);
+        }
+        
+        .reminder-options {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px dashed var(--reminder);
+        }
+        
+        .flight-selector {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .flight-selector select {
+            flex: 1;
+        }
+        
+        .reminder-preview {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid var(--border);
+        }
+        
+        .main-route {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid var(--primary);
         }
     </style>
 </head>
 <body>
     <header>
-        <h1><i class="fas fa-plane"></i> أمان للسفريات والسياحة</h1>
-        <p class="description">منشئ رسائل تفاصيل الرحلة - أنشئ رسائل احترافية لعملائك بسهولة</p>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-plane"></i>
+            </div>
+            <h1>أمان للسفريات والسياحة</h1>
+        </div>
+        <p class="description">منشئ رسائل تفاصيل الرحلة - أنشئ رسائل احترافية لعملائك بسهولة مع إمكانية إضافة خطوط الرحلات بشكل ديناميكي</p>
+        
+        <div class="message-type-selector">
+            <button class="message-type-btn detail-btn active" id="detailBtn">
+                <i class="fas fa-list-alt"></i> رسالة التفاصيل الكاملة
+            </button>
+            <button class="message-type-btn reminder-btn" id="reminderBtn">
+                <i class="fas fa-bell"></i> رسالة التذكير
+            </button>
+        </div>
     </header>
     
-    <div class="container">
-        <div class="form-section">
-            <h2><i class="fas fa-edit"></i> إدخال بيانات الرحلة</h2>
-            
-            <div class="tab-container">
-                <div class="tab active" data-tab="basic">المعلومات الأساسية</div>
-                <div class="tab" data-tab="flights">تفاصيل الرحلات</div>
-                <div class="tab" data-tab="weight">أوزان الأمتعة</div>
+    <div class="app-container">
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-edit"></i> إدخال بيانات الرحلة</h2>
             </div>
             
-            <div class="tab-content active" id="basic-tab">
-                <div class="form-group">
-                    <label for="clientName" class="required"><i class="fas fa-user"></i> اسم العميل</label>
-                    <input type="text" id="clientName" placeholder="أدخل اسم العميل الكامل">
-                </div>
-                
-                <div class="form-group">
-                    <label for="travelDate" class="required"><i class="fas fa-calendar-alt"></i> تاريخ الرحلة</label>
-                    <input type="date" id="travelDate">
-                </div>
-                
-                <div class="form-group">
-                    <label for="arrivalTime" class="required"><i class="fas fa-clock"></i> وقت الحضور إلى المطار</label>
-                    <input type="text" id="arrivalTime" placeholder="مثال: 2:30 مساءً">
-                    <p class="input-hint">يرجى كتابة الوقت بالصيغة: الساعة:الدقيقة صباحاً/مساءً</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="airlines"><i class="fas fa-plane"></i> شركات الطيران</label>
-                    <input type="text" id="airlines" placeholder="مثال: الهولندية&واليمنية" value="الهولندية&واليمنية">
+            <div class="form-group">
+                <label for="clientName" class="required">
+                    <span class="label-icon"><i class="fas fa-user"></i></span>
+                    اسم العميل
+                </label>
+                <input type="text" id="clientName" placeholder="أدخل اسم العميل الكامل">
+            </div>
+            
+            <div class="form-group">
+                <label for="travelDate" class="required">
+                    <span class="label-icon"><i class="fas fa-calendar-alt"></i></span>
+                    تاريخ الرحلة
+                </label>
+                <div class="date-selector">
+                    <select id="day">
+                        <option value="">اليوم</option>
+                        <!-- سيتم ملء الأيام عبر الجافاسكريبت -->
+                    </select>
+                    <select id="month">
+                        <option value="">الشهر</option>
+                        <option value="يناير">يناير</option>
+                        <option value="فبراير">فبراير</option>
+                        <option value="مارس">مارس</option>
+                        <option value="أبريل">أبريل</option>
+                        <option value="مايو">مايو</option>
+                        <option value="يونيو">يونيو</option>
+                        <option value="يوليو">يوليو</option>
+                        <option value="أغسطس">أغسطس</option>
+                        <option value="سبتمبر">سبتمبر</option>
+                        <option value="أكتوبر">أكتوبر</option>
+                        <option value="نوفمبر">نوفمبر</option>
+                        <option value="ديسمبر">ديسمبر</option>
+                    </select>
+                    <select id="year">
+                        <option value="">السنة</option>
+                        <!-- سيتم ملء السنوات عبر الجافاسكريبت -->
+                    </select>
                 </div>
             </div>
             
-            <div class="tab-content" id="flights-tab">
-                <div class="flight-card">
-                    <div class="flight-header">
-                        <h3><i class="fas fa-route"></i> الخط الأول</h3>
-                        <button class="collapse-btn"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                    <div class="flight-content">
-                        <div class="form-group">
-                            <label for="firstFlightFrom" class="required"><i class="fas fa-plane-departure"></i> من</label>
-                            <input type="text" id="firstFlightFrom" placeholder="مثال: ديترويت" value="ديترويت">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="firstFlightTo" class="required"><i class="fas fa-plane-arrival"></i> إلى</label>
-                            <input type="text" id="firstFlightTo" placeholder="مثال: إمستردام" value="إمستردام">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="firstFlightCode"><i class="fas fa-code"></i> رمز الرحلة (اختياري)</label>
-                            <input type="text" id="firstFlightCode" placeholder="مثال: DXT→AMS" value="DXT→AMS">
-                        </div>
-                        
-                        <div class="time-inputs">
-                            <div class="form-group">
-                                <label for="firstDeparture" class="required"><i class="fas fa-plane-departure"></i> وقت الإقلاع</label>
-                                <input type="text" id="firstDeparture" placeholder="مثال: 06:30 مساءً" value="06:30 مساءً">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="firstArrival" class="required"><i class="fas fa-plane-arrival"></i> وقت الوصول</label>
-                                <input type="text" id="firstArrival" placeholder="مثال: 08:15 صباحاً" value="08:15 صباحاً">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="transit1"><i class="fas fa-stopwatch"></i> مدة الترانزيت</label>
-                            <input type="text" id="transit1" placeholder="مثال: 6 ساعات و 50 دقيقة" value="6 ساعات و 50 دقيقة">
-                        </div>
+            <div class="form-group">
+                <label for="arrivalTime" class="required">
+                    <span class="label-icon"><i class="fas fa-clock"></i></span>
+                    وقت الحضور إلى المطار
+                </label>
+                <div class="time-selector">
+                    <select id="arrivalHour">
+                        <option value="">ساعة</option>
+                        <!-- سيتم ملء الساعات عبر الجافاسكريبت -->
+                    </select>
+                    <select id="arrivalMinute">
+                        <option value="">دقيقة</option>
+                        <!-- سيتم ملء الدقائق عبر الجافاسكريبت -->
+                    </select>
+                </div>
+                <div class="time-period">
+                    <label class="time-option">
+                        <input type="radio" name="arrivalPeriod" value="صباحاً">
+                        صباحاً
+                    </label>
+                    <label class="time-option">
+                        <input type="radio" name="arrivalPeriod" value="ظهراً">
+                        ظهراً
+                    </label>
+                    <label class="time-option">
+                        <input type="radio" name="arrivalPeriod" value="عصراً">
+                        عصراً
+                    </label>
+                    <label class="time-option">
+                        <input type="radio" name="arrivalPeriod" value="مساءً" checked>
+                        مساءً
+                    </label>
+                    <label class="time-option">
+                        <input type="radio" name="arrivalPeriod" value="ليلاً">
+                        ليلاً
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="airlines">
+                    <span class="label-icon"><i class="fas fa-plane"></i></span>
+                    شركات الطيران
+                </label>
+                <input type="text" id="airlines" placeholder="مثال: الهولندية&واليمنية" value="الهولندية&واليمنية">
+            </div>
+            
+            <div class="main-route">
+                <div class="form-group">
+                    <label for="mainRoute" class="required">
+                        <span class="label-icon"><i class="fas fa-route"></i></span>
+                        خط سير الرحلة الرئيسي
+                    </label>
+                    <div class="flight-route-input">
+                        <input type="text" id="mainRouteFrom" placeholder="من" value="ديترويت">
+                        <span>←</span>
+                        <input type="text" id="mainRouteTo" placeholder="إلى" value="عدن">
                     </div>
                 </div>
                 
-                <div class="flight-card">
-                    <div class="flight-header">
-                        <h3><i class="fas fa-route"></i> الخط الثاني</h3>
-                        <button class="collapse-btn"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                    <div class="flight-content">
-                        <div class="form-group">
-                            <label for="secondFlightFrom" class="required"><i class="fas fa-plane-departure"></i> من</label>
-                            <input type="text" id="secondFlightFrom" placeholder="مثال: إمستردام" value="إمستردام">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="secondFlightTo" class="required"><i class="fas fa-plane-arrival"></i> إلى</label>
-                            <input type="text" id="secondFlightTo" placeholder="مثال: الرياض" value="الرياض">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="secondFlightCode"><i class="fas fa-code"></i> رمز الرحلة (اختياري)</label>
-                            <input type="text" id="secondFlightCode" placeholder="مثال: AMS→RUH" value="AMS→RUH">
-                        </div>
-                        
-                        <div class="time-inputs">
-                            <div class="form-group">
-                                <label for="secondDeparture" class="required"><i class="fas fa-plane-departure"></i> وقت الإقلاع</label>
-                                <input type="text" id="secondDeparture" placeholder="مثال: 03:05 عصراً" value="03:05 عصراً">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="secondArrival" class="required"><i class="fas fa-plane-arrival"></i> وقت الوصول</label>
-                                <input type="text" id="secondArrival" placeholder="مثال: 10:15 ليلاً" value="10:15 ليلاً">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="transit2"><i class="fas fa-stopwatch"></i> مدة الترانزيت</label>
-                            <input type="text" id="transit2" placeholder="مثال: 3 ساعة و 15 دقيقة" value="3 ساعة و 15 دقيقة">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="flight-card">
-                    <div class="flight-header">
-                        <h3><i class="fas fa-route"></i> الخط الثالث</h3>
-                        <button class="collapse-btn"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                    <div class="flight-content">
-                        <div class="form-group">
-                            <label for="thirdFlightFrom" class="required"><i class="fas fa-plane-departure"></i> من</label>
-                            <input type="text" id="thirdFlightFrom" placeholder="مثال: الرياض" value="الرياض">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="thirdFlightTo" class="required"><i class="fas fa-plane-arrival"></i> إلى</label>
-                            <input type="text" id="thirdFlightTo" placeholder="مثال: عدن" value="عدن">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="thirdFlightCode"><i class="fas fa-code"></i> رمز الرحلة (اختياري)</label>
-                            <input type="text" id="thirdFlightCode" placeholder="مثال: RUH→ADE" value="RUH→ADE">
-                        </div>
-                        
-                        <div class="time-inputs">
-                            <div class="form-group">
-                                <label for="thirdDeparture" class="required"><i class="fas fa-plane-departure"></i> وقت الإقلاع</label>
-                                <input type="text" id="thirdDeparture" placeholder="مثال: 01:30 صباحاً" value="01:30 صباحاً">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="thirdArrival" class="required"><i class="fas fa-plane-arrival"></i> وقت الوصول</label>
-                                <input type="text" id="thirdArrival" placeholder="مثال: 03:30 فجراً" value="03:30 فجراً">
-                            </div>
-                        </div>
+                <div class="form-group">
+                    <label for="mainRouteCode">
+                        <span class="label-icon"><i class="fas fa-code"></i></span>
+                        رمز الرحلة الرئيسي
+                    </label>
+                    <div class="flight-route-input">
+                        <input type="text" id="mainRouteCodeFrom" placeholder="من" value="DX" style="text-align: center;">
+                        <span>→</span>
+                        <input type="text" id="mainRouteCodeTo" placeholder="إلى" value="ADE" style="text-align: center;">
                     </div>
                 </div>
             </div>
             
-            <div class="tab-content" id="weight-tab">
-                <div class="flight-card">
-                    <div class="flight-header">
-                        <h3><i class="fas fa-suitcase"></i> وزن الأمتعة - الخط الأول</h3>
-                    </div>
-                    <div class="weight-inputs">
-                        <div class="form-group">
-                            <label for="firstWeight1"><i class="fas fa-suitcase"></i> الوزن المسموح 1</label>
-                            <input type="text" id="firstWeight1" value="2 حقائب بوزن 23 كجم (50 رطلاً) لكل منهما">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="firstWeight2"><i class="fas fa-briefcase"></i> الوزن المسموح 2</label>
-                            <input type="text" id="firstWeight2" value="حقائب المقصورة: للبالغين، قطعة واحدة">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="flight-card">
-                    <div class="flight-header">
-                        <h3><i class="fas fa-suitcase"></i> وزن الأمتعة - الخط الثاني</h3>
-                    </div>
-                    <div class="weight-inputs">
-                        <div class="form-group">
-                            <label for="secondWeight1"><i class="fas fa-suitcase"></i> الوزن المسموح 1</label>
-                            <input type="text" id="secondWeight1" value="2 حقائب بوزن 23 كيلو.(50رطل)">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="secondWeight2"><i class="fas fa-briefcase"></i> الوزن المسموح 2</label>
-                            <input type="text" id="secondWeight2" value="1 حقيبة يد بوزن 12 كيلو.(26رطل)">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="flight-card">
-                    <div class="flight-header">
-                        <h3><i class="fas fa-suitcase"></i> وزن الأمتعة - الخط الثالث</h3>
-                    </div>
-                    <div class="form-group">
-                        <label for="thirdWeight"><i class="fas fa-suitcase"></i> الوزن المسموح</label>
-                        <input type="text" id="thirdWeight" value="لايوجد معلومات">
-                    </div>
+            <div class="card-header">
+                <h2><i class="fas fa-route"></i> خطوط الرحلة</h2>
+                <button class="btn btn-success" id="addFlightBtn">
+                    <i class="fas fa-plus"></i> إضافة خط
+                </button>
+            </div>
+            
+            <div class="flights-container" id="flightsContainer">
+                <div class="empty-state" id="emptyState">
+                    <i class="fas fa-plane-slash"></i>
+                    <h3>لا توجد خطوط رحلة مضافة</h3>
+                    <p>انقر على زر "إضافة خط" لبدء إضافة خطوط الرحلة</p>
                 </div>
             </div>
             
-            <button id="generateBtn"><i class="fas fa-magic"></i> إنشاء الرسالة</button>
+            <div class="reminder-options" id="reminderOptions">
+                <h3><i class="fas fa-bell"></i> إعدادات رسالة التذكير</h3>
+                
+                <div class="flight-selector">
+                    <label>اختر خط الرحلة:</label>
+                    <select id="reminderFlightSelector">
+                        <option value="all">جميع الخطوط</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customMessage">
+                        <span class="label-icon"><i class="fas fa-comment"></i></span>
+                        رسالة مخصصة (اختياري)
+                    </label>
+                    <textarea id="customMessage" rows="3" placeholder="أضف رسالة مخصصة لرسالة التذكير"></textarea>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="generateBtn">
+                <i class="fas fa-magic"></i> إنشاء الرسالة
+            </button>
             
             <div class="success-message" id="successMessage">
                 <i class="fas fa-check-circle"></i> تم إنشاء الرسالة بنجاح! يمكنك نسخها أو مشاركتها الآن.
             </div>
         </div>
         
-        <div class="preview-section">
-            <h2><i class="fas fa-eye"></i> معاينة الرسالة</h2>
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-eye"></i> معاينة الرسالة</h2>
+                <select id="previewTypeSelector">
+                    <option value="detail">رسالة التفاصيل</option>
+                    <option value="reminder">رسالة التذكير</option>
+                </select>
+            </div>
+            
             <div class="message-preview" id="messagePreview">
                 ستظهر معاينة الرسالة هنا بعد ملء النموذج والضغط على "إنشاء الرسالة"
             </div>
             
-            <div class="buttons">
-                <button id="copyBtn" class="copy-btn"><i class="fas fa-copy"></i> نسخ الرسالة</button>
-                <button id="shareBtn" class="share-btn"><i class="fas fa-share-alt"></i> مشاركة</button>
-                <button id="resetBtn" class="reset-btn"><i class="fas fa-trash"></i> مسح الكل</button>
+            <div class="action-buttons">
+                <button class="btn btn-success" id="copyBtn">
+                    <i class="fas fa-copy"></i> نسخ الرسالة
+                </button>
+                <button class="btn btn-warning" id="shareBtn">
+                    <i class="fas fa-share-alt"></i> مشاركة
+                </button>
+                <button class="btn btn-danger" id="resetBtn">
+                    <i class="fas fa-trash"></i> مسح الكل
+                </button>
             </div>
         </div>
     </div>
 
+    <!-- قالب خط الرحلة (سيتم استنساخه عبر الجافاسكريبت) -->
+    <template id="flightTemplate">
+        <div class="flight-card" data-flight-id="">
+            <div class="flight-header">
+                <div class="flight-number">خط #<span class="flight-number-value">1</span></div>
+                <div class="flight-actions">
+                    <button class="toggle-btn">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm remove-flight">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flight-content">
+                <div class="form-group">
+                    <label class="required">
+                        <span class="label-icon"><i class="fas fa-plane-departure"></i></span>
+                        من
+                    </label>
+                    <input type="text" class="flight-from" placeholder="مثال: ديترويت">
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">
+                        <span class="label-icon"><i class="fas fa-plane-arrival"></i></span>
+                        إلى
+                    </label>
+                    <input type="text" class="flight-to" placeholder="مثال: إمستردام">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <span class="label-icon"><i class="fas fa-code"></i></span>
+                        رمز الرحلة
+                    </label>
+                    <div class="flight-route-input">
+                        <input type="text" class="flight-code-from" placeholder="من" style="text-align: center;">
+                        <span>→</span>
+                        <input type="text" class="flight-code-to" placeholder="إلى" style="text-align: center;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">
+                        <span class="label-icon"><i class="fas fa-plane-departure"></i></span>
+                        وقت الإقلاع
+                    </label>
+                    <div class="time-selector">
+                        <select class="departure-hour">
+                            <option value="">ساعة</option>
+                            <!-- سيتم ملء الساعات عبر الجافاسكريبت -->
+                        </select>
+                        <select class="departure-minute">
+                            <option value="">دقيقة</option>
+                            <!-- سيتم ملء الدقائق عبر الجافاسكريبت -->
+                        </select>
+                    </div>
+                    <div class="time-period">
+                        <label class="time-option">
+                            <input type="radio" class="departure-period" name="departure-period-1" value="صباحاً">
+                            صباحاً
+                        </label>
+                        <label class="time-option">
+                            <input type="radio" class="departure-period" name="departure-period-1" value="ظهراً">
+                            ظهراً
+                        </label>
+                        <label class="time-option">
+                            <input type="radio" class="departure-period" name="departure-period-1" value="عصراً">
+                            عصراً
+                        </label>
+                        <label class="time-option">
+                            <input type="radio" class="departure-period" name="departure-period-1" value="مساءً" checked>
+                            مساءً
+                        </label>
+                        <label class="time-option">
+                            <input type="radio" class="departure-period" name="departure-period-1" value="ليلاً">
+                            ليلاً
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">
+                        <span class="label-icon"><i class="fas fa-plane-arrival"></i></span>
+                        وقت الوصول
+                    </label>
+                    <div class="time-selector">
+                        <select class="arrival-hour">
+                            <option value="">ساعة</option>
+                            <!-- سيتم ملء الساعات عبر الجافاسكريبت -->
+                        </select>
+                        <select class="arrival-minute">
+                            <option value="">دقيقة</option>
+                            <!-- سيتم ملء الدقائق عبر الجافاسكريبت -->
+                        </select>
+                    </div>
+                    <div class="time-period">
+                        <label class="time-option">
+                            <input type="radio" class="arrival-period" name="arrival-period-1" value="صباحاً" checked>
+                            صباحاً
+                        </label>
+                        <label class="time-option">
+                            <input type="radio" class="arrival-period" name="arrival-period-1" value="ظهراً">
+                            ظهراً
+                        </label>
+                        <label class="time-option">
+                            <input type="radio" class="arrival-period" name="arrival-period-1" value="عصراً">
+                            عصراً
+                        </label>
+                        <label class="time-option">
+                            <input type="radio" class="arrival-period" name="arrival-period-1" value="مساءً">
+                            مساءً
+                        </label>
+                        <label class="time-option">
+                            <input type="radio" class="arrival-period" name="arrival-period-1" value="ليلاً">
+                            ليلاً
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <span class="label-icon"><i class="fas fa-stopwatch"></i></span>
+                        مدة الترانزيت
+                    </label>
+                    <input type="text" class="transit-time" placeholder="مثال: 6 ساعات و 50 دقيقة">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <span class="label-icon"><i class="fas fa-suitcase"></i></span>
+                        الوزن المسموح 1
+                    </label>
+                    <input type="text" class="weight-1" placeholder="مثال: 2 حقائب بوزن 23 كجم">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <span class="label-icon"><i class="fas fa-briefcase"></i></span>
+                        الوزن المسموح 2
+                    </label>
+                    <input type="text" class="weight-2" placeholder="مثال: حقائب المقصورة: قطعة واحدة">
+                </div>
+            </div>
+        </div>
+    </template>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // العناصر الرئيسية
             const generateBtn = document.getElementById('generateBtn');
             const copyBtn = document.getElementById('copyBtn');
             const shareBtn = document.getElementById('shareBtn');
             const resetBtn = document.getElementById('resetBtn');
+            const addFlightBtn = document.getElementById('addFlightBtn');
             const messagePreview = document.getElementById('messagePreview');
             const successMessage = document.getElementById('successMessage');
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            const collapseButtons = document.querySelectorAll('.collapse-btn');
+            const detailBtn = document.getElementById('detailBtn');
+            const reminderBtn = document.getElementById('reminderBtn');
+            const flightsContainer = document.getElementById('flightsContainer');
+            const emptyState = document.getElementById('emptyState');
+            const flightTemplate = document.getElementById('flightTemplate');
+            const reminderFlightSelector = document.getElementById('reminderFlightSelector');
+            const previewTypeSelector = document.getElementById('previewTypeSelector');
             
-            // تعبئة التاريخ الحالي كقيمة افتراضية
-            const today = new Date();
-            const nextWednesday = new Date(today);
-            nextWednesday.setDate(today.getDate() + ((3 + 7 - today.getDay()) % 7));
-            document.getElementById('travelDate').valueAsDate = nextWednesday;
+            // متغيرات التطبيق
+            let flightCount = 0;
+            let isReminderMode = false;
             
-            // إعداد نظام التبويب
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabId = tab.getAttribute('data-tab');
-                    
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(tc => tc.classList.remove('active'));
-                    
-                    tab.classList.add('active');
-                    document.getElementById(`${tabId}-tab`).classList.add('active');
+            // تهيئة الخيارات للوقت والتاريخ
+            function initializeSelectOptions() {
+                // تعبئة الأيام (1-31)
+                const daySelect = document.getElementById('day');
+                daySelect.innerHTML = '<option value="">اليوم</option>';
+                for (let i = 1; i <= 31; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    daySelect.appendChild(option);
+                }
+                
+                // تعبئة السنوات (2023-2030)
+                const yearSelect = document.getElementById('year');
+                yearSelect.innerHTML = '<option value="">السنة</option>';
+                const currentYear = new Date().getFullYear();
+                for (let i = currentYear; i <= currentYear + 5; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    yearSelect.appendChild(option);
+                }
+                
+                // تعبئة الساعات (1-12)
+                const hourSelects = document.querySelectorAll('select[id$="Hour"]');
+                hourSelects.forEach(select => {
+                    select.innerHTML = '<option value="">ساعة</option>';
+                    for (let i = 1; i <= 12; i++) {
+                        const option = document.createElement('option');
+                        option.value = i;
+                        option.textContent = i;
+                        select.appendChild(option);
+                    }
                 });
-            });
+                
+                // تعبئة الدقائق (00-59)
+                const minuteSelects = document.querySelectorAll('select[id$="Minute"]');
+                minuteSelects.forEach(select => {
+                    select.innerHTML = '<option value="">دقيقة</option>';
+                    for (let i = 0; i < 60; i++) {
+                        const option = document.createElement('option');
+                        option.value = i < 10 ? '0' + i : i;
+                        option.textContent = i < 10 ? '0' + i : i;
+                        select.appendChild(option);
+                    }
+                });
+                
+                // تعيين القيم الافتراضية
+                document.getElementById('day').value = '28';
+                document.getElementById('month').value = 'يوليو';
+                document.getElementById('year').value = '2025';
+                
+                document.getElementById('arrivalHour').value = '2';
+                document.getElementById('arrivalMinute').value = '30';
+                document.querySelector('input[name="arrivalPeriod"][value="مساءً"]').checked = true;
+            }
             
-            // إعداد أزرار الطي
-            collapseButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const content = btn.closest('.flight-card').querySelector('.flight-content');
-                    content.classList.toggle('collapsed');
+            // إضافة خط رحلة جديد
+            function addFlight() {
+                flightCount++;
+                emptyState.style.display = 'none';
+                
+                const flightElement = flightTemplate.content.cloneNode(true);
+                const flightCard = flightElement.querySelector('.flight-card');
+                flightCard.setAttribute('data-flight-id', flightCount);
+                
+                // تعيين رقم الخط
+                flightElement.querySelector('.flight-number-value').textContent = flightCount;
+                
+                // تعبئة خيارات الوقت للخط الجديد
+                const departureHour = flightElement.querySelector('.departure-hour');
+                const departureMinute = flightElement.querySelector('.departure-minute');
+                const arrivalHour = flightElement.querySelector('.arrival-hour');
+                const arrivalMinute = flightElement.querySelector('.arrival-minute');
+                
+                // تعبئة الساعات
+                for (let i = 1; i <= 12; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    departureHour.appendChild(option.cloneNode(true));
+                    arrivalHour.appendChild(option.cloneNode(true));
+                }
+                
+                // تعبئة الدقائق
+                for (let i = 0; i < 60; i++) {
+                    const option = document.createElement('option');
+                    option.value = i < 10 ? '0' + i : i;
+                    option.textContent = i < 10 ? '0' + i : i;
+                    departureMinute.appendChild(option.cloneNode(true));
+                    arrivalMinute.appendChild(option.cloneNode(true));
+                }
+                
+                // تعيين قيم افتراضية للخط الأول
+                if (flightCount === 1) {
+                    flightElement.querySelector('.flight-from').value = 'ديترويت';
+                    flightElement.querySelector('.flight-to').value = 'إمستردام';
+                    flightElement.querySelector('.flight-code-from').value = 'DXT';
+                    flightElement.querySelector('.flight-code-to').value = 'AMS';
+                    departureHour.value = '6';
+                    departureMinute.value = '30';
+                    flightElement.querySelector('.departure-period[value="مساءً"]').checked = true;
+                    arrivalHour.value = '8';
+                    arrivalMinute.value = '15';
+                    flightElement.querySelector('.arrival-period[value="صباحاً"]').checked = true;
+                    flightElement.querySelector('.transit-time').value = '6 ساعات و 50 دقيقة';
+                    flightElement.querySelector('.weight-1').value = '2 حقائب بوزن 23 كجم (50 رطلاً) لكل منهما';
+                    flightElement.querySelector('.weight-2').value = 'حقائب المقصورة: للبالغين، قطعة واحدة';
+                } 
+                // تعيين قيم افتراضية للخط الثاني
+                else if (flightCount === 2) {
+                    flightElement.querySelector('.flight-from').value = 'إمستردام';
+                    flightElement.querySelector('.flight-to').value = 'الرياض';
+                    flightElement.querySelector('.flight-code-from').value = 'AMS';
+                    flightElement.querySelector('.flight-code-to').value = 'RUH';
+                    departureHour.value = '3';
+                    departureMinute.value = '05';
+                    flightElement.querySelector('.departure-period[value="عصراً"]').checked = true;
+                    arrivalHour.value = '10';
+                    arrivalMinute.value = '15';
+                    flightElement.querySelector('.arrival-period[value="ليلاً"]').checked = true;
+                    flightElement.querySelector('.transit-time').value = '3 ساعة و 15 دقيقة';
+                    flightElement.querySelector('.weight-1').value = '2 حقائب بوزن 23 كيلو.(50رطل)';
+                    flightElement.querySelector('.weight-2').value = '1 حقيبة يد بوزن 12 كيلو.(26رطل)';
+                }
+                // تعيين قيم افتراضية للخط الثالث
+                else {
+                    flightElement.querySelector('.flight-from').value = 'الرياض';
+                    flightElement.querySelector('.flight-to').value = 'عدن';
+                    flightElement.querySelector('.flight-code-from').value = 'RUH';
+                    flightElement.querySelector('.flight-code-to').value = 'ADE';
+                    departureHour.value = '1';
+                    departureMinute.value = '30';
+                    flightElement.querySelector('.departure-period[value="صباحاً"]').checked = true;
+                    arrivalHour.value = '3';
+                    arrivalMinute.value = '30';
+                    flightElement.querySelector('.arrival-period[value="فجراً"]').checked = true;
+                    flightElement.querySelector('.weight-1').value = 'لايوجد معلومات';
+                    flightElement.querySelector('.weight-2').value = '';
+                }
+                
+                // إضافة حدث لحذف الخط
+                flightElement.querySelector('.remove-flight').addEventListener('click', function() {
+                    flightCard.remove();
+                    flightCount--;
                     
-                    const icon = btn.querySelector('i');
-                    if (content.classList.contains('collapsed')) {
+                    if (flightCount === 0) {
+                        emptyState.style.display = 'block';
+                    }
+                    
+                    // إعادة ترقيم الخطوط
+                    renumberFlights();
+                    updateReminderFlightSelector();
+                });
+                
+                // إضافة حدث للطي/الفرد
+                flightElement.querySelector('.toggle-btn').addEventListener('click', function() {
+                    flightCard.classList.toggle('collapsed');
+                    
+                    const icon = this.querySelector('i');
+                    if (flightCard.classList.contains('collapsed')) {
                         icon.classList.remove('fa-chevron-down');
                         icon.classList.add('fa-chevron-up');
                     } else {
@@ -599,57 +1052,160 @@
                         icon.classList.add('fa-chevron-down');
                     }
                 });
-            });
+                
+                flightsContainer.appendChild(flightElement);
+                updateReminderFlightSelector();
+            }
             
-            generateBtn.addEventListener('click', generateMessage);
-            copyBtn.addEventListener('click', copyMessage);
-            shareBtn.addEventListener('click', shareMessage);
-            resetBtn.addEventListener('click', resetForm);
+            // إعادة ترقيم الخطوط بعد الحذف
+            function renumberFlights() {
+                const flightCards = flightsContainer.querySelectorAll('.flight-card');
+                flightCards.forEach((card, index) => {
+                    card.querySelector('.flight-number-value').textContent = index + 1;
+                });
+            }
             
+            // تحديث قائمة اختيار الخط لرسالة التذكير
+            function updateReminderFlightSelector() {
+                reminderFlightSelector.innerHTML = '<option value="all">جميع الخطوط</option>';
+                
+                const flightCards = flightsContainer.querySelectorAll('.flight-card');
+                flightCards.forEach((card, index) => {
+                    const from = card.querySelector('.flight-from').value || `خط ${index + 1}`;
+                    const to = card.querySelector('.flight-to').value || ``;
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `خط ${index + 1}: ${from} ← ${to}`;
+                    reminderFlightSelector.appendChild(option);
+                });
+            }
+            
+            // إنشاء الرسالة
             function generateMessage() {
                 const clientName = document.getElementById('clientName').value || "عمر صـلاح الحـالمي";
-                const travelDateInput = document.getElementById('travelDate').value;
-                const arrivalTime = document.getElementById('arrivalTime').value || "2:30 مساءً";
+                
+                // جمع بيانات التاريخ
+                const day = document.getElementById('day').value;
+                const month = document.getElementById('month').value;
+                const year = document.getElementById('year').value;
+                const travelDate = day && month && year ? `${day} ${month} ${year}م` : "28 يوليو 2025م";
+                
+                // جمع بيانات وقت الحضور
+                const arrivalHour = document.getElementById('arrivalHour').value;
+                const arrivalMinute = document.getElementById('arrivalMinute').value;
+                const arrivalPeriod = document.querySelector('input[name="arrivalPeriod"]:checked')?.value || "مساءً";
+                const arrivalTime = arrivalHour && arrivalMinute ? `${arrivalHour}:${arrivalMinute} ${arrivalPeriod}` : "2:30 مساءً";
+                
+                // جمع بيانات الخط الرئيسي
+                const mainRouteFrom = document.getElementById('mainRouteFrom').value || "ديترويت";
+                const mainRouteTo = document.getElementById('mainRouteTo').value || "عدن";
+                const mainRouteCodeFrom = document.getElementById('mainRouteCodeFrom').value || "DX";
+                const mainRouteCodeTo = document.getElementById('mainRouteCodeTo').value || "ADE";
+                const mainRouteCode = `${mainRouteCodeFrom}→${mainRouteCodeTo}`;
+                
                 const airlines = document.getElementById('airlines').value || "الهولندية&واليمنية";
+                const customMessage = document.getElementById('customMessage').value || "";
                 
-                // تحويل تاريخ الرحلة إلى التنسيق المطلوب
-                let travelDate = "28 يوليو 2025م";
-                if (travelDateInput) {
-                    const dateObj = new Date(travelDateInput);
-                    const options = { day: 'numeric', month: 'long', year: 'numeric' };
-                    travelDate = dateObj.toLocaleDateString('ar-EG', options) + 'م';
-                }
+                // تحديد نوع المعاينة
+                const previewType = previewTypeSelector.value;
                 
-                // بيانات الخط الأول
-                const firstFlightFrom = document.getElementById('firstFlightFrom').value || "ديترويت";
-                const firstFlightTo = document.getElementById('firstFlightTo').value || "إمستردام";
-                const firstFlightCode = document.getElementById('firstFlightCode').value || "DXT→AMS";
-                const firstDeparture = document.getElementById('firstDeparture').value || "06:30 مساءً";
-                const firstArrival = document.getElementById('firstArrival').value || "08:15 صباحاً";
-                const transit1 = document.getElementById('transit1').value || "6 ساعات و 50 دقيقة";
-                const firstWeight1 = document.getElementById('firstWeight1').value || "2 حقائب بوزن 23 كجم (50 رطلاً) لكل منهما";
-                const firstWeight2 = document.getElementById('firstWeight2').value || "حقائب المقصورة: للبالغين، قطعة واحدة";
-                
-                // بيانات الخط الثاني
-                const secondFlightFrom = document.getElementById('secondFlightFrom').value || "إمستردام";
-                const secondFlightTo = document.getElementById('secondFlightTo').value || "الرياض";
-                const secondFlightCode = document.getElementById('secondFlightCode').value || "AMS→RUH";
-                const secondDeparture = document.getElementById('secondDeparture').value || "03:05 عصراً";
-                const secondArrival = document.getElementById('secondArrival').value || "10:15 ليلاً";
-                const transit2 = document.getElementById('transit2').value || "3 ساعة و 15 دقيقة";
-                const secondWeight1 = document.getElementById('secondWeight1').value || "2 حقائب بوزن 23 كيلو.(50رطل)";
-                const secondWeight2 = document.getElementById('secondWeight2').value || "1 حقيبة يد بوزن 12 كيلو.(26رطل)";
-                
-                // بيانات الخط الثالث
-                const thirdFlightFrom = document.getElementById('thirdFlightFrom').value || "الرياض";
-                const thirdFlightTo = document.getElementById('thirdFlightTo').value || "عدن";
-                const thirdFlightCode = document.getElementById('thirdFlightCode').value || "RUH→ADE";
-                const thirdDeparture = document.getElementById('thirdDeparture').value || "01:30 صباحاً";
-                const thirdArrival = document.getElementById('thirdArrival').value || "03:30 فجراً";
-                const thirdWeight = document.getElementById('thirdWeight').value || "لايوجد معلومات";
-                
-                // إنشاء نص الرسالة
-                const message = `عميلنا العـزيز ...💼🤵‍♂
+                if (previewType === "reminder") {
+                    // إنشاء رسالة التذكير
+                    const selectedFlightIndex = reminderFlightSelector.value;
+                    let flightDetails = "";
+                    
+                    if (selectedFlightIndex === "all") {
+                        // رسالة تذكير لجميع الخطوط
+                        flightDetails = `خــــط🛫 *(${mainRouteFrom}←${mainRouteTo})*`;
+                    } else {
+                        // رسالة تذكير لخط محدد
+                        const flightCards = flightsContainer.querySelectorAll('.flight-card');
+                        const selectedFlight = flightCards[selectedFlightIndex];
+                        
+                        if (selectedFlight) {
+                            const from = selectedFlight.querySelector('.flight-from').value || "مدينة المغادرة";
+                            const to = selectedFlight.querySelector('.flight-to').value || "مدينة الوصول";
+                            flightDetails = `خــــط🛫 *(${from}←${to})*`;
+                        } else {
+                            flightDetails = `خــــط🛫 *(${mainRouteFrom}←${mainRouteTo})*`;
+                        }
+                    }
+                    
+                    const message = `عميلنا الكريم ${clientName}🌹
+
+🔻 *هذا الاشعار لتذكيرك*⏰
+
+    *بأن رحلتك*
+🗓 بتاريخ غـداً *${travelDate}* 
+      (حسب توقيت اليمن)
+
+${flightDetails}
+
+> على طيران ${airlines} حسب التفاصيل المرسله لكم سابقًا🌹
+
+💥يرجـى التوجــه للمطار قبل موعد الرحـــلة بـ أربـع سـاعات أي الساعة *${arrivalTime}*
+
+${customMessage ? customMessage + '\n' : ''}
+*مــــــــلاحظـة:*❗
+> يـرجـــــى مراجعـــة تفــاصيـل الحـجـــز جيداً، والتقـيد بالتعليمات،وكذلك التأكـد من وثـائـق الســـــــفر.
+➖➖➖➖➖➖➖➖
+_فريق الدعـــم والمســاعدة_
+*يتمنى لكم رحـــــلة آمنـه وسعيـده*🛫
+
+شكراً لإختياركم *امان للسفريات والسياحة* 
+*سعدنا بخدمتكم*`;
+
+                    messagePreview.textContent = message;
+                } else {
+                    // إنشاء رسالة التفاصيل الكاملة
+                    // جمع بيانات خطوط الرحلة
+                    let flightDetails = "";
+                    const flightCards = flightsContainer.querySelectorAll('.flight-card');
+                    
+                    flightCards.forEach((card, index) => {
+                        const flightNumber = index + 1;
+                        const from = card.querySelector('.flight-from').value || "مدينة المغادرة";
+                        const to = card.querySelector('.flight-to').value || "مدينة الوصول";
+                        const codeFrom = card.querySelector('.flight-code-from').value || "XXX";
+                        const codeTo = card.querySelector('.flight-code-to').value || "YYY";
+                        const flightCode = `${codeFrom}→${codeTo}`;
+                        
+                        const departureHour = card.querySelector('.departure-hour').value;
+                        const departureMinute = card.querySelector('.departure-minute').value;
+                        const departurePeriod = card.querySelector('.departure-period:checked')?.value || "مساءً";
+                        const departureTime = departureHour && departureMinute ? `${departureHour}:${departureMinute} ${departurePeriod}` : "00:00 مساءً";
+                        
+                        const arrivalHour = card.querySelector('.arrival-hour').value;
+                        const arrivalMinute = card.querySelector('.arrival-minute').value;
+                        const arrivalPeriod = card.querySelector('.arrival-period:checked')?.value || "صباحاً";
+                        const arrivalTime = arrivalHour && arrivalMinute ? `${arrivalHour}:${arrivalMinute} ${arrivalPeriod}` : "00:00 صباحاً";
+                        
+                        const transitTime = card.querySelector('.transit-time').value || "0 ساعات";
+                        const weight1 = card.querySelector('.weight-1').value || "لايوجد معلومات";
+                        const weight2 = card.querySelector('.weight-2').value || "";
+                        
+                        flightDetails += `\n> ${flightNumber}${flightNumber === 1 ? '①' : flightNumber === 2 ? '②' : '③'} الخـط ${flightNumber === 1 ? 'الأول' : flightNumber === 2 ? 'الـثـانـــي' : 'الثالث'} :
+> *${from}←${to}-(${flightCode})*`;
+
+                        if (weight1 || weight2) {
+                            flightDetails += `\n> *🎒الـوزن المسموح:*`;
+                            if (weight1) flightDetails += `\n- ${weight1}`;
+                            if (weight2) flightDetails += `\n- ${weight2}`;
+                        }
+
+                        flightDetails += `\n\n> ⏰ *توقيـت الرحــلة*: 
+_🛫 الاقــلاع: *${departureTime}* من ${from}._
+
+_🛬 الوصـول: *${arrivalTime}* إلى ${to}._`;
+
+                        if (transitTime && index < flightCards.length - 1) {
+                            flightDetails += `\n\n⏳ *ترانزيت في ${to} ${transitTime}*`;
+                            flightDetails += `\n> •✈-----------------✈•\n`;
+                        }
+                    });
+                    
+                    // إنشاء نص الرسالة
+                    const message = `عميلنا العـزيز ...💼🤵‍♂
 > ${clientName}✓
 
 > 📄إليكم تفـاصـيل رحلتـكم القـادمـة بـإذن الله والمقررة يوم الأربعـاء تـأريخ ${travelDate}.
@@ -664,47 +1220,8 @@ _•(قبل الرحــــلة بـ اربع ســـاعات)•*_
 🗓 *التاريخ*:${travelDate}
 ــــــــــــــــــــــــــــــــــــــــــــــــــ
 > 🛫 *خـط سير الرحلــــــة*: 
-> ديترويت←عـدن(DX→ADE)
-
-> ① الخـط الأول :
-> *${firstFlightFrom}←${firstFlightTo}-(${firstFlightCode})*
-> *🎒الـوزن المسموح:*
-- ${firstWeight1}
-- ${firstWeight2}
-
-> ⏰ *توقيـت الرحــلة*: 
-> 🗓  الأثنين ${travelDate}
-_🛫 الاقــلاع: *${firstDeparture}* من ${firstFlightFrom}._
-
-_🛬 الوصـول: *${firstArrival}* إلى ${firstFlightTo} 29 يوليو ._
-
-⏳ *ترانزيت في ${firstFlightTo} ${transit1}*
-> •✈-----------------✈•
-
-> ②الخـط الـثـانـــي:
-> يوم الثلثاء29يوليو
-> *${secondFlightFrom}←${secondFlightTo}_(${secondFlightCode})*
-
-*🎒 الـوزن المسموح*:
-- ${secondWeight1}
-- ${secondWeight2}
-
-> *⏰توقيت الرحلـــــة:*
-_🛫 الإقـلاع *${secondDeparture}* من ${secondFlightFrom}._
-
-_🛬 الوصـول *${secondArrival}* الى ${secondFlightTo}._
-
-⏳ *ترانزيت في ${secondFlightTo} ${transit2}*
-•✈-----------------✈•
-
-> 🔚③الخط الثالث:
-> *${thirdFlightFrom}←${thirdFlightTo}_(${thirdFlightCode})*
-*🎒الــوزن المســموح:* ${thirdWeight}
-
-> ⏰توقيت الرحلـــــة:
-_🛫الإقــلاع: *${thirdDeparture}* من ${thirdFlightFrom}.(30يوليو)_
-
-_🛬الوصــول: *${thirdArrival}* إلى ${thirdFlightTo}._
+> ${mainRouteFrom}←${mainRouteTo}(${mainRouteCode})
+${flightDetails}
      
 ➖️➖️➖️➖️➖️➖️➖➖
    *فريق الدعـــم والمســــاعدة*
@@ -713,7 +1230,9 @@ _*يتمنى لكم رحلة سعيدة🌹*_
 ▫️شكرًا لاختياركم *أمـــان للسفريات والسياحة* ✈️
 > *أمان فخامة السفر براحة وأمان*`;
 
-                messagePreview.textContent = message;
+                    messagePreview.textContent = message;
+                }
+                
                 successMessage.style.display = 'block';
                 
                 // إخفاء رسالة النجاح بعد 3 ثوان
@@ -722,6 +1241,7 @@ _*يتمنى لكم رحلة سعيدة🌹*_
                 }, 3000);
             }
             
+            // نسخ الرسالة
             function copyMessage() {
                 const text = messagePreview.textContent;
                 navigator.clipboard.writeText(text).then(() => {
@@ -732,6 +1252,7 @@ _*يتمنى لكم رحلة سعيدة🌹*_
                 });
             }
             
+            // مشاركة الرسالة
             function shareMessage() {
                 const text = messagePreview.textContent;
                 if (navigator.share) {
@@ -749,45 +1270,74 @@ _*يتمنى لكم رحلة سعيدة🌹*_
                 }
             }
             
+            // مسح النموذج
             function resetForm() {
                 if (confirm('هل أنت متأكد من أنك تريد مسح جميع البيانات؟')) {
-                    document.querySelectorAll('input').forEach(input => {
-                        input.value = '';
-                    });
-                    
-                    // إعادة تعيين القيم الافتراضية
+                    // مسح الحقول الأساسية
+                    document.getElementById('clientName').value = '';
                     document.getElementById('airlines').value = "الهولندية&واليمنية";
-                    document.getElementById('firstFlightFrom').value = "ديترويت";
-                    document.getElementById('firstFlightTo').value = "إمستردام";
-                    document.getElementById('firstFlightCode').value = "DXT→AMS";
-                    document.getElementById('firstDeparture').value = "06:30 مساءً";
-                    document.getElementById('firstArrival').value = "08:15 صباحاً";
-                    document.getElementById('transit1').value = "6 ساعات و 50 دقيقة";
-                    document.getElementById('firstWeight1').value = "2 حقائب بوزن 23 كجم (50 رطلاً) لكل منهما";
-                    document.getElementById('firstWeight2').value = "حقائب المقصورة: للبالغين، قطعة واحدة";
+                    document.getElementById('customMessage').value = "";
                     
-                    document.getElementById('secondFlightFrom').value = "إمستردام";
-                    document.getElementById('secondFlightTo').value = "الرياض";
-                    document.getElementById('secondFlightCode').value = "AMS→RUH";
-                    document.getElementById('secondDeparture').value = "03:05 عصراً";
-                    document.getElementById('secondArrival').value = "10:15 ليلاً";
-                    document.getElementById('transit2').value = "3 ساعة و 15 دقيقة";
-                    document.getElementById('secondWeight1').value = "2 حقائب بوزن 23 كيلو.(50رطل)";
-                    document.getElementById('secondWeight2').value = "1 حقيبة يد بوزن 12 كيلو.(26رطل)";
+                    // مسح خطوط الرحلة
+                    flightsContainer.innerHTML = '';
+                    flightsContainer.appendChild(emptyState);
+                    flightCount = 0;
+                    emptyState.style.display = 'block';
                     
-                    document.getElementById('thirdFlightFrom').value = "الرياض";
-                    document.getElementById('thirdFlightTo').value = "عدن";
-                    document.getElementById('thirdFlightCode').value = "RUH→ADE";
-                    document.getElementById('thirdDeparture').value = "01:30 صباحاً";
-                    document.getElementById('thirdArrival').value = "03:30 فجراً";
-                    document.getElementById('thirdWeight').value = "لايوجد معلومات";
+                    // إعادة تعيين الخط الرئيسي
+                    document.getElementById('mainRouteFrom').value = "ديترويت";
+                    document.getElementById('mainRouteTo').value = "عدن";
+                    document.getElementById('mainRouteCodeFrom').value = "DX";
+                    document.getElementById('mainRouteCodeTo').value = "ADE";
                     
-                    // إعادة تعيين التاريخ إلى تاريخ الأربعاء القادم
-                    document.getElementById('travelDate').valueAsDate = nextWednesday;
+                    // إعادة تعيين منتقي الوقت والتاريخ
+                    initializeSelectOptions();
+                    
+                    // تحديث قائمة التذكير
+                    updateReminderFlightSelector();
                     
                     messagePreview.textContent = 'ستظهر معاينة الرسالة هنا بعد ملء النموذج والضغط على "إنشاء الرسالة"';
                 }
             }
+            
+            // إعداد event listeners
+            detailBtn.addEventListener('click', () => {
+                document.body.classList.remove('reminder-mode');
+                detailBtn.classList.add('active');
+                reminderBtn.classList.remove('active');
+                previewTypeSelector.value = "detail";
+                generateMessage();
+            });
+            
+            reminderBtn.addEventListener('click', () => {
+                document.body.classList.add('reminder-mode');
+                detailBtn.classList.remove('active');
+                reminderBtn.classList.add('active');
+                previewTypeSelector.value = "reminder";
+                generateMessage();
+            });
+            
+            generateBtn.addEventListener('click', generateMessage);
+            copyBtn.addEventListener('click', copyMessage);
+            shareBtn.addEventListener('click', shareMessage);
+            resetBtn.addEventListener('click', resetForm);
+            addFlightBtn.addEventListener('click', addFlight);
+            
+            previewTypeSelector.addEventListener('change', generateMessage);
+            reminderFlightSelector.addEventListener('change', generateMessage);
+            
+            // تحديث قائمة التذكير عند تغيير أي حقل
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('flight-from') || e.target.classList.contains('flight-to')) {
+                    updateReminderFlightSelector();
+                }
+            });
+            
+            // تهيئة التطبيق
+            initializeSelectOptions();
+            
+            // إضافة خط افتراضي عند التحميل
+            addFlight();
         });
     </script>
 </body>
