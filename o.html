@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أمان للسفريات والسياحة - منشئ الرسائل</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: var(--secondary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 10px;
+        }
+        
+        .description {
+            color: var(--dark);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section, .preview-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2 i {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .flight-route {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .flight-route input {
+            flex: 1;
+        }
+        
+        .flight-route span {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .copy-btn {
+            background: var(--success);
+        }
+        
+        .share-btn {
+            background: #9b59b6;
+        }
+        
+        .reset-btn {
+            background: var(--danger);
+        }
+        
+        .message-preview {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 25px;
+            height: 600px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 16px;
+            line-height: 1.8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .message-preview {
+                height: 500px;
+            }
+        }
+        
+        .success-message {
+            background: var(--success);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section-title {
+            background: #f1f8ff;
+            padding: 12px;
+            border-right: 4px solid var(--primary);
+            margin: 20px 0;
+            font-weight: bold;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .flight-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+        
+        .flight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .flight-number {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .time-inputs {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .time-inputs > div {
+            flex: 1;
+        }
+        
+        .weight-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .collapse-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .flight-content {
+            display: block;
+        }
+        
+        .flight-content.collapsed {
+            display: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background: #f1f1f1;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .required::after {
+            content: " *";
+            color: var(--danger);
+        }
+        
+        .input-hint {
+            font-size: 0.85rem;
+            color: #777;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-plane"></i> أمان للسفريات والسياحة</h1>
+        <p class="description">منشئ رسائل تفاصيل الرحلة - أنشئ رسائل احترافية لعملائك بسهولة</p>
+    </header>
+    
+    <div class="container">
+        <div class="form-section">
+            <h2><i class="fas fa-edit"></i> إدخال بيانات الرحلة</h2>
+            
+            <div class="tab-container">
+                <div class="tab active" data-tab="basic">المعلومات الأساسية</div>
+                <div class="tab" data-tab="flights">تفاصيل الرحلات</div>
+                <div class="tab" data-tab="weight">أوزان الأمتعة</div>
+            </div>
+            
+            <div class="tab-content active" id="basic-tab">
+                <div class="form-group">
+                    <label for="clientName" class="required"><i class="fas fa-user"></i> اسم العميل</label>
+                    <input type="text" id="clientName" placeholder="أدخل اسم العميل الكامل">
+                </div>
+                
+                <div class="form-group">
+                    <label for="travelDate" class="required"><i class="fas fa-calendar-alt"></i> تاريخ الرحلة</label>
+                    <input type="date" id="travelDate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="arrivalTime" class="required"><i class="fas fa-clock"></i> وقت الحضور إلى المطار</label>
+                    <input type="text" id="arrivalTime" placeholder="مثال: 2:30 مساءً">
+                    <p class="input-hint">يرجى كتابة الوقت بالصيغة: الساعة:الدقيقة صباحاً/مساءً</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="airlines"><i class="fas fa-plane"></i> شركات الطيران</label>
+                    <input type="text" id="airlines" placeholder="مثال: الهولندية&واليمنية" value="الهولندية&واليمنية">
+                </div>
+            </div>
+            
+            <div class="tab-content" id="flights-tab">
+                <div class="flight-card">
+                    <div class="flight-header">
+                        <h3><i class="fas fa-route"></i> الخط الأول</h3>
+                        <button class="collapse-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="flight-content">
+                        <div class="form-group">
+                            <label for="firstFlightFrom" class="required"><i class="fas fa-plane-departure"></i> من</label>
+                            <input type="text" id="firstFlightFrom" placeholder="مثال: ديترويت" value="ديترويت">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="firstFlightTo" class="required"><i class="fas fa-plane-arrival"></i> إلى</label>
+                            <input type="text" id="firstFlightTo" placeholder="مثال: إمستردام" value="إمستردام">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="firstFlightCode"><i class="fas fa-code"></i> رمز الرحلة (اختياري)</label>
+                            <input type="text" id="firstFlightCode" placeholder="مثال: DXT→AMS" value="DXT→AMS">
+                        </div>
+                        
+                        <div class="time-inputs">
+                            <div class="form-group">
+                                <label for="firstDeparture" class="required"><i class="fas fa-plane-departure"></i> وقت الإقلاع</label>
+                                <input type="text" id="firstDeparture" placeholder="مثال: 06:30 مساءً" value="06:30 مساءً">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="firstArrival" class="required"><i class="fas fa-plane-arrival"></i> وقت الوصول</label>
+                                <input type="text" id="firstArrival" placeholder="مثال: 08:15 صباحاً" value="08:15 صباحاً">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transit1"><i class="fas fa-stopwatch"></i> مدة الترانزيت</label>
+                            <input type="text" id="transit1" placeholder="مثال: 6 ساعات و 50 دقيقة" value="6 ساعات و 50 دقيقة">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flight-card">
+                    <div class="flight-header">
+                        <h3><i class="fas fa-route"></i> الخط الثاني</h3>
+                        <button class="collapse-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="flight-content">
+                        <div class="form-group">
+                            <label for="secondFlightFrom" class="required"><i class="fas fa-plane-departure"></i> من</label>
+                            <input type="text" id="secondFlightFrom" placeholder="مثال: إمستردام" value="إمستردام">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="secondFlightTo" class="required"><i class="fas fa-plane-arrival"></i> إلى</label>
+                            <input type="text" id="secondFlightTo" placeholder="مثال: الرياض" value="الرياض">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="secondFlightCode"><i class="fas fa-code"></i> رمز الرحلة (اختياري)</label>
+                            <input type="text" id="secondFlightCode" placeholder="مثال: AMS→RUH" value="AMS→RUH">
+                        </div>
+                        
+                        <div class="time-inputs">
+                            <div class="form-group">
+                                <label for="secondDeparture" class="required"><i class="fas fa-plane-departure"></i> وقت الإقلاع</label>
+                                <input type="text" id="secondDeparture" placeholder="مثال: 03:05 عصراً" value="03:05 عصراً">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="secondArrival" class="required"><i class="fas fa-plane-arrival"></i> وقت الوصول</label>
+                                <input type="text" id="secondArrival" placeholder="مثال: 10:15 ليلاً" value="10:15 ليلاً">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="transit2"><i class="fas fa-stopwatch"></i> مدة الترانزيت</label>
+                            <input type="text" id="transit2" placeholder="مثال: 3 ساعة و 15 دقيقة" value="3 ساعة و 15 دقيقة">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flight-card">
+                    <div class="flight-header">
+                        <h3><i class="fas fa-route"></i> الخط الثالث</h3>
+                        <button class="collapse-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="flight-content">
+                        <div class="form-group">
+                            <label for="thirdFlightFrom" class="required"><i class="fas fa-plane-departure"></i> من</label>
+                            <input type="text" id="thirdFlightFrom" placeholder="مثال: الرياض" value="الرياض">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="thirdFlightTo" class="required"><i class="fas fa-plane-arrival"></i> إلى</label>
+                            <input type="text" id="thirdFlightTo" placeholder="مثال: عدن" value="عدن">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="thirdFlightCode"><i class="fas fa-code"></i> رمز الرحلة (اختياري)</label>
+                            <input type="text" id="thirdFlightCode" placeholder="مثال: RUH→ADE" value="RUH→ADE">
+                        </div>
+                        
+                        <div class="time-inputs">
+                            <div class="form-group">
+                                <label for="thirdDeparture" class="required"><i class="fas fa-plane-departure"></i> وقت الإقلاع</label>
+                                <input type="text" id="thirdDeparture" placeholder="مثال: 01:30 صباحاً" value="01:30 صباحاً">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="thirdArrival" class="required"><i class="fas fa-plane-arrival"></i> وقت الوصول</label>
+                                <input type="text" id="thirdArrival" placeholder="مثال: 03:30 فجراً" value="03:30 فجراً">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="weight-tab">
+                <div class="flight-card">
+                    <div class="flight-header">
+                        <h3><i class="fas fa-suitcase"></i> وزن الأمتعة - الخط الأول</h3>
+                    </div>
+                    <div class="weight-inputs">
+                        <div class="form-group">
+                            <label for="firstWeight1"><i class="fas fa-suitcase"></i> الوزن المسموح 1</label>
+                            <input type="text" id="firstWeight1" value="2 حقائب بوزن 23 كجم (50 رطلاً) لكل منهما">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="firstWeight2"><i class="fas fa-briefcase"></i> الوزن المسموح 2</label>
+                            <input type="text" id="firstWeight2" value="حقائب المقصورة: للبالغين، قطعة واحدة">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flight-card">
+                    <div class="flight-header">
+                        <h3><i class="fas fa-suitcase"></i> وزن الأمتعة - الخط الثاني</h3>
+                    </div>
+                    <div class="weight-inputs">
+                        <div class="form-group">
+                            <label for="secondWeight1"><i class="fas fa-suitcase"></i> الوزن المسموح 1</label>
+                            <input type="text" id="secondWeight1" value="2 حقائب بوزن 23 كيلو.(50رطل)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="secondWeight2"><i class="fas fa-briefcase"></i> الوزن المسموح 2</label>
+                            <input type="text" id="secondWeight2" value="1 حقيبة يد بوزن 12 كيلو.(26رطل)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flight-card">
+                    <div class="flight-header">
+                        <h3><i class="fas fa-suitcase"></i> وزن الأمتعة - الخط الثالث</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="thirdWeight"><i class="fas fa-suitcase"></i> الوزن المسموح</label>
+                        <input type="text" id="thirdWeight" value="لايوجد معلومات">
+                    </div>
+                </div>
+            </div>
+            
+            <button id="generateBtn"><i class="fas fa-magic"></i> إنشاء الرسالة</button>
+            
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i> تم إنشاء الرسالة بنجاح! يمكنك نسخها أو مشاركتها الآن.
+            </div>
+        </div>
+        
+        <div class="preview-section">
+            <h2><i class="fas fa-eye"></i> معاينة الرسالة</h2>
+            <div class="message-preview" id="messagePreview">
+                ستظهر معاينة الرسالة هنا بعد ملء النموذج والضغط على "إنشاء الرسالة"
+            </div>
+            
+            <div class="buttons">
+                <button id="copyBtn" class="copy-btn"><i class="fas fa-copy"></i> نسخ الرسالة</button>
+                <button id="shareBtn" class="share-btn"><i class="fas fa-share-alt"></i> مشاركة</button>
+                <button id="resetBtn" class="reset-btn"><i class="fas fa-trash"></i> مسح الكل</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generateBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const shareBtn = document.getElementById('shareBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const messagePreview = document.getElementById('messagePreview');
+            const successMessage = document.getElementById('successMessage');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const collapseButtons = document.querySelectorAll('.collapse-btn');
+            
+            // تعبئة التاريخ الحالي كقيمة افتراضية
+            const today = new Date();
+            const nextWednesday = new Date(today);
+            nextWednesday.setDate(today.getDate() + ((3 + 7 - today.getDay()) % 7));
+            document.getElementById('travelDate').valueAsDate = nextWednesday;
+            
+            // إعداد نظام التبويب
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // إعداد أزرار الطي
+            collapseButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const content = btn.closest('.flight-card').querySelector('.flight-content');
+                    content.classList.toggle('collapsed');
+                    
+                    const icon = btn.querySelector('i');
+                    if (content.classList.contains('collapsed')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+            
+            generateBtn.addEventListener('click', generateMessage);
+            copyBtn.addEventListener('click', copyMessage);
+            shareBtn.addEventListener('click', shareMessage);
+            resetBtn.addEventListener('click', resetForm);
+            
+            function generateMessage() {
+                const clientName = document.getElementById('clientName').value || "عمر صـلاح الحـالمي";
+                const travelDateInput = document.getElementById('travelDate').value;
+                const arrivalTime = document.getElementById('arrivalTime').value || "2:30 مساءً";
+                const airlines = document.getElementById('airlines').value || "الهولندية&واليمنية";
+                
+                // تحويل تاريخ الرحلة إلى التنسيق المطلوب
+                let travelDate = "28 يوليو 2025م";
+                if (travelDateInput) {
+                    const dateObj = new Date(travelDateInput);
+                    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                    travelDate = dateObj.toLocaleDateString('ar-EG', options) + 'م';
+                }
+                
+                // بيانات الخط الأول
+                const firstFlightFrom = document.getElementById('firstFlightFrom').value || "ديترويت";
+                const firstFlightTo = document.getElementById('firstFlightTo').value || "إمستردام";
+                const firstFlightCode = document.getElementById('firstFlightCode').value || "DXT→AMS";
+                const firstDeparture = document.getElementById('firstDeparture').value || "06:30 مساءً";
+                const firstArrival = document.getElementById('firstArrival').value || "08:15 صباحاً";
+                const transit1 = document.getElementById('transit1').value || "6 ساعات و 50 دقيقة";
+                const firstWeight1 = document.getElementById('firstWeight1').value || "2 حقائب بوزن 23 كجم (50 رطلاً) لكل منهما";
+                const firstWeight2 = document.getElementById('firstWeight2').value || "حقائب المقصورة: للبالغين، قطعة واحدة";
+                
+                // بيانات الخط الثاني
+                const secondFlightFrom = document.getElementById('secondFlightFrom').value || "إمستردام";
+                const secondFlightTo = document.getElementById('secondFlightTo').value || "الرياض";
+                const secondFlightCode = document.getElementById('secondFlightCode').value || "AMS→RUH";
+                const secondDeparture = document.getElementById('secondDeparture').value || "03:05 عصراً";
+                const secondArrival = document.getElementById('secondArrival').value || "10:15 ليلاً";
+                const transit2 = document.getElementById('transit2').value || "3 ساعة و 15 دقيقة";
+                const secondWeight1 = document.getElementById('secondWeight1').value || "2 حقائب بوزن 23 كيلو.(50رطل)";
+                const secondWeight2 = document.getElementById('secondWeight2').value || "1 حقيبة يد بوزن 12 كيلو.(26رطل)";
+                
+                // بيانات الخط الثالث
+                const thirdFlightFrom = document.getElementById('thirdFlightFrom').value || "الرياض";
+                const thirdFlightTo = document.getElementById('thirdFlightTo').value || "عدن";
+                const thirdFlightCode = document.getElementById('thirdFlightCode').value || "RUH→ADE";
+                const thirdDeparture = document.getElementById('thirdDeparture').value || "01:30 صباحاً";
+                const thirdArrival = document.getElementById('thirdArrival').value || "03:30 فجراً";
+                const thirdWeight = document.getElementById('thirdWeight').value || "لايوجد معلومات";
+                
+                // إنشاء نص الرسالة
+                const message = `عميلنا العـزيز ...💼🤵‍♂
+> ${clientName}✓
+
+> 📄إليكم تفـاصـيل رحلتـكم القـادمـة بـإذن الله والمقررة يوم الأربعـاء تـأريخ ${travelDate}.
+
+      *💥 تنـبـــــــــــيـه هــام⚠️*
+يرجـى حضوركم إلى المطـار يوم الأربعـاء تأريخ ${travelDate.replace('م', '')}م على *الســـــاعـة: ${arrivalTime}*‼️🚸
+_•(قبل الرحــــلة بـ اربع ســـاعات)•*_
+
+📃تفـــاصــيل رحــلة الذهاب🔻
+➖️➖️➖️➖️➖️➖️➖️➖
+✈️ *على طـيران* : ${airlines}.
+🗓 *التاريخ*:${travelDate}
+ــــــــــــــــــــــــــــــــــــــــــــــــــ
+> 🛫 *خـط سير الرحلــــــة*: 
+> ديترويت←عـدن(DX→ADE)
+
+> ① الخـط الأول :
+> *${firstFlightFrom}←${firstFlightTo}-(${firstFlightCode})*
+> *🎒الـوزن المسموح:*
+- ${firstWeight1}
+- ${firstWeight2}
+
+> ⏰ *توقيـت الرحــلة*: 
+> 🗓  الأثنين ${travelDate}
+_🛫 الاقــلاع: *${firstDeparture}* من ${firstFlightFrom}._
+
+_🛬 الوصـول: *${firstArrival}* إلى ${firstFlightTo} 29 يوليو ._
+
+⏳ *ترانزيت في ${firstFlightTo} ${transit1}*
+> •✈-----------------✈•
+
+> ②الخـط الـثـانـــي:
+> يوم الثلثاء29يوليو
+> *${secondFlightFrom}←${secondFlightTo}_(${secondFlightCode})*
+
+*🎒 الـوزن المسموح*:
+- ${secondWeight1}
+- ${secondWeight2}
+
+> *⏰توقيت الرحلـــــة:*
+_🛫 الإقـلاع *${secondDeparture}* من ${secondFlightFrom}._
+
+_🛬 الوصـول *${secondArrival}* الى ${secondFlightTo}._
+
+⏳ *ترانزيت في ${secondFlightTo} ${transit2}*
+•✈-----------------✈•
+
+> 🔚③الخط الثالث:
+> *${thirdFlightFrom}←${thirdFlightTo}_(${thirdFlightCode})*
+*🎒الــوزن المســموح:* ${thirdWeight}
+
+> ⏰توقيت الرحلـــــة:
+_🛫الإقــلاع: *${thirdDeparture}* من ${thirdFlightFrom}.(30يوليو)_
+
+_🛬الوصــول: *${thirdArrival}* إلى ${thirdFlightTo}._
+     
+➖️➖️➖️➖️➖️➖️➖➖
+   *فريق الدعـــم والمســــاعدة*
+_*يتمنى لكم رحلة سعيدة🌹*_
+
+▫️شكرًا لاختياركم *أمـــان للسفريات والسياحة* ✈️
+> *أمان فخامة السفر براحة وأمان*`;
+
+                messagePreview.textContent = message;
+                successMessage.style.display = 'block';
+                
+                // إخفاء رسالة النجاح بعد 3 ثوان
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            }
+            
+            function copyMessage() {
+                const text = messagePreview.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('تم نسخ الرسالة إلى الحافظة بنجاح!');
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                    alert('حدث خطأ أثناء نسخ الرسالة. يرجى المحاولة مرة أخرى.');
+                });
+            }
+            
+            function shareMessage() {
+                const text = messagePreview.textContent;
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'تفاصيل رحلتك مع أمان للسفريات',
+                        text: text
+                    }).then(() => {
+                        console.log('تمت المشاركة بنجاح');
+                    }).catch(err => {
+                        console.error('Error sharing:', err);
+                        alert('لم تتمكن من المشاركة. يرجى نسخ الرسالة يدويًا.');
+                    });
+                } else {
+                    alert('ميزة المشاركة غير مدعومة في متصفحك. يرجى نسخ الرسالة يدويًا.');
+                }
+            }
+            
+            function resetForm() {
+                if (confirm('هل أنت متأكد من أنك تريد مسح جميع البيانات؟')) {
+                    document.querySelectorAll('input').forEach(input => {
+                        input.value = '';
+                    });
+                    
+                    // إعادة تعيين القيم الافتراضية
+                    document.getElementById('airlines').value = "الهولندية&واليمنية";
+                    document.getElementById('firstFlightFrom').value = "ديترويت";
+                    document.getElementById('firstFlightTo').value = "إمستردام";
+                    document.getElementById('firstFlightCode').value = "DXT→AMS";
+                    document.getElementById('firstDeparture').value = "06:30 مساءً";
+                    document.getElementById('firstArrival').value = "08:15 صباحاً";
+                    document.getElementById('transit1').value = "6 ساعات و 50 دقيقة";
+                    document.getElementById('firstWeight1').value = "2 حقائب بوزن 23 كجم (50 رطلاً) لكل منهما";
+                    document.getElementById('firstWeight2').value = "حقائب المقصورة: للبالغين، قطعة واحدة";
+                    
+                    document.getElementById('secondFlightFrom').value = "إمستردام";
+                    document.getElementById('secondFlightTo').value = "الرياض";
+                    document.getElementById('secondFlightCode').value = "AMS→RUH";
+                    document.getElementById('secondDeparture').value = "03:05 عصراً";
+                    document.getElementById('secondArrival').value = "10:15 ليلاً";
+                    document.getElementById('transit2').value = "3 ساعة و 15 دقيقة";
+                    document.getElementById('secondWeight1').value = "2 حقائب بوزن 23 كيلو.(50رطل)";
+                    document.getElementById('secondWeight2').value = "1 حقيبة يد بوزن 12 كيلو.(26رطل)";
+                    
+                    document.getElementById('thirdFlightFrom').value = "الرياض";
+                    document.getElementById('thirdFlightTo').value = "عدن";
+                    document.getElementById('thirdFlightCode').value = "RUH→ADE";
+                    document.getElementById('thirdDeparture').value = "01:30 صباحاً";
+                    document.getElementById('thirdArrival').value = "03:30 فجراً";
+                    document.getElementById('thirdWeight').value = "لايوجد معلومات";
+                    
+                    // إعادة تعيين التاريخ إلى تاريخ الأربعاء القادم
+                    document.getElementById('travelDate').valueAsDate = nextWednesday;
+                    
+                    messagePreview.textContent = 'ستظهر معاينة الرسالة هنا بعد ملء النموذج والضغط على "إنشاء الرسالة"';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
