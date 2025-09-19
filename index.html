@@ -431,6 +431,21 @@
     .offers-slider {
       margin: 30px 0;
       position: relative;
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-color) var(--bg-color);
+      padding: 10px 0;
+      gap: 15px;
+    }
+    
+    .offers-slider::-webkit-scrollbar {
+      height: 6px;
+    }
+    
+    .offers-slider::-webkit-scrollbar-thumb {
+      background-color: var(--primary-color);
+      border-radius: 3px;
     }
     
     .offer-card {
@@ -438,8 +453,9 @@
       border-radius: var(--border-radius);
       padding: 20px;
       color: white;
-      margin: 0 10px;
+      min-width: 280px;
       box-shadow: var(--box-shadow);
+      flex-shrink: 0;
     }
     
     .offer-card h3 {
@@ -467,9 +483,16 @@
       display: inline-block;
     }
     
-    /* Contact Info Section */
+    /* Contact Info Section - Redesigned */
     .contact-info {
       margin: 30px 0;
+    }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
     }
     
     .contact-card {
@@ -477,18 +500,64 @@
       padding: 20px;
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
-      line-height: 2;
-      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: var(--transition);
+      cursor: pointer;
     }
     
-    .contact-card strong {
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      color: white;
+      font-size: 24px;
+    }
+    
+    .contact-card h3 {
+      margin-bottom: 10px;
       color: var(--primary-color);
+    }
+    
+    .contact-card p {
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+    
+    .contact-button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .contact-button:hover {
+      background: var(--secondary-color);
     }
     
     .map-container {
       margin-top: 20px;
       border-radius: var(--border-radius);
       overflow: hidden;
+      box-shadow: var(--box-shadow);
     }
     
     /* Bottom Navigation with Curve */
@@ -624,6 +693,148 @@
       background: rgba(255, 255, 255, 0.3);
     }
     
+    /* Service Details Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: var(--card-bg);
+      margin: 15px;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      max-width: 500px;
+      width: 100%;
+      position: relative;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text-color);
+    }
+    
+    .modal-title {
+      text-align: center;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .modal-button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: var(--current-font);
+      font-weight: 500;
+    }
+    
+    .modal-button.primary {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .modal-button.primary:hover {
+      background: var(--secondary-color);
+    }
+    
+    .modal-button.secondary {
+      background: var(--bg-color);
+      color: var(--text-color);
+      border: 1px solid #ddd;
+    }
+    
+    .modal-button.secondary:hover {
+      background: #e9ecef;
+    }
+    
+    /* Testimonials Section */
+    .testimonials {
+      margin: 40px 0;
+    }
+    
+    .testimonial-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 20px;
+    }
+    
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 15px;
+      position: relative;
+      padding: 0 20px;
+    }
+    
+    .testimonial-text::before,
+    .testimonial-text::after {
+      content: '"';
+      font-size: 40px;
+      color: var(--primary-color);
+      opacity: 0.3;
+      position: absolute;
+    }
+    
+    .testimonial-text::before {
+      top: -15px;
+      left: 0;
+    }
+    
+    .testimonial-text::after {
+      bottom: -30px;
+      right: 0;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+    
+    .testimonial-author img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-left: 10px;
+      object-fit: cover;
+    }
+    
+    .author-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .author-name {
+      font-weight: bold;
+    }
+    
+    .author-title {
+      font-size: 14px;
+      color: var(--footer-text);
+    }
+    
     /* Responsive Design */
     @media (max-width: 768px) {
       .grid {
@@ -644,6 +855,14 @@
       
       .user-actions {
         margin-top: 10px;
+      }
+      
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-buttons {
+        flex-direction: column;
       }
     }
     
@@ -734,35 +953,35 @@
   </h2>
   
   <div class="grid">
-    <div class="grid-item fade-in delay-1" onclick="location.href='insurance.html'">
+    <div class="grid-item fade-in delay-1" onclick="showServiceModal('insurance', 'تأمين سفر', 'نوفر أفضل بوالص التأمين للسفر لتغطية النفقات الطبية الطارئة، فقدان الأمتعة، والتأخير أو الإلغاء الرحلة. احصل على تغطية شاملة لرحلتك بأسعار تنافسية.')">
       <i class="fas fa-umbrella-beach"></i>
       <div class="label">تأمين سفر</div>
     </div>
-    <div class="grid-item fade-in delay-2" onclick="location.href='visa-req.html'">
+    <div class="grid-item fade-in delay-2" onclick="showServiceModal('visa-req', 'متطلبات التأشيرة', 'نساعدك في معرفة متطلبات التأشيرة لجميع الدول حول العالم. نوفر معلومات محدثة حول المستندات المطلوبة، رسوم التأشيرة، ومدة المعالجة.')">
       <i class="fas fa-passport"></i>
       <div class="label">متطلبات التأشيرة</div>
     </div>
-    <div class="grid-item fade-in delay-3" onclick="location.href='evisa.html'">
+    <div class="grid-item fade-in delay-3" onclick="showServiceModal('evisa', 'تأشيرة إلكترونية', 'خدمة الحصول على التأشيرة الإلكترونية لأكثر من 40 دولة حول العالم. معالجة سريعة ودعم على مدار الساعة.')">
       <i class="fas fa-file-alt"></i>
       <div class="label">تأشيرة إلكترونية</div>
     </div>
-    <div class="grid-item fade-in delay-4" onclick="location.href='hotel.html'">
+    <div class="grid-item fade-in delay-4" onclick="showServiceModal('hotel', 'حجز فندقي', 'احجز أفضل الفنادق حول العالم بأسعار مميزة. نوفر خيارات متنوعة تناسب جميع الميزانيات مع مراجعات حقيقية من المسافرين.')">
       <i class="fas fa-hotel"></i>
       <div class="label">حجز فندقي</div>
     </div>
-    <div class="grid-item fade-in delay-1" onclick="location.href='sim.html'">
+    <div class="grid-item fade-in delay-1" onclick="showServiceModal('sim', 'شريحة إلكترونية', 'اشترِ شريحة اتصال دولية مسبقة الدفع لتستمتع بالإنترنت والمكالمات بأسعار اقتصادية في أكثر من 130 دولة حول العالم.')">
       <i class="fas fa-sim-card"></i>
       <div class="label">شريحة إلكترونية</div>
     </div>
-    <div class="grid-item fade-in delay-2" onclick="location.href='flight.html'">
+    <div class="grid-item fade-in delay-2" onclick="showServiceModal('flight', 'حجز طيران', 'احجز تذاكر الطيران بأفضل الأسعار مع أكبر الخطوط الجوية العالمية. نوفر عروضاً حصرية على السفر الدولي والمحلي.')">
       <i class="fas fa-plane-departure"></i>
       <div class="label">حجز طيران</div>
     </div>
-    <div class="grid-item fade-in delay-3" onclick="location.href='embassy.html'">
+    <div class="grid-item fade-in delay-3" onclick="showServiceModal('embassy', 'السفارات', 'معلومات كاملة عن سفارات الدول العربية والأجنبية، including orifices, ساعات العمل، ومتطلبات الحصول على التأشيرة.')">
       <i class="fas fa-landmark"></i>
       <div class="label">السفارات</div>
     </div>
-    <div class="grid-item fade-in delay-4" onclick="location.href='itinerary.html'">
+    <div class="grid-item fade-in delay-4" onclick="showServiceModal('itinerary', 'خط سير رحلة', 'نساعدك في تخطيط رحلتك بشكل كامل من بدايتها إلى نهايتها، بما في ذلك حجوزات الطيران، الفنادق، والأنشطة السياحية.')">
       <i class="fas fa-route"></i>
       <div class="label">خط سير رحلة</div>
     </div>
@@ -774,11 +993,31 @@
     ملفك الشخصي غير مكتمل - أكمل معلوماتك الآن واحصل على خصم 10% على أول حجز
   </div>
 
+  <h2 class="section-title fade-in">
+    <i class="fas fa-gift"></i>
+    عروض خاصة
+  </h2>
+  
   <div class="offers-slider fade-in">
     <div class="offer-card">
-      <h3><i class="fas fa-gift"></i> عرض خاص!</h3>
+      <h3><i class="fas fa-gift"></i> عرض خاص على دبي!</h3>
       <p>احصل على خصم 20% على حجوزات الفنادق في دبي عند استخدام الكود</p>
       <div class="offer-code">DUBAI20</div>
+    </div>
+    <div class="offer-card">
+      <h3><i class="fas fa-gift"></i> عروض اسطنبول!</h3>
+      <p>رحلة إلى اسطنبول لمدة 5 أيام/4 ليالي بأسعار تبدأ من $400 فقط</p>
+      <div class="offer-code">IST400</div>
+    </div>
+    <div class="offer-card">
+      <h3><i class="fas fa-gift"></i> خصم على التأشيرات!</h3>
+      <p>خصم 15% على جميع التأشيرات الإلكترونية لهذا الأسبوع فقط</p>
+      <div class="offer-code">VISA15</div>
+    </div>
+    <div class="offer-card">
+      <h3><i class="fas fa-gift"></i> عروض ماليزيا!</h3>
+      <p>باقات سياحية إلى ماليزيا تشمل الإقامة والجولات والتنقلات</p>
+      <div class="offer-code">MYPACK</div>
     </div>
   </div>
 
@@ -830,7 +1069,7 @@
     
     <div class="destination-card fade-in delay-1">
       <div class="image-container">
-        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1350&q=80" alt="برج إيفل - باريس">
+        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1350&q=80" alt="برج إيفل - بارıs">
         <div class="price">$1100+</div>
         <div class="rating">4.8 <i class="fas fa-star"></i></div>
       </div>
@@ -849,24 +1088,107 @@
     </div>
   </div>
   
+  <section class="testimonials fade-in">
+    <h2 class="section-title"><i class="fas fa-comment"></i> آراء عملائنا</h2>
+    
+    <div class="testimonial-card">
+      <div class="testimonial-text">
+        تجربة رائعة مع شركة أمان للسفريات، ساعدوني في الحصول على تأشيرة شنغن في وقت قياسي، وكانوا محترفين جداً في التعامل. أنصح الجميع بالتعامل معهم.
+      </div>
+      <div class="testimonial-author">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="عمر أحمد">
+        <div class="author-info">
+          <span class="author-name">عمر أحمد</span>
+          <span class="author-title">سافر إلى ألمانيا</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="testimonial-card">
+      <div class="testimonial-text">
+        حجزت رحلتي إلى ماليزيا через أمان للسفريات، وكانت تجربة متميزة من حيث التنظيم والخدمة. الأسعار كانت منافسة والفندق كان رائعاً. شكراً لكم.
+      </div>
+      <div class="testimonial-author">
+        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="سارة محمد">
+        <div class="author-info">
+          <span class="author-name">سارة محمد</span>
+          <span class="author-title">سافرت إلى ماليزيا</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
   <section class="contact-info fade-in">
     <h2 class="section-title"><i class="fas fa-info-circle"></i> معلومات التواصل</h2>
-    <div class="contact-card">
-      <p><strong><i class="fas fa-map-marker-alt"></i> العنوان:</strong> الضالع - دمت - الشارع العام - جوار أبو هاني العامري للصرافة (عمارة فندق السفير)</p>
-      <p><strong><i class="fas fa-phone"></i> الهاتف:</strong> 781422229 / 733336537</p>
-      <p><strong><i class="fas fa-envelope"></i> البريد الإلكتروني:</strong> info@amantravel.com</p>
-      <p><strong><i class="fas fa-building"></i> اسم الشركة:</strong> AMAN TRAVEL & TOURISM</p>
-      
-      <div class="map-container">
-        <iframe src="https://maps.google.com/maps?q=الضالع%20دمت%20الشارع%20العام%20جوار%20أبو%20هاني%20العامري%20للصرافة&t=&z=15&ie=UTF8&iwloc=&output=embed" 
-                width="100%" height="250" style="border:0; border-radius: var(--border-radius);" allowfullscreen="" loading="lazy">
-        </iframe>
+    
+    <div class="contact-grid">
+      <div class="contact-card" onclick="window.open('https://maps.app.goo.gl/SkQ65d7JZ2RiATY56', '_blank')">
+        <div class="contact-icon">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <h3>عنوان المكتب</h3>
+        <p>الضالع - دمت - الشارع العام<br>جوار أبو هاني العامري للصرافة<br>(عمارة فندق السفير)</p>
+        <button class="contact-button">
+          <i class="fas fa-directions"></i> اتجاهات
+        </button>
       </div>
+      
+      <div class="contact-card" onclick="window.open('tel:+967781422229')">
+        <div class="contact-icon">
+          <i class="fas fa-phone"></i>
+        </div>
+        <h3>اتصل بنا</h3>
+        <p>781422229 / 733336537</p>
+        <button class="contact-button">
+          <i class="fas fa-phone"></i> اتصل الآن
+        </button>
+      </div>
+      
+      <div class="contact-card" onclick="window.open('mailto:info@amantravel.com')">
+        <div class="contact-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <h3>البريد الإلكتروني</h3>
+        <p>info@amantravel.com</p>
+        <button class="contact-button">
+          <i class="fas fa-paper-plane"></i> إرسال بريد
+        </button>
+      </div>
+      
+      <div class="contact-card" onclick="openWhatsApp()">
+        <div class="contact-icon" style="background: linear-gradient(135deg, #25D366, #128C7E);">
+          <i class="fab fa-whatsapp"></i>
+        </div>
+        <h3>واتساب</h3>
+        <p>تواصل معنا مباشرة عبر الواتساب</p>
+        <button class="contact-button" style="background: linear-gradient(135deg, #25D366, #128C7E);">
+          <i class="fab fa-whatsapp"></i> تواصل الآن
+        </button>
+      </div>
+    </div>
+    
+    <div class="map-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.238033874477!2d44.78146757570096!3d13.697870986698767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQxJzUyLjMiTiA0NMKwNDcnMDEuOCJF!5e0!3m2!1sen!2s!4v1634567890123!5m2!1sen!2s" 
+              width="100%" height="300" style="border:0; border-radius: var(--border-radius);" allowfullscreen="" loading="lazy">
+      </iframe>
     </div>
   </section>
 </div>
 
-<a href="https://wa.me/967781422229" target="_blank" class="whatsapp-button">
+<!-- Service Modal -->
+<div class="modal" id="serviceModal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <h2 class="modal-title" id="modalServiceTitle">خدمة</h2>
+    <p id="modalServiceDescription">وصف الخدمة</p>
+    <div class="modal-buttons">
+      <button class="modal-button secondary" onclick="closeModal()">إلغاء</button>
+      <button class="modal-button primary" onclick="navigateToService()">احجز الآن</button>
+    </div>
+  </div>
+</div>
+
+<a href="#" onclick="openWhatsApp(); return false;" class="whatsapp-button">
   <i class="fab fa-whatsapp"></i>
 </a>
 
@@ -875,15 +1197,14 @@
   <a href="#" class="home-button">
     <i class="fas fa-home"></i>
   </a>
-  <nav class="bottom-nav">
-
-
-
 
   </nav>
 </div>
 
 <script>
+  // متغيرات لتخزين معلومات الخدمة الحالية
+  let currentServiceId = '';
+  
   // Close alert when clicking the close button
   document.querySelector('.close-btn').addEventListener('click', function() {
     document.querySelector('.alert').style.display = 'none';
@@ -974,9 +1295,61 @@
       }
     });
   });
+  
+  // Service Modal Functions
+  function showServiceModal(serviceId, title, description) {
+    currentServiceId = serviceId;
+    document.getElementById('modalServiceTitle').textContent = title;
+    document.getElementById('modalServiceDescription').textContent = description;
+    document.getElementById('serviceModal').style.display = 'flex';
+  }
+  
+  function closeModal() {
+    document.getElementById('serviceModal').style.display = 'none';
+  }
+  
+  // Close modal when clicking outside
+  window.addEventListener('click', function(event) {
+    const modal = document.getElementById('serviceModal');
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+  
+  // Navigate to service page
+  function navigateToService() {
+    closeModal();
+    
+    // الانتقال إلى الصفحة المناسبة بناءً على معرف الخدمة
+    window.location.href = `${currentServiceId}.html`;
+    
+    // إذا كانت الصفحة غير موجودة، نعرض رسالة للمستخدم
+    setTimeout(function() {
+      // هذا مجرد مثال، في التطبيق الحقيقي يجب أن توجد الصفحات
+      alert(`سيتم توجيهك إلى صفحة ${currentServiceId} قريباً. إذا لم يتم التوجيه، تأكد من وجود الصفحة.`);
+    }, 1000);
+  }
+  
+  // WhatsApp function with proper handling for different environments
+  function openWhatsApp() {
+    const phoneNumber = "967781422229";
+    const message = "مرحباً، أريد الاستفسار عن خدمات السفر والسياحة";
+    
+    // Check if we're in a mobile app environment
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      // For mobile devices, use the proper WhatsApp URL scheme
+      window.location.href = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+      
+      // Fallback in case the app doesn't open
+      setTimeout(function() {
+        window.location.href = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+      }, 1000);
+    } else {
+      // For desktop browsers, use the web version
+      window.open(`https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`, '_blank');
+    }
+  }
 </script>
 
 </body>
 </html>
-  
-  
