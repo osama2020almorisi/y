@@ -109,6 +109,7 @@
         
         .form-group {
             margin-bottom: 20px;
+            position: relative;
         }
         
         .form-label {
@@ -129,6 +130,7 @@
             font-family: 'Tajawal', sans-serif;
             font-size: 16px;
             transition: all 0.3s ease;
+            background-color: white;
         }
         
         .form-select:focus, .form-input:focus {
@@ -419,26 +421,111 @@
             border-radius: 50%;
         }
         
-        .date-toggle {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
+        /* تنسيقات البحث الذكي */
+        .searchable-select {
+            position: relative;
         }
         
-        .toggle-btn {
-            background: #f1f5f9;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 15px;
+        .search-input {
+            width: 100%;
+            padding: 15px 40px 15px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
             font-family: 'Tajawal', sans-serif;
-            cursor: pointer;
+            font-size: 16px;
             transition: all 0.3s ease;
         }
         
-        .toggle-btn.active {
-            background: var(--primary);
-            color: white;
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+        
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .dropdown-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item:hover {
+            background: #f8fafc;
+        }
+        
+        .dropdown-item.active {
+            background: #e0f2fe;
+            color: var(--primary);
+        }
+        
+        .item-icon {
+            width: 24px;
+            text-align: center;
+            color: var(--primary);
+        }
+        
+        .item-content {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .item-details {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        
+        .selected-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .selected-item:hover {
+            border-color: var(--primary);
+        }
+        
+        .selected-placeholder {
+            color: #64748b;
         }
         
         @media (max-width: 768px) {
@@ -539,9 +626,23 @@
                                         <i class="fas fa-flag"></i>
                                         الدولة الأصل
                                     </label>
-                                    <select id="originCountry" class="form-select" required>
-                                        <option value="">اختر الدولة</option>
-                                    </select>
+                                    <div class="searchable-select">
+                                        <div class="selected-item" id="originCountrySelected">
+                                            <div class="item-icon">
+                                                <i class="fas fa-flag"></i>
+                                            </div>
+                                            <div class="item-content">
+                                                <span class="selected-placeholder">اختر الدولة</span>
+                                            </div>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-list" id="originCountryDropdown">
+                                            <input type="text" class="search-input" placeholder="ابحث عن الدولة...">
+                                            <i class="fas fa-search search-icon"></i>
+                                            <div class="dropdown-items" id="originCountryItems"></div>
+                                        </div>
+                                        <input type="hidden" id="originCountry" required>
+                                    </div>
                                     <div class="helper-text">
                                         <i class="fas fa-info-circle"></i>
                                         اختر الدولة التي ستسافر منها
@@ -553,9 +654,23 @@
                                         <i class="fas fa-city"></i>
                                         المدينة الأصل
                                     </label>
-                                    <select id="originCity" class="form-select" disabled required>
-                                        <option value="">اختر المدينة</option>
-                                    </select>
+                                    <div class="searchable-select">
+                                        <div class="selected-item" id="originCitySelected">
+                                            <div class="item-icon">
+                                                <i class="fas fa-city"></i>
+                                            </div>
+                                            <div class="item-content">
+                                                <span class="selected-placeholder">اختر المدينة</span>
+                                            </div>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-list" id="originCityDropdown">
+                                            <input type="text" class="search-input" placeholder="ابحث عن المدينة...">
+                                            <i class="fas fa-search search-icon"></i>
+                                            <div class="dropdown-items" id="originCityItems"></div>
+                                        </div>
+                                        <input type="hidden" id="originCity" required>
+                                    </div>
                                 </div>
                                 
                                 <div class="form-group">
@@ -563,9 +678,23 @@
                                         <i class="fas fa-plane-departure"></i>
                                         المطار الأصل
                                     </label>
-                                    <select id="originAirport" class="form-select" disabled required>
-                                        <option value="">اختر المطار</option>
-                                    </select>
+                                    <div class="searchable-select">
+                                        <div class="selected-item" id="originAirportSelected">
+                                            <div class="item-icon">
+                                                <i class="fas fa-plane-departure"></i>
+                                            </div>
+                                            <div class="item-content">
+                                                <span class="selected-placeholder">اختر المطار</span>
+                                            </div>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-list" id="originAirportDropdown">
+                                            <input type="text" class="search-input" placeholder="ابحث عن المطار...">
+                                            <i class="fas fa-search search-icon"></i>
+                                            <div class="dropdown-items" id="originAirportItems"></div>
+                                        </div>
+                                        <input type="hidden" id="originAirport" required>
+                                    </div>
                                 </div>
                                 
                                 <!-- نقطة الوصول -->
@@ -574,9 +703,23 @@
                                         <i class="fas fa-flag-checkered"></i>
                                         الدولة الوجهة
                                     </label>
-                                    <select id="destinationCountry" class="form-select" required>
-                                        <option value="">اختر الدولة</option>
-                                    </select>
+                                    <div class="searchable-select">
+                                        <div class="selected-item" id="destinationCountrySelected">
+                                            <div class="item-icon">
+                                                <i class="fas fa-flag-checkered"></i>
+                                            </div>
+                                            <div class="item-content">
+                                                <span class="selected-placeholder">اختر الدولة</span>
+                                            </div>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-list" id="destinationCountryDropdown">
+                                            <input type="text" class="search-input" placeholder="ابحث عن الدولة...">
+                                            <i class="fas fa-search search-icon"></i>
+                                            <div class="dropdown-items" id="destinationCountryItems"></div>
+                                        </div>
+                                        <input type="hidden" id="destinationCountry" required>
+                                    </div>
                                     <div class="helper-text">
                                         <i class="fas fa-info-circle"></i>
                                         اختر الدولة التي تريد السفر إليها
@@ -588,9 +731,23 @@
                                         <i class="fas fa-city"></i>
                                         المدينة الوجهة
                                     </label>
-                                    <select id="destinationCity" class="form-select" disabled required>
-                                        <option value="">اختر المدينة</option>
-                                    </select>
+                                    <div class="searchable-select">
+                                        <div class="selected-item" id="destinationCitySelected">
+                                            <div class="item-icon">
+                                                <i class="fas fa-city"></i>
+                                            </div>
+                                            <div class="item-content">
+                                                <span class="selected-placeholder">اختر المدينة</span>
+                                            </div>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-list" id="destinationCityDropdown">
+                                            <input type="text" class="search-input" placeholder="ابحث عن المدينة...">
+                                            <i class="fas fa-search search-icon"></i>
+                                            <div class="dropdown-items" id="destinationCityItems"></div>
+                                        </div>
+                                        <input type="hidden" id="destinationCity" required>
+                                    </div>
                                 </div>
                                 
                                 <div class="form-group">
@@ -598,9 +755,23 @@
                                         <i class="fas fa-plane-arrival"></i>
                                         المطار الوجهة
                                     </label>
-                                    <select id="destinationAirport" class="form-select" disabled required>
-                                        <option value="">اختر المطار</option>
-                                    </select>
+                                    <div class="searchable-select">
+                                        <div class="selected-item" id="destinationAirportSelected">
+                                            <div class="item-icon">
+                                                <i class="fas fa-plane-arrival"></i>
+                                            </div>
+                                            <div class="item-content">
+                                                <span class="selected-placeholder">اختر المطار</span>
+                                            </div>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </div>
+                                        <div class="dropdown-list" id="destinationAirportDropdown">
+                                            <input type="text" class="search-input" placeholder="ابحث عن المطار...">
+                                            <i class="fas fa-search search-icon"></i>
+                                            <div class="dropdown-items" id="destinationAirportItems"></div>
+                                        </div>
+                                        <input type="hidden" id="destinationAirport" required>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -612,10 +783,6 @@
                                         تاريخ المغادرة
                                     </label>
                                     <input type="date" id="departureDate" class="form-input" required>
-                                    <div class="date-toggle">
-                                        <button type="button" class="toggle-btn active" data-format="gregorian">الميلادي</button>
-                                        <button type="button" class="toggle-btn" data-format="hijri">الهجري</button>
-                                    </div>
                                 </div>
                                 
                                 <div class="form-group" id="returnDateGroup">
@@ -624,10 +791,6 @@
                                         تاريخ العودة
                                     </label>
                                     <input type="date" id="returnDate" class="form-input">
-                                    <div class="date-toggle">
-                                        <button type="button" class="toggle-btn active" data-format="gregorian">الميلادي</button>
-                                        <button type="button" class="toggle-btn" data-format="hijri">الهجري</button>
-                                    </div>
                                 </div>
                                 
                                 <div class="form-group">
@@ -759,69 +922,14 @@
         let airportsData = null;
         let currentTripType = 'round-trip';
         let multiFlightSegments = [];
-        let dateFormat = 'gregorian'; // تنسيق التاريخ الافتراضي
         
         // تحميل بيانات المطارات
         async function loadAirportsData() {
             try {
-                // محاكاة لبيانات المطارات (في التطبيق الحقيقي سيتم جلبها من ملف JSON)
-                airportsData = {
-                    countries: [
-                        {
-                            code: 'SA',
-                            name: 'المملكة العربية السعودية',
-                            cities: [
-                                {
-                                    code: 'RUH',
-                                    name: 'الرياض',
-                                    airports: [
-                                        { code: 'RUH', name: 'مطار الملك خالد الدولي' }
-                                    ]
-                                },
-                                {
-                                    code: 'JED',
-                                    name: 'جدة',
-                                    airports: [
-                                        { code: 'JED', name: 'مطار الملك عبدالعزيز الدولي' }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            code: 'AE',
-                            name: 'الإمارات العربية المتحدة',
-                            cities: [
-                                {
-                                    code: 'DXB',
-                                    name: 'دبي',
-                                    airports: [
-                                        { code: 'DXB', name: 'مطار دبي الدولي' }
-                                    ]
-                                },
-                                {
-                                    code: 'AUH',
-                                    name: 'أبوظبي',
-                                    airports: [
-                                        { code: 'AUH', name: 'مطار أبوظبي الدولي' }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            code: 'EG',
-                            name: 'مصر',
-                            cities: [
-                                {
-                                    code: 'CAI',
-                                    name: 'القاهرة',
-                                    airports: [
-                                        { code: 'CAI', name: 'مطار القاهرة الدولي' }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                };
+                const response = await fetch('airports.json');
+                if (!response.ok) throw new Error('فشل في تحميل البيانات');
+                
+                airportsData = await response.json();
                 
                 // إخفاء التحميل وإظهار النموذج
                 document.getElementById('loading').style.display = 'none';
@@ -847,97 +955,258 @@
         
         // تعبئة قائمة الدول
         function populateCountries() {
-            const originSelect = document.getElementById('originCountry');
-            const destinationSelect = document.getElementById('destinationCountry');
+            const originItems = document.getElementById('originCountryItems');
+            const destinationItems = document.getElementById('destinationCountryItems');
             
             airportsData.countries.forEach(country => {
-                [originSelect, destinationSelect].forEach(select => {
-                    const option = document.createElement('option');
-                    option.value = country.code;
-                    option.textContent = country.name;
-                    select.appendChild(option);
+                [originItems, destinationItems].forEach(container => {
+                    const item = document.createElement('div');
+                    item.className = 'dropdown-item';
+                    item.dataset.value = country.code;
+                    item.innerHTML = `
+                        <div class="item-icon">
+                            <i class="fas fa-flag"></i>
+                        </div>
+                        <div class="item-content">
+                            <div class="item-name">${country.name}</div>
+                            <div class="item-details">${country.arabicName || ''}</div>
+                        </div>
+                    `;
+                    container.appendChild(item);
                 });
             });
         }
         
         // إعداد مستمعي الأحداث
         function setupEventListeners() {
-            // مستمعي الدول
-            document.getElementById('originCountry').addEventListener('change', () => updateCities('origin'));
-            document.getElementById('destinationCountry').addEventListener('change', () => updateCities('destination'));
-            
             // مستمعي أزرار النوع
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => switchTripType(btn.dataset.type));
             });
             
-            // مستمعي أزرار تبديل التاريخ
-            document.querySelectorAll('.toggle-btn').forEach(btn => {
-                btn.addEventListener('click', () => toggleDateFormat(btn));
-            });
-            
             // مستمع لإضافة رحلة جديدة
             document.getElementById('addFlightBtn').addEventListener('click', addMultiFlightSegment);
+            
+            // إعداد البحث الذكي
+            setupSearchableSelects();
         }
         
-        // تحديث المدن
-        function updateCities(type) {
-            const countrySelect = document.getElementById(`${type}Country`);
-            const citySelect = document.getElementById(`${type}City`);
-            const airportSelect = document.getElementById(`${type}Airport`);
+        // إعداد القوائم القابلة للبحث
+        function setupSearchableSelects() {
+            // الدول الأصل
+            setupSearchableSelect(
+                'originCountrySelected',
+                'originCountryDropdown',
+                'originCountryItems',
+                'originCountry',
+                (countryCode) => updateCities(countryCode, 'origin')
+            );
             
-            const countryCode = countrySelect.value;
-            citySelect.innerHTML = '<option value="">اختر المدينة</option>';
-            airportSelect.innerHTML = '<option value="">اختر المطار</option>';
+            // المدن الأصل
+            setupSearchableSelect(
+                'originCitySelected',
+                'originCityDropdown',
+                'originCityItems',
+                'originCity',
+                (cityCode) => updateAirports(cityCode, 'origin')
+            );
             
-            if (countryCode) {
-                const country = airportsData.countries.find(c => c.code === countryCode);
-                if (country) {
-                    citySelect.disabled = false;
-                    country.cities.forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city.code;
-                        option.textContent = city.name;
-                        citySelect.appendChild(option);
-                    });
+            // المطارات الأصل
+            setupSearchableSelect(
+                'originAirportSelected',
+                'originAirportDropdown',
+                'originAirportItems',
+                'originAirport'
+            );
+            
+            // الدول الوجهة
+            setupSearchableSelect(
+                'destinationCountrySelected',
+                'destinationCountryDropdown',
+                'destinationCountryItems',
+                'destinationCountry',
+                (countryCode) => updateCities(countryCode, 'destination')
+            );
+            
+            // المدن الوجهة
+            setupSearchableSelect(
+                'destinationCitySelected',
+                'destinationCityDropdown',
+                'destinationCityItems',
+                'destinationCity',
+                (cityCode) => updateAirports(cityCode, 'destination')
+            );
+            
+            // المطارات الوجهة
+            setupSearchableSelect(
+                'destinationAirportSelected',
+                'destinationAirportDropdown',
+                'destinationAirportItems',
+                'destinationAirport'
+            );
+        }
+        
+        // إعداد قائمة قابلة للبحث
+        function setupSearchableSelect(selectedId, dropdownId, itemsId, hiddenInputId, onChangeCallback) {
+            const selectedElement = document.getElementById(selectedId);
+            const dropdownElement = document.getElementById(dropdownId);
+            const itemsContainer = document.getElementById(itemsId);
+            const hiddenInput = document.getElementById(hiddenInputId);
+            const searchInput = dropdownElement.querySelector('.search-input');
+            
+            // فتح/إغلاق القائمة
+            selectedElement.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = dropdownElement.style.display === 'block';
+                closeAllDropdowns();
+                
+                if (!isOpen) {
+                    dropdownElement.style.display = 'block';
+                    searchInput.focus();
+                }
+            });
+            
+            // البحث في القائمة
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const items = itemsContainer.querySelectorAll('.dropdown-item');
+                
+                items.forEach(item => {
+                    const text = item.querySelector('.item-name').textContent.toLowerCase();
+                    const details = item.querySelector('.item-details').textContent.toLowerCase();
                     
-                    // تحديث مستمع المدن
-                    citySelect.onchange = () => updateAirports(type);
+                    if (text.includes(searchTerm) || details.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+            
+            // اختيار عنصر من القائمة
+            itemsContainer.addEventListener('click', (e) => {
+                const item = e.target.closest('.dropdown-item');
+                if (!item) return;
+                
+                const value = item.dataset.value;
+                const name = item.querySelector('.item-name').textContent;
+                const details = item.querySelector('.item-details').textContent;
+                
+                // تحديث العنصر المختار
+                selectedElement.querySelector('.item-content').innerHTML = `
+                    <div class="item-name">${name}</div>
+                    ${details ? `<div class="item-details">${details}</div>` : ''}
+                `;
+                
+                // تحديث الحقل المخفي
+                hiddenInput.value = value;
+                
+                // إغلاق القائمة
+                dropdownElement.style.display = 'none';
+                
+                // استدعاء الدالة الإضافية إذا كانت موجودة
+                if (onChangeCallback) {
+                    onChangeCallback(value);
                 }
-            } else {
-                citySelect.disabled = true;
-                airportSelect.disabled = true;
-            }
+            });
+            
+            // إغلاق القائمة عند النقر خارجها
+            document.addEventListener('click', (e) => {
+                if (!dropdownElement.contains(e.target) && !selectedElement.contains(e.target)) {
+                    dropdownElement.style.display = 'none';
+                }
+            });
         }
         
-        // تحديث المطارات
-        function updateAirports(type) {
-            const countrySelect = document.getElementById(`${type}Country`);
-            const citySelect = document.getElementById(`${type}City`);
-            const airportSelect = document.getElementById(`${type}Airport`);
+        // إغلاق جميع القوائم المنسدلة
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-list').forEach(dropdown => {
+                dropdown.style.display = 'none';
+            });
+        }
+        
+        // تحديث المدن بناءً على الدولة المختارة
+        function updateCities(countryCode, type) {
+            const itemsContainer = document.getElementById(`${type}CityItems`);
+            const selectedElement = document.getElementById(`${type}CitySelected`);
+            const hiddenInput = document.getElementById(`${type}City`);
             
-            const countryCode = countrySelect.value;
-            const cityCode = citySelect.value;
+            // مسح القائمة الحالية
+            itemsContainer.innerHTML = '';
+            selectedElement.querySelector('.item-content').innerHTML = `
+                <span class="selected-placeholder">اختر المدينة</span>
+            `;
+            hiddenInput.value = '';
             
-            airportSelect.innerHTML = '<option value="">اختر المطار</option>';
+            // تحديث المطارات أيضًا
+            updateAirports('', type);
             
-            if (countryCode && cityCode) {
-                const country = airportsData.countries.find(c => c.code === countryCode);
-                if (country) {
-                    const city = country.cities.find(c => c.code === cityCode);
-                    if (city) {
-                        airportSelect.disabled = false;
-                        city.airports.forEach(airport => {
-                            const option = document.createElement('option');
-                            option.value = airport.code;
-                            option.textContent = `${airport.name} (${airport.code})`;
-                            airportSelect.appendChild(option);
-                        });
-                    }
-                }
-            } else {
-                airportSelect.disabled = true;
-            }
+            // إذا لم يتم اختيار دولة، لا تعرض أي مدن
+            if (!countryCode) return;
+            
+            // العثور على الدولة المختارة
+            const country = airportsData.countries.find(c => c.code === countryCode);
+            if (!country) return;
+            
+            // تعبئة المدن
+            country.cities.forEach(city => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.dataset.value = city.code;
+                item.innerHTML = `
+                    <div class="item-icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-name">${city.name}</div>
+                        <div class="item-details">${city.arabicName || ''}</div>
+                    </div>
+                `;
+                itemsContainer.appendChild(item);
+            });
+        }
+        
+        // تحديث المطارات بناءً على المدينة المختارة
+        function updateAirports(cityCode, type) {
+            const itemsContainer = document.getElementById(`${type}AirportItems`);
+            const selectedElement = document.getElementById(`${type}AirportSelected`);
+            const hiddenInput = document.getElementById(`${type}Airport`);
+            const countryInput = document.getElementById(`${type}Country`);
+            const countryCode = countryInput.value;
+            
+            // مسح القائمة الحالية
+            itemsContainer.innerHTML = '';
+            selectedElement.querySelector('.item-content').innerHTML = `
+                <span class="selected-placeholder">اختر المطار</span>
+            `;
+            hiddenInput.value = '';
+            
+            // إذا لم يتم اختيار مدينة، لا تعرض أي مطارات
+            if (!cityCode || !countryCode) return;
+            
+            // العثور على الدولة والمدينة المختارة
+            const country = airportsData.countries.find(c => c.code === countryCode);
+            if (!country) return;
+            
+            const city = country.cities.find(c => c.code === cityCode);
+            if (!city) return;
+            
+            // تعبئة المطارات
+            city.airports.forEach(airport => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.dataset.value = airport.code;
+                item.innerHTML = `
+                    <div class="item-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-name">${airport.name} (${airport.code})</div>
+                        <div class="item-details">${airport.city}, ${country.name}</div>
+                    </div>
+                `;
+                itemsContainer.appendChild(item);
+            });
         }
         
         // تبديل نوع الرحلة
@@ -968,24 +1237,6 @@
             }
         }
         
-        // تبديل تنسيق التاريخ
-        function toggleDateFormat(btn) {
-            const format = btn.dataset.format;
-            const allToggleBtns = btn.parentElement.querySelectorAll('.toggle-btn');
-            
-            // تحديث حالة الأزرار
-            allToggleBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // تحديث تنسيق التاريخ
-            dateFormat = format;
-            
-            // تحديث عرض التواريخ إذا لزم الأمر
-            if (document.getElementById('flightSummary').style.display !== 'none') {
-                updateSummaryData();
-            }
-        }
-        
         // إضافة رحلة جديدة للرحلات المتعددة
         function addMultiFlightSegment() {
             const container = document.getElementById('multiFlightContainer');
@@ -1001,91 +1252,15 @@
                         </button>` : ''}
                     </div>
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label" for="multiOriginCountry-${segmentIndex}">
-                                <i class="fas fa-flag"></i>
-                                الدولة الأصل
-                            </label>
-                            <select id="multiOriginCountry-${segmentIndex}" class="form-select multi-origin-country" required>
-                                <option value="">اختر الدولة</option>
-                                ${airportsData.countries.map(country => 
-                                    `<option value="${country.code}">${country.name}</option>`
-                                ).join('')}
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="multiOriginCity-${segmentIndex}">
-                                <i class="fas fa-city"></i>
-                                المدينة الأصل
-                            </label>
-                            <select id="multiOriginCity-${segmentIndex}" class="form-select multi-origin-city" disabled required>
-                                <option value="">اختر المدينة</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="multiOriginAirport-${segmentIndex}">
-                                <i class="fas fa-plane-departure"></i>
-                                المطار الأصل
-                            </label>
-                            <select id="multiOriginAirport-${segmentIndex}" class="form-select multi-origin-airport" disabled required>
-                                <option value="">اختر المطار</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="multiDestinationCountry-${segmentIndex}">
-                                <i class="fas fa-flag-checkered"></i>
-                                الدولة الوجهة
-                            </label>
-                            <select id="multiDestinationCountry-${segmentIndex}" class="form-select multi-destination-country" required>
-                                <option value="">اختر الدولة</option>
-                                ${airportsData.countries.map(country => 
-                                    `<option value="${country.code}">${country.name}</option>`
-                                ).join('')}
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="multiDestinationCity-${segmentIndex}">
-                                <i class="fas fa-city"></i>
-                                المدينة الوجهة
-                            </label>
-                            <select id="multiDestinationCity-${segmentIndex}" class="form-select multi-destination-city" disabled required>
-                                <option value="">اختر المدينة</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="multiDestinationAirport-${segmentIndex}">
-                                <i class="fas fa-plane-arrival"></i>
-                                المطار الوجهة
-                            </label>
-                            <select id="multiDestinationAirport-${segmentIndex}" class="form-select multi-destination-airport" disabled required>
-                                <option value="">اختر المطار</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label" for="multiDepartureDate-${segmentIndex}">
-                                <i class="fas fa-calendar-alt"></i>
-                                تاريخ المغادرة
-                            </label>
-                            <input type="date" id="multiDepartureDate-${segmentIndex}" class="form-input multi-departure-date" required>
-                        </div>
+                        <!-- سيتم إضافة الحقول ديناميكياً باستخدام JavaScript -->
                     </div>
                 </div>
             `;
             
             container.insertAdjacentHTML('beforeend', segmentHTML);
             
-            // إضافة مستمعي الأحداث للحقول الجديدة
-            const originCountry = document.getElementById(`multiOriginCountry-${segmentIndex}`);
-            const destinationCountry = document.getElementById(`multiDestinationCountry-${segmentIndex}`);
-            
-            originCountry.addEventListener('change', () => updateMultiCities(segmentIndex, 'origin'));
-            destinationCountry.addEventListener('change', () => updateMultiCities(segmentIndex, 'destination'));
+            // إعداد حقول البحث للرحلة الجديدة
+            setupMultiFlightSegment(segmentIndex);
             
             // إضافة الرحلة إلى المصفوفة
             multiFlightSegments.push({
@@ -1095,64 +1270,329 @@
             });
         }
         
+        // إعداد حقول البحث لقطعة الرحلة
+        function setupMultiFlightSegment(segmentIndex) {
+            const segment = document.getElementById(`segment-${segmentIndex}`);
+            const formGrid = segment.querySelector('.form-grid');
+            
+            // HTML للحقول
+            formGrid.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-flag"></i>
+                        الدولة الأصل
+                    </label>
+                    <div class="searchable-select">
+                        <div class="selected-item" id="multiOriginCountrySelected-${segmentIndex}">
+                            <div class="item-icon">
+                                <i class="fas fa-flag"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="selected-placeholder">اختر الدولة</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-list" id="multiOriginCountryDropdown-${segmentIndex}">
+                            <input type="text" class="search-input" placeholder="ابحث عن الدولة...">
+                            <i class="fas fa-search search-icon"></i>
+                            <div class="dropdown-items" id="multiOriginCountryItems-${segmentIndex}"></div>
+                        </div>
+                        <input type="hidden" id="multiOriginCountry-${segmentIndex}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-city"></i>
+                        المدينة الأصل
+                    </label>
+                    <div class="searchable-select">
+                        <div class="selected-item" id="multiOriginCitySelected-${segmentIndex}">
+                            <div class="item-icon">
+                                <i class="fas fa-city"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="selected-placeholder">اختر المدينة</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-list" id="multiOriginCityDropdown-${segmentIndex}">
+                            <input type="text" class="search-input" placeholder="ابحث عن المدينة...">
+                            <i class="fas fa-search search-icon"></i>
+                            <div class="dropdown-items" id="multiOriginCityItems-${segmentIndex}"></div>
+                        </div>
+                        <input type="hidden" id="multiOriginCity-${segmentIndex}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-plane-departure"></i>
+                        المطار الأصل
+                    </label>
+                    <div class="searchable-select">
+                        <div class="selected-item" id="multiOriginAirportSelected-${segmentIndex}">
+                            <div class="item-icon">
+                                <i class="fas fa-plane-departure"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="selected-placeholder">اختر المطار</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-list" id="multiOriginAirportDropdown-${segmentIndex}">
+                            <input type="text" class="search-input" placeholder="ابحث عن المطار...">
+                            <i class="fas fa-search search-icon"></i>
+                            <div class="dropdown-items" id="multiOriginAirportItems-${segmentIndex}"></div>
+                        </div>
+                        <input type="hidden" id="multiOriginAirport-${segmentIndex}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-flag-checkered"></i>
+                        الدولة الوجهة
+                    </label>
+                    <div class="searchable-select">
+                        <div class="selected-item" id="multiDestinationCountrySelected-${segmentIndex}">
+                            <div class="item-icon">
+                                <i class="fas fa-flag-checkered"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="selected-placeholder">اختر الدولة</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-list" id="multiDestinationCountryDropdown-${segmentIndex}">
+                            <input type="text" class="search-input" placeholder="ابحث عن الدولة...">
+                            <i class="fas fa-search search-icon"></i>
+                            <div class="dropdown-items" id="multiDestinationCountryItems-${segmentIndex}"></div>
+                        </div>
+                        <input type="hidden" id="multiDestinationCountry-${segmentIndex}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-city"></i>
+                        المدينة الوجهة
+                    </label>
+                    <div class="searchable-select">
+                        <div class="selected-item" id="multiDestinationCitySelected-${segmentIndex}">
+                            <div class="item-icon">
+                                <i class="fas fa-city"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="selected-placeholder">اختر المدينة</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-list" id="multiDestinationCityDropdown-${segmentIndex}">
+                            <input type="text" class="search-input" placeholder="ابحث عن المدينة...">
+                            <i class="fas fa-search search-icon"></i>
+                            <div class="dropdown-items" id="multiDestinationCityItems-${segmentIndex}"></div>
+                        </div>
+                        <input type="hidden" id="multiDestinationCity-${segmentIndex}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-plane-arrival"></i>
+                        المطار الوجهة
+                    </label>
+                    <div class="searchable-select">
+                        <div class="selected-item" id="multiDestinationAirportSelected-${segmentIndex}">
+                            <div class="item-icon">
+                                <i class="fas fa-plane-arrival"></i>
+                            </div>
+                            <div class="item-content">
+                                <span class="selected-placeholder">اختر المطار</span>
+                            </div>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-list" id="multiDestinationAirportDropdown-${segmentIndex}">
+                            <input type="text" class="search-input" placeholder="ابحث عن المطار...">
+                            <i class="fas fa-search search-icon"></i>
+                            <div class="dropdown-items" id="multiDestinationAirportItems-${segmentIndex}"></div>
+                        </div>
+                        <input type="hidden" id="multiDestinationAirport-${segmentIndex}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="multiDepartureDate-${segmentIndex}">
+                        <i class="fas fa-calendar-alt"></i>
+                        تاريخ المغادرة
+                    </label>
+                    <input type="date" id="multiDepartureDate-${segmentIndex}" class="form-input" required>
+                </div>
+            `;
+            
+            // تعبئة الدول
+            const originCountryItems = document.getElementById(`multiOriginCountryItems-${segmentIndex}`);
+            const destinationCountryItems = document.getElementById(`multiDestinationCountryItems-${segmentIndex}`);
+            
+            airportsData.countries.forEach(country => {
+                [originCountryItems, destinationCountryItems].forEach(container => {
+                    const item = document.createElement('div');
+                    item.className = 'dropdown-item';
+                    item.dataset.value = country.code;
+                    item.innerHTML = `
+                        <div class="item-icon">
+                            <i class="fas fa-flag"></i>
+                        </div>
+                        <div class="item-content">
+                            <div class="item-name">${country.name}</div>
+                            <div class="item-details">${country.arabicName || ''}</div>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+            });
+            
+            // إعداد البحث الذكي للحقول الجديدة
+            setupMultiSearchableSelects(segmentIndex);
+        }
+        
+        // إعداد البحث الذكي للحقول في الرحلات المتعددة
+        function setupMultiSearchableSelects(segmentIndex) {
+            // الدول الأصل
+            setupSearchableSelect(
+                `multiOriginCountrySelected-${segmentIndex}`,
+                `multiOriginCountryDropdown-${segmentIndex}`,
+                `multiOriginCountryItems-${segmentIndex}`,
+                `multiOriginCountry-${segmentIndex}`,
+                (countryCode) => updateMultiCities(countryCode, segmentIndex, 'origin')
+            );
+            
+            // المدن الأصل
+            setupSearchableSelect(
+                `multiOriginCitySelected-${segmentIndex}`,
+                `multiOriginCityDropdown-${segmentIndex}`,
+                `multiOriginCityItems-${segmentIndex}`,
+                `multiOriginCity-${segmentIndex}`,
+                (cityCode) => updateMultiAirports(cityCode, segmentIndex, 'origin')
+            );
+            
+            // المطارات الأصل
+            setupSearchableSelect(
+                `multiOriginAirportSelected-${segmentIndex}`,
+                `multiOriginAirportDropdown-${segmentIndex}`,
+                `multiOriginAirportItems-${segmentIndex}`,
+                `multiOriginAirport-${segmentIndex}`
+            );
+            
+            // الدول الوجهة
+            setupSearchableSelect(
+                `multiDestinationCountrySelected-${segmentIndex}`,
+                `multiDestinationCountryDropdown-${segmentIndex}`,
+                `multiDestinationCountryItems-${segmentIndex}`,
+                `multiDestinationCountry-${segmentIndex}`,
+                (countryCode) => updateMultiCities(countryCode, segmentIndex, 'destination')
+            );
+            
+            // المدن الوجهة
+            setupSearchableSelect(
+                `multiDestinationCitySelected-${segmentIndex}`,
+                `multiDestinationCityDropdown-${segmentIndex}`,
+                `multiDestinationCityItems-${segmentIndex}`,
+                `multiDestinationCity-${segmentIndex}`,
+                (cityCode) => updateMultiAirports(cityCode, segmentIndex, 'destination')
+            );
+            
+            // المطارات الوجهة
+            setupSearchableSelect(
+                `multiDestinationAirportSelected-${segmentIndex}`,
+                `multiDestinationAirportDropdown-${segmentIndex}`,
+                `multiDestinationAirportItems-${segmentIndex}`,
+                `multiDestinationAirport-${segmentIndex}`
+            );
+        }
+        
         // تحديث المدن في الرحلات المتعددة
-        function updateMultiCities(segmentIndex, type) {
-            const countrySelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Country-${segmentIndex}`);
-            const citySelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}City-${segmentIndex}`);
-            const airportSelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Airport-${segmentIndex}`);
+        function updateMultiCities(countryCode, segmentIndex, type) {
+            const itemsContainer = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}CityItems-${segmentIndex}`);
+            const selectedElement = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}CitySelected-${segmentIndex}`);
+            const hiddenInput = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}City-${segmentIndex}`);
             
-            const countryCode = countrySelect.value;
-            citySelect.innerHTML = '<option value="">اختر المدينة</option>';
-            airportSelect.innerHTML = '<option value="">اختر المطار</option>';
+            // مسح القائمة الحالية
+            itemsContainer.innerHTML = '';
+            selectedElement.querySelector('.item-content').innerHTML = `
+                <span class="selected-placeholder">اختر المدينة</span>
+            `;
+            hiddenInput.value = '';
             
-            if (countryCode) {
-                const country = airportsData.countries.find(c => c.code === countryCode);
-                if (country) {
-                    citySelect.disabled = false;
-                    country.cities.forEach(city => {
-                        const option = document.createElement('option');
-                        option.value = city.code;
-                        option.textContent = city.name;
-                        citySelect.appendChild(option);
-                    });
-                    
-                    // تحديث مستمع المدن
-                    citySelect.onchange = () => updateMultiAirports(segmentIndex, type);
-                }
-            } else {
-                citySelect.disabled = true;
-                airportSelect.disabled = true;
-            }
+            // تحديث المطارات أيضًا
+            updateMultiAirports('', segmentIndex, type);
+            
+            // إذا لم يتم اختيار دولة، لا تعرض أي مدن
+            if (!countryCode) return;
+            
+            // العثور على الدولة المختارة
+            const country = airportsData.countries.find(c => c.code === countryCode);
+            if (!country) return;
+            
+            // تعبئة المدن
+            country.cities.forEach(city => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.dataset.value = city.code;
+                item.innerHTML = `
+                    <div class="item-icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-name">${city.name}</div>
+                        <div class="item-details">${city.arabicName || ''}</div>
+                    </div>
+                `;
+                itemsContainer.appendChild(item);
+            });
         }
         
         // تحديث المطارات في الرحلات المتعددة
-        function updateMultiAirports(segmentIndex, type) {
-            const countrySelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Country-${segmentIndex}`);
-            const citySelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}City-${segmentIndex}`);
-            const airportSelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Airport-${segmentIndex}`);
+        function updateMultiAirports(cityCode, segmentIndex, type) {
+            const itemsContainer = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}AirportItems-${segmentIndex}`);
+            const selectedElement = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}AirportSelected-${segmentIndex}`);
+            const hiddenInput = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Airport-${segmentIndex}`);
+            const countryInput = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Country-${segmentIndex}`);
+            const countryCode = countryInput.value;
             
-            const countryCode = countrySelect.value;
-            const cityCode = citySelect.value;
+            // مسح القائمة الحالية
+            itemsContainer.innerHTML = '';
+            selectedElement.querySelector('.item-content').innerHTML = `
+                <span class="selected-placeholder">اختر المطار</span>
+            `;
+            hiddenInput.value = '';
             
-            airportSelect.innerHTML = '<option value="">اختر المطار</option>';
+            // إذا لم يتم اختيار مدينة، لا تعرض أي مطارات
+            if (!cityCode || !countryCode) return;
             
-            if (countryCode && cityCode) {
-                const country = airportsData.countries.find(c => c.code === countryCode);
-                if (country) {
-                    const city = country.cities.find(c => c.code === cityCode);
-                    if (city) {
-                        airportSelect.disabled = false;
-                        city.airports.forEach(airport => {
-                            const option = document.createElement('option');
-                            option.value = airport.code;
-                            option.textContent = `${airport.name} (${airport.code})`;
-                            airportSelect.appendChild(option);
-                        });
-                    }
-                }
-            } else {
-                airportSelect.disabled = true;
-            }
+            // العثور على الدولة والمدينة المختارة
+            const country = airportsData.countries.find(c => c.code === countryCode);
+            if (!country) return;
+            
+            const city = country.cities.find(c => c.code === cityCode);
+            if (!city) return;
+            
+            // تعبئة المطارات
+            city.airports.forEach(airport => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.dataset.value = airport.code;
+                item.innerHTML = `
+                    <div class="item-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-name">${airport.name} (${airport.code})</div>
+                        <div class="item-details">${airport.city}, ${country.name}</div>
+                    </div>
+                `;
+                itemsContainer.appendChild(item);
+            });
         }
         
         // حذف رحلة من الرحلات المتعددة
@@ -1176,6 +1616,34 @@
                 const removeBtn = seg.querySelector('.remove-segment');
                 if (removeBtn) {
                     removeBtn.setAttribute('onclick', `removeMultiFlightSegment(${index})`);
+                }
+                
+                // تحديث معرفات الحقول
+                updateMultiSegmentFields(seg, index);
+            });
+        }
+        
+        // تحديث معرفات الحقول في مقطع الرحلة
+        function updateMultiSegmentFields(segment, newIndex) {
+            const fields = segment.querySelectorAll('[id]');
+            fields.forEach(field => {
+                const oldId = field.id;
+                const newId = oldId.replace(/-\d+$/, `-${newIndex}`);
+                field.id = newId;
+                
+                // تحديث عناصر البحث الذكي
+                if (oldId.includes('Selected')) {
+                    const dropdownId = oldId.replace('Selected', 'Dropdown');
+                    const itemsId = oldId.replace('Selected', 'Items');
+                    const hiddenId = oldId.replace('Selected', '');
+                    
+                    const dropdown = document.getElementById(dropdownId);
+                    const items = document.getElementById(itemsId);
+                    const hidden = document.getElementById(hiddenId);
+                    
+                    if (dropdown) dropdown.id = dropdownId.replace(/-\d+$/, `-${newIndex}`);
+                    if (items) items.id = itemsId.replace(/-\d+$/, `-${newIndex}`);
+                    if (hidden) hidden.id = hiddenId.replace(/-\d+$/, `-${newIndex}`);
                 }
             });
         }
@@ -1244,8 +1712,7 @@
                 for (const fieldId of requiredFields) {
                     const field = document.getElementById(fieldId);
                     if (!field.value) {
-                        alert(`يرجى ملء حقل ${field.labels[0].textContent}`);
-                        field.focus();
+                        alert(`يرجى ملء حقل ${fieldId}`);
                         return false;
                     }
                 }
@@ -1283,13 +1750,30 @@
         function updateBasicSummary() {
             const routeDisplay = document.getElementById('routeDisplay');
             
+            // الحصول على البيانات من الحقول المخفية
+            const originCountry = document.getElementById('originCountry').value;
+            const originCity = document.getElementById('originCity').value;
+            const originAirport = document.getElementById('originAirport').value;
+            const destinationCountry = document.getElementById('destinationCountry').value;
+            const destinationCity = document.getElementById('destinationCity').value;
+            const destinationAirport = document.getElementById('destinationAirport').value;
+            
+            // العثور على بيانات المطارات
+            const originCountryData = airportsData.countries.find(c => c.code === originCountry);
+            const originCityData = originCountryData?.cities.find(c => c.code === originCity);
+            const originAirportData = originCityData?.airports.find(a => a.code === originAirport);
+            
+            const destinationCountryData = airportsData.countries.find(c => c.code === destinationCountry);
+            const destinationCityData = destinationCountryData?.cities.find(c => c.code === destinationCity);
+            const destinationAirportData = destinationCityData?.airports.find(a => a.code === destinationAirport);
+            
             if (currentTripType === 'one-way') {
                 // عرض سهم واحد للذهاب فقط
                 routeDisplay.innerHTML = `
                     <div class="route-display">
                         <div class="route-point">
-                            <div class="airport-code">${document.getElementById('originAirport').value}</div>
-                            <div class="city-name">${document.getElementById('originCity').options[document.getElementById('originCity').selectedIndex].text}</div>
+                            <div class="airport-code">${originAirport}</div>
+                            <div class="city-name">${originCityData?.name || ''}</div>
                             <div class="flight-date">${formatDate(new Date(document.getElementById('departureDate').value))}</div>
                         </div>
                         
@@ -1299,8 +1783,8 @@
                         </div>
                         
                         <div class="route-point">
-                            <div class="airport-code">${document.getElementById('destinationAirport').value}</div>
-                            <div class="city-name">${document.getElementById('destinationCity').options[document.getElementById('destinationCity').selectedIndex].text}</div>
+                            <div class="airport-code">${destinationAirport}</div>
+                            <div class="city-name">${destinationCityData?.name || ''}</div>
                             <div class="flight-date">${formatDate(new Date(document.getElementById('departureDate').value))}</div>
                         </div>
                     </div>
@@ -1310,8 +1794,8 @@
                 routeDisplay.innerHTML = `
                     <div class="route-display">
                         <div class="route-point">
-                            <div class="airport-code">${document.getElementById('originAirport').value}</div>
-                            <div class="city-name">${document.getElementById('originCity').options[document.getElementById('originCity').selectedIndex].text}</div>
+                            <div class="airport-code">${originAirport}</div>
+                            <div class="city-name">${originCityData?.name || ''}</div>
                             <div class="flight-date">${formatDate(new Date(document.getElementById('departureDate').value))}</div>
                         </div>
                         
@@ -1321,8 +1805,8 @@
                         </div>
                         
                         <div class="route-point">
-                            <div class="airport-code">${document.getElementById('destinationAirport').value}</div>
-                            <div class="city-name">${document.getElementById('destinationCity').options[document.getElementById('destinationCity').selectedIndex].text}</div>
+                            <div class="airport-code">${destinationAirport}</div>
+                            <div class="city-name">${destinationCityData?.name || ''}</div>
                             <div class="flight-date">${formatDate(new Date(document.getElementById('returnDate').value))}</div>
                         </div>
                     </div>
@@ -1339,16 +1823,31 @@
             const segments = document.querySelectorAll('.flight-segment');
             const flightData = [];
             
-            segments.forEach((segment, index) => {
+            segments.forEach((segment, index) {
+                const originCountry = document.getElementById(`multiOriginCountry-${index}`).value;
+                const originCity = document.getElementById(`multiOriginCity-${index}`).value;
                 const originAirport = document.getElementById(`multiOriginAirport-${index}`).value;
-                const originCity = document.getElementById(`multiOriginCity-${index}`).options[document.getElementById(`multiOriginCity-${index}`).selectedIndex].text;
+                const destinationCountry = document.getElementById(`multiDestinationCountry-${index}`).value;
+                const destinationCity = document.getElementById(`multiDestinationCity-${index}`).value;
                 const destinationAirport = document.getElementById(`multiDestinationAirport-${index}`).value;
-                const destinationCity = document.getElementById(`multiDestinationCity-${index}`).options[document.getElementById(`multiDestinationCity-${index}`).selectedIndex].text;
                 const date = document.getElementById(`multiDepartureDate-${index}`).value;
                 
+                // العثور على بيانات المطارات
+                const originCountryData = airportsData.countries.find(c => c.code === originCountry);
+                const originCityData = originCountryData?.cities.find(c => c.code === originCity);
+                
+                const destinationCountryData = airportsData.countries.find(c => c.code === destinationCountry);
+                const destinationCityData = destinationCountryData?.cities.find(c => c.code === destinationCity);
+                
                 flightData.push({
-                    origin: { airport: originAirport, city: originCity },
-                    destination: { airport: destinationAirport, city: destinationCity },
+                    origin: { 
+                        airport: originAirport, 
+                        city: originCityData?.name || '' 
+                    },
+                    destination: { 
+                        airport: destinationAirport, 
+                        city: destinationCityData?.name || '' 
+                    },
                     date: date
                 });
             });
@@ -1407,26 +1906,51 @@
                 
                 // جمع بيانات الرحلات المتعددة
                 const segments = document.querySelectorAll('.flight-segment');
-                segments.forEach((segment, index) => {
+                segments.forEach((segment, index) {
+                    const originCountry = document.getElementById(`multiOriginCountry-${index}`).value;
+                    const originCity = document.getElementById(`multiOriginCity-${index}`).value;
                     const originAirport = document.getElementById(`multiOriginAirport-${index}`).value;
-                    const originCity = document.getElementById(`multiOriginCity-${index}`).options[document.getElementById(`multiOriginCity-${index}`).selectedIndex].text;
+                    const destinationCountry = document.getElementById(`multiDestinationCountry-${index}`).value;
+                    const destinationCity = document.getElementById(`multiDestinationCity-${index}`).value;
                     const destinationAirport = document.getElementById(`multiDestinationAirport-${index}`).value;
-                    const destinationCity = document.getElementById(`multiDestinationCity-${index}`).options[document.getElementById(`multiDestinationCity-${index}`).selectedIndex].text;
                     const date = formatDate(new Date(document.getElementById(`multiDepartureDate-${index}`).value));
                     
+                    // العثور على بيانات المطارات
+                    const originCountryData = airportsData.countries.find(c => c.code === originCountry);
+                    const originCityData = originCountryData?.cities.find(c => c.code === originCity);
+                    
+                    const destinationCountryData = airportsData.countries.find(c => c.code === destinationCountry);
+                    const destinationCityData = destinationCountryData?.cities.find(c => c.code === destinationCity);
+                    
                     message += `الرحلة ${index + 1}:\n`;
-                    message += `📍 من: ${originCity} (${originAirport})\n`;
-                    message += `🛬 إلى: ${destinationCity} (${destinationAirport})\n`;
+                    message += `📍 من: ${originCityData?.name || ''} (${originAirport})\n`;
+                    message += `🛬 إلى: ${destinationCityData?.name || ''} (${destinationAirport})\n`;
                     message += `📅 التاريخ: ${date}\n\n`;
                 });
             } else {
                 message += `🛫 نوع الرحلة: ${document.getElementById('tripTypeText').textContent}\n`;
-                message += `📍 من: ${document.getElementById('originCityName').textContent} (${document.getElementById('originAirportCode').textContent})\n`;
-                message += `🛬 إلى: ${document.getElementById('destinationCityName').textContent} (${document.getElementById('destinationAirportCode').textContent})\n`;
-                message += `📅 المغادرة: ${document.getElementById('departureDateText').textContent}\n`;
+                
+                // الحصول على البيانات من الحقول المخفية
+                const originCountry = document.getElementById('originCountry').value;
+                const originCity = document.getElementById('originCity').value;
+                const originAirport = document.getElementById('originAirport').value;
+                const destinationCountry = document.getElementById('destinationCountry').value;
+                const destinationCity = document.getElementById('destinationCity').value;
+                const destinationAirport = document.getElementById('destinationAirport').value;
+                
+                // العثور على بيانات المطارات
+                const originCountryData = airportsData.countries.find(c => c.code === originCountry);
+                const originCityData = originCountryData?.cities.find(c => c.code === originCity);
+                
+                const destinationCountryData = airportsData.countries.find(c => c.code === destinationCountry);
+                const destinationCityData = destinationCountryData?.cities.find(c => c.code === destinationCity);
+                
+                message += `📍 من: ${originCityData?.name || ''} (${originAirport})\n`;
+                message += `🛬 إلى: ${destinationCityData?.name || ''} (${destinationAirport})\n`;
+                message += `📅 المغادرة: ${formatDate(new Date(document.getElementById('departureDate').value))}\n`;
                 
                 if (currentTripType === 'round-trip') {
-                    message += `📅 العودة: ${document.getElementById('returnDateText').textContent}\n`;
+                    message += `📅 العودة: ${formatDate(new Date(document.getElementById('returnDate').value))}\n`;
                 }
                 
                 message += `\n`;
@@ -1440,23 +1964,13 @@
             window.open(url, '_blank');
         }
         
-        // تنسيق التاريخ
+        // تنسيق التاريخ (الميلادي فقط)
         function formatDate(date) {
-            if (dateFormat === 'hijri') {
-                // محاكاة للتحويل إلى التاريخ الهجري (في التطبيق الحقيقي سيتم استخدام مكتبة متخصصة)
-                const hijriMonths = ['محرم', 'صفر', 'ربيع الأول', 'ربيع الآخر', 'جمادى الأولى', 'جمادى الآخرة', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذو القعدة', 'ذو الحجة'];
-                const hijriYear = Math.floor((date.getFullYear() - 622) * (33/32));
-                const hijriMonth = hijriMonths[date.getMonth()];
-                const hijriDay = date.getDate();
-                
-                return `${hijriDay} ${hijriMonth} ${hijriYear} هـ`;
-            } else {
-                return date.toLocaleDateString('ar-SA', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-            }
+            return date.toLocaleDateString('ar-SA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
         }
         
         // بدء التحميل عند فتح الصفحة
