@@ -605,71 +605,10 @@
         // تحميل بيانات المطارات
         async function loadAirportsData() {
             try {
-                // استخدام بيانات افتراضية بدلاً من ملف JSON
-                airportsData = {
-                    countries: [
-                        {
-                            code: "SA",
-                            name: "المملكة العربية السعودية",
-                            cities: [
-                                {
-                                    code: "RUH",
-                                    name: "الرياض",
-                                    airports: [
-                                        { code: "RUH", name: "مطار الملك خالد الدولي" }
-                                    ]
-                                },
-                                {
-                                    code: "JED",
-                                    name: "جدة",
-                                    airports: [
-                                        { code: "JED", name: "مطار الملك عبدالعزيز الدولي" }
-                                    ]
-                                },
-                                {
-                                    code: "DMM",
-                                    name: "الدمام",
-                                    airports: [
-                                        { code: "DMM", name: "مطار الملك فهد الدولي" }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            code: "AE",
-                            name: "الإمارات العربية المتحدة",
-                            cities: [
-                                {
-                                    code: "DXB",
-                                    name: "دبي",
-                                    airports: [
-                                        { code: "DXB", name: "مطار دبي الدولي" }
-                                    ]
-                                },
-                                {
-                                    code: "AUH",
-                                    name: "أبوظبي",
-                                    airports: [
-                                        { code: "AUH", name: "مطار أبوظبي الدولي" }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            code: "EG",
-                            name: "مصر",
-                            cities: [
-                                {
-                                    code: "CAI",
-                                    name: "القاهرة",
-                                    airports: [
-                                        { code: "CAI", name: "مطار القاهرة الدولي" }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                };
+                const response = await fetch('airports.json');
+                if (!response.ok) throw new Error('فشل في تحميل البيانات');
+                
+                airportsData = await response.json();
                 
                 // إخفاء التحميل وإظهار النموذج
                 document.getElementById('loading').style.display = 'none';
