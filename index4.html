@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام حجز الطيران - أمان للسفريات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* التنسيقات الأساسية */
         :root {
             --primary: #2563eb;
             --secondary: #7c3aed;
@@ -14,24 +15,14 @@
             --light: #f8fafc;
             --dark: #1e293b;
             --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --gray: #64748b;
-            --border: #e2e8f0;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
         
         body {
             font-family: 'Tajawal', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            margin: 0;
             padding: 20px;
-            color: var(--dark);
         }
         
         .container {
@@ -39,13 +30,11 @@
             margin: 0 auto;
         }
         
-        /* التصميم الأساسي */
         .app-card {
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
-            margin-bottom: 100px;
         }
         
         .app-header {
@@ -53,11 +42,10 @@
             color: white;
             padding: 30px;
             text-align: center;
-            position: relative;
         }
         
         .app-title {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin: 0;
             display: flex;
             align-items: center;
@@ -67,10 +55,8 @@
         
         .app-content {
             padding: 30px;
-            min-height: 500px;
         }
         
-        /* شريط التحميل */
         .loading {
             text-align: center;
             padding: 60px 20px;
@@ -87,25 +73,12 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* رسالة الخطأ */
-        .error-message {
-            background: #fef2f2;
-            color: var(--danger);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid #fecaca;
-            margin: 20px 0;
-        }
-        
-        /* أزرار أنواع الرحلات */
         .search-tabs {
             display: flex;
             background: #f1f5f9;
-            border-radius: 15px;
-            padding: 8px;
+            border-radius: 12px;
+            padding: 5px;
             margin-bottom: 30px;
-            gap: 8px;
         }
         
         .tab-btn {
@@ -115,24 +88,18 @@
             background: none;
             font-family: 'Tajawal', sans-serif;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            border-radius: 12px;
+            border-radius: 8px;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
         
         .tab-btn.active {
             background: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             color: var(--primary);
-            transform: translateY(-2px);
         }
         
-        /* نموذج البحث */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -142,13 +109,12 @@
         
         .form-group {
             margin-bottom: 20px;
-            position: relative;
         }
         
         .form-label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--dark);
             display: flex;
             align-items: center;
@@ -158,12 +124,11 @@
         .form-select, .form-input {
             width: 100%;
             padding: 15px;
-            border: 2px solid var(--border);
+            border: 2px solid #e2e8f0;
             border-radius: 12px;
             font-family: 'Tajawal', sans-serif;
             font-size: 16px;
             transition: all 0.3s ease;
-            background: white;
         }
         
         .form-select:focus, .form-input:focus {
@@ -188,7 +153,6 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-top: 10px;
         }
         
         .search-btn:hover {
@@ -196,11 +160,10 @@
             box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
         }
         
-        /* ملخص الرحلة */
         .flight-summary {
             background: #f8fafc;
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 15px;
+            padding: 25px;
             margin-top: 30px;
             border: 2px dashed #cbd5e1;
         }
@@ -209,26 +172,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
         }
         
         .summary-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--primary);
             margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         
-        /* عرض المسار */
         .route-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
             position: relative;
         }
         
@@ -237,7 +199,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 70%;
+            width: 60%;
             height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             z-index: 1;
@@ -245,383 +207,243 @@
         
         .route-point {
             background: white;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
             z-index: 2;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            min-width: 160px;
-            border: 2px solid var(--border);
-            transition: all 0.3s ease;
-        }
-        
-        .route-point:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            min-width: 140px;
         }
         
         .airport-code {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
         
         .city-name {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--dark);
-            margin-bottom: 8px;
-            font-weight: 600;
+            margin-bottom: 5px;
         }
         
         .flight-date {
-            font-size: 1rem;
-            color: var(--gray);
-            background: #f1f5f9;
-            padding: 5px 10px;
-            border-radius: 8px;
-            display: inline-block;
+            font-size: 0.9rem;
+            color: #64748b;
         }
         
         .route-arrow {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--accent);
             z-index: 2;
             background: white;
-            padding: 15px;
+            padding: 10px;
             border-radius: 50%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin: 0 20px;
         }
         
-        /* تفاصيل الملخص */
         .summary-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
         
         .detail-card {
             background: white;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            border: 1px solid var(--border);
         }
         
         .detail-label {
-            font-size: 0.95rem;
-            color: var(--gray);
-            margin-bottom: 8px;
-            font-weight: 500;
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 5px;
         }
         
         .detail-value {
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: var(--dark);
         }
         
-        /* زر واتساب */
         .whatsapp-btn {
             background: linear-gradient(135deg, #25d366, #128c7e);
             color: white;
             border: none;
-            padding: 20px 30px;
-            border-radius: 15px;
+            padding: 18px 30px;
+            border-radius: 12px;
             font-family: 'Tajawal', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 600;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
-        }
-        
-        .whatsapp-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
-        }
-        
-        /* الشريط السفلي */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
-            padding: 15px;
-            z-index: 1000;
-        }
-        
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            padding: 10px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--gray);
-            text-decoration: none;
-            min-width: 80px;
-        }
-        
-        .nav-item.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
-        }
-        
-        .nav-icon {
-            font-size: 1.5rem;
-        }
-        
-        .nav-text {
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        /* محدد البحث */
-        .searchable-select {
-            position: relative;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 15px 45px 15px 15px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 16px;
-            background: white;
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray);
-        }
-        
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            max-height: 300px;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            display: none;
-        }
-        
-        .search-item {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
             gap: 10px;
         }
         
-        .search-item:hover {
-            background: #f1f5f9;
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
         }
         
-        .search-item:last-child {
-            border-bottom: none;
-        }
-        
-        .item-icon {
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-        
-        .item-main {
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
-        .item-sub {
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-        
-        /* رحلات متعددة */
-        .multi-flight-section {
-            background: #f8fafc;
-            border-radius: 15px;
+        .error-message {
+            background: #fef2f2;
+            color: #dc2626;
             padding: 20px;
-            margin-top: 20px;
-            border: 2px dashed var(--border);
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #fecaca;
+            margin: 20px 0;
         }
         
-        .multi-flight-header {
+        .helper-text {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 5px;
             display: flex;
-            justify-content: between;
             align-items: center;
+            gap: 5px;
+        }
+        
+        /* التنسيقات الجديدة للرحلات المتعددة */
+        .multi-flight-container {
             margin-bottom: 20px;
         }
         
-        .multi-flight-title {
+        .flight-segment {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .segment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .segment-title {
             font-size: 1.2rem;
             color: var(--primary);
-            font-weight: 600;
+            margin: 0;
+        }
+        
+        .remove-segment {
+            background: #fef2f2;
+            color: #dc2626;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .add-flight-btn {
             background: var(--success);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Tajawal', sans-serif;
-            font-weight: 600;
-        }
-        
-        .flight-segment {
-            background: white;
-            padding: 20px;
             border-radius: 12px;
-            margin-bottom: 15px;
-            position: relative;
-            border: 1px solid var(--border);
-        }
-        
-        .remove-flight-btn {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            padding: 15px 20px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 16px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* مسار متعدد */
-        .multi-route {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            padding: 20px;
-        }
-        
-        .multi-route-point {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            min-width: 140px;
-            border: 2px solid var(--primary);
-        }
-        
-        .multi-route-arrow {
-            color: var(--accent);
-            font-size: 1.5rem;
-        }
-        
-        /* الدول المدعومة */
-        .supported-countries {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .countries-title {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 25px;
-            text-align: center;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-        }
-        
-        .countries-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        
-        .country-card {
-            background: #f8fafc;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
+            margin-bottom: 20px;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
         }
         
-        .country-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-color: var(--primary);
+        .add-flight-btn:hover {
+            background: #0da271;
         }
         
-        .country-flag {
-            font-size: 3rem;
-            margin-bottom: 15px;
+        .multi-route-display {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
         }
         
-        .country-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 5px;
-        }
-        
-        .country-code {
-            font-size: 1rem;
-            color: var(--gray);
+        .multi-route-segment {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             background: white;
-            padding: 5px 10px;
-            border-radius: 8px;
-            display: inline-block;
+            padding: 15px;
+            border-radius: 12px;
+            position: relative;
         }
         
-        /* التجاوب */
+        .multi-route-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: 1;
+        }
+        
+        .multi-route-point {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 2;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            min-width: 120px;
+        }
+        
+        .multi-route-arrow {
+            font-size: 1.5rem;
+            color: var(--accent);
+            z-index: 2;
+            background: white;
+            padding: 8px;
+            border-radius: 50%;
+        }
+        
+        .date-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .toggle-btn {
+            background: #f1f5f9;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-family: 'Tajawal', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
         @media (max-width: 768px) {
             .app-title {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             
             .form-grid {
@@ -631,7 +453,6 @@
             .route-display {
                 flex-direction: column;
                 gap: 20px;
-                text-align: center;
             }
             
             .route-line {
@@ -640,105 +461,20 @@
             
             .route-arrow {
                 transform: rotate(90deg);
-                margin: 10px 0;
             }
             
-            .summary-details {
-                grid-template-columns: 1fr 1fr;
+            .multi-route-segment {
+                flex-direction: column;
+                gap: 15px;
             }
             
-            .nav-container {
-                padding: 0 10px;
+            .multi-route-line {
+                display: none;
             }
             
-            .nav-item {
-                padding: 8px 12px;
-                min-width: 60px;
+            .multi-route-arrow {
+                transform: rotate(90deg);
             }
-            
-            .nav-text {
-                font-size: 0.75rem;
-            }
-            
-            .countries-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .app-content {
-                padding: 20px;
-            }
-            
-            .summary-details {
-                grid-template-columns: 1fr;
-            }
-            
-            .tab-btn {
-                padding: 12px 8px;
-                font-size: 14px;
-            }
-            
-            .countries-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        /* نصوص المساعدة */
-        .helper-text {
-            font-size: 0.85rem;
-            color: var(--gray);
-            margin-top: 5px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        /* تحسينات عامة */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        /* شريط التقدم */
-        .progress-bar {
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 3px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-        
-        /* رسالة نجاح */
-        .success-message {
-            background: #f0fdf4;
-            color: var(--success);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid #bbf7d0;
-            margin: 20px 0;
         }
     </style>
 </head>
@@ -762,17 +498,14 @@
                     </div>
                     <h3>جاري تحميل نظام المطارات...</h3>
                     <p>يرجى الانتظار قليلاً</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 0%" id="progressFill"></div>
-                    </div>
                 </div>
                 
                 <!-- شاشة الخطأ -->
                 <div id="error" class="error-message" style="display: none;">
-                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    <i class="fas fa-exclamation-triangle"></i>
                     <h3>حدث خطأ في تحميل البيانات</h3>
                     <p>تعذر تحميل قاعدة بيانات المطارات. يرجى تحديث الصفحة.</p>
-                    <button onclick="window.location.reload()" class="search-btn" style="margin-top: 15px; background: var(--danger);">
+                    <button onclick="window.location.reload()" class="search-btn" style="margin-top: 15px;">
                         <i class="fas fa-redo"></i>
                         إعادة تحميل الصفحة
                     </button>
@@ -797,147 +530,153 @@
                     </div>
                     
                     <!-- نموذج البحث الأساسي -->
-                    <form id="flightForm">
-                        <div class="form-grid">
-                            <!-- نقطة الانطلاق -->
-                            <div class="form-group">
-                                <label class="form-label" for="originCountry">
-                                    <i class="fas fa-flag"></i>
-                                    الدولة الأصل
-                                </label>
-                                <div class="searchable-select">
-                                    <input type="text" class="search-input" id="originCountrySearch" placeholder="ابحث عن الدولة..." 
-                                           onfocus="showSearch('originCountry')" autocomplete="off">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <select id="originCountry" class="form-select" style="display: none;" required>
+                    <div id="basicFlightForm" class="flight-form">
+                        <form id="flightForm">
+                            <div class="form-grid">
+                                <!-- نقطة الانطلاق -->
+                                <div class="form-group">
+                                    <label class="form-label" for="originCountry">
+                                        <i class="fas fa-flag"></i>
+                                        الدولة الأصل
+                                    </label>
+                                    <select id="originCountry" class="form-select" required>
                                         <option value="">اختر الدولة</option>
                                     </select>
-                                    <div class="search-results" id="originCountryResults"></div>
+                                    <div class="helper-text">
+                                        <i class="fas fa-info-circle"></i>
+                                        اختر الدولة التي ستسافر منها
+                                    </div>
                                 </div>
-                                <div class="helper-text">
-                                    <i class="fas fa-info-circle"></i>
-                                    ابدأ بالكتابة للبحث السريع عن الدولة
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="originCity">
-                                    <i class="fas fa-city"></i>
-                                    المدينة الأصل
-                                </label>
-                                <div class="searchable-select">
-                                    <input type="text" class="search-input" id="originCitySearch" placeholder="اختر الدولة أولاً" 
-                                           onfocus="showSearch('originCity')" disabled autocomplete="off">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <select id="originCity" class="form-select" style="display: none;" disabled required>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="originCity">
+                                        <i class="fas fa-city"></i>
+                                        المدينة الأصل
+                                    </label>
+                                    <select id="originCity" class="form-select" disabled required>
                                         <option value="">اختر المدينة</option>
                                     </select>
-                                    <div class="search-results" id="originCityResults"></div>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="originAirport">
-                                    <i class="fas fa-plane-departure"></i>
-                                    المطار الأصل
-                                </label>
-                                <div class="searchable-select">
-                                    <input type="text" class="search-input" id="originAirportSearch" placeholder="اختر المدينة أولاً" 
-                                           onfocus="showSearch('originAirport')" disabled autocomplete="off">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <select id="originAirport" class="form-select" style="display: none;" disabled required>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="originAirport">
+                                        <i class="fas fa-plane-departure"></i>
+                                        المطار الأصل
+                                    </label>
+                                    <select id="originAirport" class="form-select" disabled required>
                                         <option value="">اختر المطار</option>
                                     </select>
-                                    <div class="search-results" id="originAirportResults"></div>
                                 </div>
-                            </div>
-                            
-                            <!-- نقطة الوصول -->
-                            <div class="form-group">
-                                <label class="form-label" for="destinationCountry">
-                                    <i class="fas fa-flag-checkered"></i>
-                                    الدولة الوجهة
-                                </label>
-                                <div class="searchable-select">
-                                    <input type="text" class="search-input" id="destinationCountrySearch" placeholder="ابحث عن الدولة..." 
-                                           onfocus="showSearch('destinationCountry')" autocomplete="off">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <select id="destinationCountry" class="form-select" style="display: none;" required>
+                                
+                                <!-- نقطة الوصول -->
+                                <div class="form-group">
+                                    <label class="form-label" for="destinationCountry">
+                                        <i class="fas fa-flag-checkered"></i>
+                                        الدولة الوجهة
+                                    </label>
+                                    <select id="destinationCountry" class="form-select" required>
                                         <option value="">اختر الدولة</option>
                                     </select>
-                                    <div class="search-results" id="destinationCountryResults"></div>
+                                    <div class="helper-text">
+                                        <i class="fas fa-info-circle"></i>
+                                        اختر الدولة التي تريد السفر إليها
+                                    </div>
                                 </div>
-                                <div class="helper-text">
-                                    <i class="fas fa-info-circle"></i>
-                                    ابدأ بالكتابة للبحث السريع عن الدولة
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="destinationCity">
-                                    <i class="fas fa-city"></i>
-                                    المدينة الوجهة
-                                </label>
-                                <div class="searchable-select">
-                                    <input type="text" class="search-input" id="destinationCitySearch" placeholder="اختر الدولة أولاً" 
-                                           onfocus="showSearch('destinationCity')" disabled autocomplete="off">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <select id="destinationCity" class="form-select" style="display: none;" disabled required>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="destinationCity">
+                                        <i class="fas fa-city"></i>
+                                        المدينة الوجهة
+                                    </label>
+                                    <select id="destinationCity" class="form-select" disabled required>
                                         <option value="">اختر المدينة</option>
                                     </select>
-                                    <div class="search-results" id="destinationCityResults"></div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="destinationAirport">
+                                        <i class="fas fa-plane-arrival"></i>
+                                        المطار الوجهة
+                                    </label>
+                                    <select id="destinationAirport" class="form-select" disabled required>
+                                        <option value="">اختر المطار</option>
+                                    </select>
                                 </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label class="form-label" for="destinationAirport">
-                                    <i class="fas fa-plane-arrival"></i>
-                                    المطار الوجهة
-                                </label>
-                                <div class="searchable-select">
-                                    <input type="text" class="search-input" id="destinationAirportSearch" placeholder="اختر المدينة أولاً" 
-                                           onfocus="showSearch('destinationAirport')" disabled autocomplete="off">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <select id="destinationAirport" class="form-select" style="display: none;" disabled required>
-                                        <option value="">اختر المطار</option>
+                            <!-- تواريخ السفر -->
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="departureDate">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        تاريخ المغادرة
+                                    </label>
+                                    <input type="date" id="departureDate" class="form-input" required>
+                                    <div class="date-toggle">
+                                        <button type="button" class="toggle-btn active" data-format="gregorian">الميلادي</button>
+                                        <button type="button" class="toggle-btn" data-format="hijri">الهجري</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" id="returnDateGroup">
+                                    <label class="form-label" for="returnDate">
+                                        <i class="fas fa-calendar-check"></i>
+                                        تاريخ العودة
+                                    </label>
+                                    <input type="date" id="returnDate" class="form-input">
+                                    <div class="date-toggle">
+                                        <button type="button" class="toggle-btn active" data-format="gregorian">الميلادي</button>
+                                        <button type="button" class="toggle-btn" data-format="hijri">الهجري</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="passengers">
+                                        <i class="fas fa-users"></i>
+                                        عدد المسافرين
+                                    </label>
+                                    <select id="passengers" class="form-select" required>
+                                        <option value="1">1 مسافر</option>
+                                        <option value="2">2 مسافرين</option>
+                                        <option value="3">3 مسافرين</option>
+                                        <option value="4">4 مسافرين</option>
+                                        <option value="family">عائلة (أكثر من 4)</option>
                                     </select>
-                                    <div class="search-results" id="destinationAirportResults"></div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="flightClass">
+                                        <i class="fas fa-couch"></i>
+                                        فئة السفر
+                                    </label>
+                                    <select id="flightClass" class="form-select" required>
+                                        <option value="economy">الدرجة الاقتصادية</option>
+                                        <option value="business">درجة رجال الأعمال</option>
+                                        <option value="first">الدرجة الأولى</option>
+                                    </select>
                                 </div>
                             </div>
+                        </form>
+                    </div>
+                    
+                    <!-- نموذج الرحلات المتعددة -->
+                    <div id="multiFlightForm" class="flight-form" style="display: none;">
+                        <div class="multi-flight-container" id="multiFlightContainer">
+                            <!-- سيتم إضافة مقاطع الرحلات هنا ديناميكياً -->
                         </div>
                         
-                        <!-- تواريخ السفر -->
+                        <button type="button" class="add-flight-btn" id="addFlightBtn">
+                            <i class="fas fa-plus"></i>
+                            إضافة رحلة جديدة
+                        </button>
+                        
                         <div class="form-grid">
                             <div class="form-group">
-                                <label class="form-label" for="departureDate">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    تاريخ المغادرة
-                                </label>
-                                <input type="date" id="departureDate" class="form-input" required>
-                                <div class="helper-text">
-                                    <i class="fas fa-info-circle"></i>
-                                    اختر تاريخ المغادرة (التاريخ الميلادي)
-                                </div>
-                            </div>
-                            
-                            <div class="form-group" id="returnDateGroup">
-                                <label class="form-label" for="returnDate">
-                                    <i class="fas fa-calendar-check"></i>
-                                    تاريخ العودة
-                                </label>
-                                <input type="date" id="returnDate" class="form-input">
-                                <div class="helper-text">
-                                    <i class="fas fa-info-circle"></i>
-                                    اختر تاريخ العودة (التاريخ الميلادي)
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label" for="passengers">
+                                <label class="form-label" for="multiPassengers">
                                     <i class="fas fa-users"></i>
                                     عدد المسافرين
                                 </label>
-                                <select id="passengers" class="form-select" required>
+                                <select id="multiPassengers" class="form-select" required>
                                     <option value="1">1 مسافر</option>
                                     <option value="2">2 مسافرين</option>
                                     <option value="3">3 مسافرين</option>
@@ -947,40 +686,23 @@
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="flightClass">
+                                <label class="form-label" for="multiFlightClass">
                                     <i class="fas fa-couch"></i>
                                     فئة السفر
                                 </label>
-                                <select id="flightClass" class="form-select" required>
+                                <select id="multiFlightClass" class="form-select" required>
                                     <option value="economy">الدرجة الاقتصادية</option>
                                     <option value="business">درجة رجال الأعمال</option>
                                     <option value="first">الدرجة الأولى</option>
                                 </select>
                             </div>
                         </div>
-                        
-                        <!-- قسم الرحلات المتعددة -->
-                        <div id="multiFlightSection" class="multi-flight-section" style="display: none;">
-                            <div class="multi-flight-header">
-                                <div class="multi-flight-title">
-                                    <i class="fas fa-plus-circle"></i>
-                                    الرحلات الإضافية
-                                </div>
-                                <button type="button" class="add-flight-btn" onclick="addFlightSegment()">
-                                    <i class="fas fa-plus"></i>
-                                    إضافة رحلة
-                                </button>
-                            </div>
-                            <div id="multiFlightSegments">
-                                <!-- الرحلات الإضافية تضاف هنا -->
-                            </div>
-                        </div>
-                        
-                        <button type="button" class="search-btn" onclick="showFlightSummary()">
-                            <i class="fas fa-search"></i>
-                            بحث عن الرحلات المتاحة
-                        </button>
-                    </form>
+                    </div>
+                    
+                    <button type="button" class="search-btn" onclick="showFlightSummary()">
+                        <i class="fas fa-search"></i>
+                        بحث عن الرحلات المتاحة
+                    </button>
                 </div>
                 
                 <!-- ملخص الرحلة -->
@@ -996,9 +718,9 @@
                         </button>
                     </div>
                     
-                    <!-- عرض المسار -->
+                    <!-- عرض مسار الرحلة -->
                     <div id="routeDisplay">
-                        <!-- يتم تعبئته ديناميكياً -->
+                        <!-- سيتم تعبئته ديناميكياً حسب نوع الرحلة -->
                     </div>
                     
                     <div class="summary-details">
@@ -1030,260 +752,83 @@
                 </div>
             </div>
         </div>
-        
-        <!-- الدول المدعومة -->
-        <div id="supportedCountries" class="supported-countries" style="display: none;">
-            <h2 class="countries-title">
-                <i class="fas fa-globe-asia"></i>
-                الدول المدعومة في نظام الحجز
-            </h2>
-            <div class="countries-grid" id="countriesGrid">
-                <!-- سيتم تعبئتها ديناميكياً -->
-            </div>
-        </div>
-    </div>
-
-    <!-- الشريط السفلي -->
-    <div class="bottom-nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-item active">
-                <i class="fas fa-home nav-icon"></i>
-                <span class="nav-text">الرئيسية</span>
-            </a>
-            <a href="flights.html" class="nav-item">
-                <i class="fas fa-plane nav-icon"></i>
-                <span class="nav-text">حجز الطيران</span>
-            </a>
-            <a href="my-bookings.html" class="nav-item">
-                <i class="fas fa-suitcase nav-icon"></i>
-                <span class="nav-text">حجوزاتي</span>
-            </a>
-            <a href="profile.html" class="nav-item">
-                <i class="fas fa-user nav-icon"></i>
-                <span class="nav-text">حسابي</span>
-            </a>
-        </div>
     </div>
 
     <script>
-        // البيانات العامة
+        // بيانات التطبيق
         let airportsData = null;
         let currentTripType = 'round-trip';
         let multiFlightSegments = [];
-        let searchIndex = {};
-        
-        // بيانات الدول المضافة
-        const additionalCountries = {
-            "countries": [
-                {
-                    "code": "EG",
-                    "name": "مصر",
-                    "flag": "🇪🇬",
-                    "cities": [
-                        {
-                            "code": "CAI",
-                            "name": "القاهرة",
-                            "airports": [
-                                {
-                                    "code": "CAI",
-                                    "name": "مطار القاهرة الدولي",
-                                    "city": "القاهرة",
-                                    "country": "مصر",
-                                    "timezone": "Africa/Cairo"
-                                }
-                            ]
-                        },
-                        {
-                            "code": "ALY",
-                            "name": "الإسكندرية",
-                            "airports": [
-                                {
-                                    "code": "HBE",
-                                    "name": "مطار برج العرب الدولي",
-                                    "city": "الإسكندرية",
-                                    "country": "مصر",
-                                    "timezone": "Africa/Cairo"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "code": "QA",
-                    "name": "قطر",
-                    "flag": "🇶🇦",
-                    "cities": [
-                        {
-                            "code": "DOH",
-                            "name": "الدوحة",
-                            "airports": [
-                                {
-                                    "code": "DOH",
-                                    "name": "مطار حمد الدولي",
-                                    "city": "الدوحة",
-                                    "country": "قطر",
-                                    "timezone": "Asia/Qatar"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "code": "KW",
-                    "name": "الكويت",
-                    "flag": "🇰🇼",
-                    "cities": [
-                        {
-                            "code": "KWI",
-                            "name": "الكويت",
-                            "airports": [
-                                {
-                                    "code": "KWI",
-                                    "name": "مطار الكويت الدولي",
-                                    "city": "الكويت",
-                                    "country": "الكويت",
-                                    "timezone": "Asia/Kuwait"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "code": "BH",
-                    "name": "البحرين",
-                    "flag": "🇧🇭",
-                    "cities": [
-                        {
-                            "code": "BAH",
-                            "name": "المنامة",
-                            "airports": [
-                                {
-                                    "code": "BAH",
-                                    "name": "مطار البحرين الدولي",
-                                    "city": "المنامة",
-                                    "country": "البحرين",
-                                    "timezone": "Asia/Bahrain"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "code": "OM",
-                    "name": "عُمان",
-                    "flag": "🇴🇲",
-                    "cities": [
-                        {
-                            "code": "MCT",
-                            "name": "مسقط",
-                            "airports": [
-                                {
-                                    "code": "MCT",
-                                    "name": "مطار مسقط الدولي",
-                                    "city": "مسقط",
-                                    "country": "عُمان",
-                                    "timezone": "Asia/Muscat"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        };
+        let dateFormat = 'gregorian'; // تنسيق التاريخ الافتراضي
         
         // تحميل بيانات المطارات
         async function loadAirportsData() {
             try {
-                // محاكاة تحميل البيانات مع شريط التقدم
-                const progressFill = document.getElementById('progressFill');
-                let progress = 0;
-                const progressInterval = setInterval(() => {
-                    progress += 5;
-                    progressFill.style.width = `${progress}%`;
-                    
-                    if (progress >= 100) {
-                        clearInterval(progressInterval);
-                    }
-                }, 100);
-                
-                // استخدام البيانات المدمجة بدلاً من ملف خارجي
+                // محاكاة لبيانات المطارات (في التطبيق الحقيقي سيتم جلبها من ملف JSON)
                 airportsData = {
-                    "countries": [
+                    countries: [
                         {
-                            "code": "SA",
-                            "name": "السعودية",
-                            "flag": "🇸🇦",
-                            "cities": [
+                            code: 'SA',
+                            name: 'المملكة العربية السعودية',
+                            cities: [
                                 {
-                                    "code": "RUH",
-                                    "name": "الرياض",
-                                    "airports": [
-                                        {
-                                            "code": "RUH",
-                                            "name": "مطار الملك خالد الدولي",
-                                            "city": "الرياض",
-                                            "country": "السعودية",
-                                            "timezone": "Asia/Riyadh"
-                                        }
+                                    code: 'RUH',
+                                    name: 'الرياض',
+                                    airports: [
+                                        { code: 'RUH', name: 'مطار الملك خالد الدولي' }
                                     ]
                                 },
                                 {
-                                    "code": "JED",
-                                    "name": "جدة",
-                                    "airports": [
-                                        {
-                                            "code": "JED",
-                                            "name": "مطار الملك عبدالعزيز الدولي",
-                                            "city": "جدة",
-                                            "country": "السعودية", 
-                                            "timezone": "Asia/Riyadh"
-                                        }
+                                    code: 'JED',
+                                    name: 'جدة',
+                                    airports: [
+                                        { code: 'JED', name: 'مطار الملك عبدالعزيز الدولي' }
                                     ]
                                 }
                             ]
                         },
                         {
-                            "code": "AE",
-                            "name": "الإمارات",
-                            "flag": "🇦🇪",
-                            "cities": [
+                            code: 'AE',
+                            name: 'الإمارات العربية المتحدة',
+                            cities: [
                                 {
-                                    "code": "DXB",
-                                    "name": "دبي",
-                                    "airports": [
-                                        {
-                                            "code": "DXB",
-                                            "name": "مطار دبي الدولي",
-                                            "city": "دبي",
-                                            "country": "الإمارات",
-                                            "timezone": "Asia/Dubai"
-                                        },
-                                        {
-                                            "code": "DWC", 
-                                            "name": "مطار آل مكتوم الدولي",
-                                            "city": "دبي",
-                                            "country": "الإمارات",
-                                            "timezone": "Asia/Dubai"
-                                        }
+                                    code: 'DXB',
+                                    name: 'دبي',
+                                    airports: [
+                                        { code: 'DXB', name: 'مطار دبي الدولي' }
+                                    ]
+                                },
+                                {
+                                    code: 'AUH',
+                                    name: 'أبوظبي',
+                                    airports: [
+                                        { code: 'AUH', name: 'مطار أبوظبي الدولي' }
                                     ]
                                 }
                             ]
                         },
-                        ...additionalCountries.countries
+                        {
+                            code: 'EG',
+                            name: 'مصر',
+                            cities: [
+                                {
+                                    code: 'CAI',
+                                    name: 'القاهرة',
+                                    airports: [
+                                        { code: 'CAI', name: 'مطار القاهرة الدولي' }
+                                    ]
+                                }
+                            ]
+                        }
                     ]
                 };
                 
-                buildSearchIndex();
+                // إخفاء التحميل وإظهار النموذج
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('searchForm').style.display = 'block';
                 
-                // إخفاء التحميل وإظهار النموذج والدول المدعومة
-                setTimeout(() => {
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('searchForm').style.display = 'block';
-                    document.getElementById('supportedCountries').style.display = 'block';
-                    
-                    // تهيئة التطبيق
-                    initializeApp();
-                }, 1500);
+                // تهيئة التطبيق
+                initializeApp();
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -1292,291 +837,106 @@
             }
         }
         
-        // بناء فهرس البحث
-        function buildSearchIndex() {
-            searchIndex = {
-                countries: [],
-                cities: [],
-                airports: []
-            };
-            
-            airportsData.countries.forEach(country => {
-                searchIndex.countries.push({
-                    id: country.code,
-                    name: country.name,
-                    flag: country.flag,
-                    type: 'country'
-                });
-                
-                country.cities.forEach(city => {
-                    searchIndex.cities.push({
-                        id: city.code,
-                        name: city.name,
-                        country: country.code,
-                        type: 'city'
-                    });
-                    
-                    city.airports.forEach(airport => {
-                        searchIndex.airports.push({
-                            id: airport.code,
-                            name: airport.name,
-                            code: airport.code,
-                            city: city.code,
-                            country: country.code,
-                            type: 'airport'
-                        });
-                    });
-                });
-            });
-            
-            // عرض الدول المدعومة
-            displaySupportedCountries();
-        }
-        
-        // عرض الدول المدعومة
-        function displaySupportedCountries() {
-            const countriesGrid = document.getElementById('countriesGrid');
-            countriesGrid.innerHTML = '';
-            
-            airportsData.countries.forEach(country => {
-                const countryCard = document.createElement('div');
-                countryCard.className = 'country-card';
-                countryCard.onclick = () => {
-                    document.getElementById('originCountrySearch').value = country.name;
-                    document.getElementById('originCountry').value = country.code;
-                    enableNextFields('originCountry');
-                    document.getElementById('originCountryResults').style.display = 'none';
-                    
-                    // تمرير إلى أعلى الصفحة
-                    document.getElementById('searchForm').scrollIntoView({ behavior: 'smooth' });
-                };
-                
-                countryCard.innerHTML = `
-                    <div class="country-flag">${country.flag}</div>
-                    <div class="country-name">${country.name}</div>
-                    <div class="country-code">${country.code}</div>
-                `;
-                
-                countriesGrid.appendChild(countryCard);
-            });
-        }
-        
         // تهيئة التطبيق
         function initializeApp() {
+            populateCountries();
             setupEventListeners();
             setDefaultDates();
+            addMultiFlightSegment(); // إضافة رحلة أولية للرحلات المتعددة
+        }
+        
+        // تعبئة قائمة الدول
+        function populateCountries() {
+            const originSelect = document.getElementById('originCountry');
+            const destinationSelect = document.getElementById('destinationCountry');
+            
+            airportsData.countries.forEach(country => {
+                [originSelect, destinationSelect].forEach(select => {
+                    const option = document.createElement('option');
+                    option.value = country.code;
+                    option.textContent = country.name;
+                    select.appendChild(option);
+                });
+            });
         }
         
         // إعداد مستمعي الأحداث
         function setupEventListeners() {
-            // البحث في الحقول
-            setupSearchHandlers();
+            // مستمعي الدول
+            document.getElementById('originCountry').addEventListener('change', () => updateCities('origin'));
+            document.getElementById('destinationCountry').addEventListener('change', () => updateCities('destination'));
             
-            // أزرار أنواع الرحلات
+            // مستمعي أزرار النوع
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => switchTripType(btn.dataset.type));
             });
-        }
-        
-        // إعداد معالجات البحث
-        function setupSearchHandlers() {
-            const searchFields = [
-                'originCountry', 'originCity', 'originAirport',
-                'destinationCountry', 'destinationCity', 'destinationAirport'
-            ];
             
-            searchFields.forEach(field => {
-                const searchInput = document.getElementById(field + 'Search');
-                searchInput.addEventListener('input', (e) => handleSearch(field, e.target.value));
-                
-                // إضافة ميزة البحث بالضغط على Enter
-                searchInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        const resultsDiv = document.getElementById(field + 'Results');
-                        const firstResult = resultsDiv.querySelector('.search-item');
-                        if (firstResult) {
-                            firstResult.click();
-                        }
-                    }
-                });
+            // مستمعي أزرار تبديل التاريخ
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', () => toggleDateFormat(btn));
             });
+            
+            // مستمع لإضافة رحلة جديدة
+            document.getElementById('addFlightBtn').addEventListener('click', addMultiFlightSegment);
         }
         
-        // إظهار نتائج البحث
-        function showSearch(field) {
-            const resultsDiv = document.getElementById(field + 'Results');
-            const searchInput = document.getElementById(field + 'Search');
+        // تحديث المدن
+        function updateCities(type) {
+            const countrySelect = document.getElementById(`${type}Country`);
+            const citySelect = document.getElementById(`${type}City`);
+            const airportSelect = document.getElementById(`${type}Airport`);
             
-            let items = [];
-            let type = field.replace('origin', '').replace('destination', '');
+            const countryCode = countrySelect.value;
+            citySelect.innerHTML = '<option value="">اختر المدينة</option>';
+            airportSelect.innerHTML = '<option value="">اختر المطار</option>';
             
-            switch(type) {
-                case 'Country':
-                    items = searchIndex.countries;
-                    break;
-                case 'City':
-                    // تصفية المدن بناءً على الدولة المحددة
-                    const countryField = field.includes('origin') ? 'originCountry' : 'destinationCountry';
-                    const countryCode = document.getElementById(countryField).value;
+            if (countryCode) {
+                const country = airportsData.countries.find(c => c.code === countryCode);
+                if (country) {
+                    citySelect.disabled = false;
+                    country.cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.code;
+                        option.textContent = city.name;
+                        citySelect.appendChild(option);
+                    });
                     
-                    if (countryCode) {
-                        items = searchIndex.cities.filter(city => city.country === countryCode);
-                    } else {
-                        items = [];
-                    }
-                    break;
-                case 'Airport':
-                    // تصفية المطارات بناءً على المدينة المحددة
-                    const cityField = field.includes('origin') ? 'originCity' : 'destinationCity';
-                    const cityCode = document.getElementById(cityField).value;
-                    
-                    if (cityCode) {
-                        items = searchIndex.airports.filter(airport => airport.city === cityCode);
-                    } else {
-                        items = [];
-                    }
-                    break;
-            }
-            
-            displaySearchResults(resultsDiv, items, field);
-            resultsDiv.style.display = 'block';
-        }
-        
-        // معالجة البحث
-        function handleSearch(field, query) {
-            const resultsDiv = document.getElementById(field + 'Results');
-            let items = [];
-            let type = field.replace('origin', '').replace('destination', '');
-            
-            switch(type) {
-                case 'Country':
-                    items = searchIndex.countries.filter(item => 
-                        item.name.includes(query) || item.id.includes(query.toUpperCase())
-                    );
-                    break;
-                case 'City':
-                    // تصفية المدن بناءً على الدولة المحددة والاستعلام
-                    const countryField = field.includes('origin') ? 'originCountry' : 'destinationCountry';
-                    const countryCode = document.getElementById(countryField).value;
-                    
-                    if (countryCode) {
-                        items = searchIndex.cities.filter(city => 
-                            city.country === countryCode && city.name.includes(query)
-                        );
-                    } else {
-                        items = [];
-                    }
-                    break;
-                case 'Airport':
-                    // تصفية المطارات بناءً على المدينة المحددة والاستعلام
-                    const cityField = field.includes('origin') ? 'originCity' : 'destinationCity';
-                    const cityCode = document.getElementById(cityField).value;
-                    
-                    if (cityCode) {
-                        items = searchIndex.airports.filter(airport => 
-                            airport.city === cityCode && 
-                            (airport.name.includes(query) || airport.code.includes(query.toUpperCase()))
-                        );
-                    } else {
-                        items = [];
-                    }
-                    break;
-            }
-            
-            displaySearchResults(resultsDiv, items, field);
-        }
-        
-        // عرض نتائج البحث
-        function displaySearchResults(container, items, field) {
-            container.innerHTML = '';
-            
-            if (items.length === 0) {
-                container.innerHTML = '<div class="search-item">لا توجد نتائج</div>';
-                return;
-            }
-            
-            // إظهار أول 10 نتائج فقط لتجنب التحميل الزائد
-            const limitedItems = items.slice(0, 10);
-            
-            limitedItems.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'search-item';
-                div.onclick = () => selectSearchItem(field, item);
-                
-                let icon = 'fas fa-flag';
-                let subText = '';
-                
-                switch(item.type) {
-                    case 'country':
-                        icon = 'fas fa-flag';
-                        subText = item.flag;
-                        break;
-                    case 'city':
-                        icon = 'fas fa-city';
-                        const country = airportsData.countries.find(c => c.code === item.country);
-                        subText = country?.name || '';
-                        break;
-                    case 'airport':
-                        icon = 'fas fa-plane';
-                        const city = searchIndex.cities.find(c => c.id === item.city);
-                        const country = airportsData.countries.find(c => c.code === item.country);
-                        subText = `${city?.name || ''}, ${country?.name || ''}`;
-                        break;
+                    // تحديث مستمع المدن
+                    citySelect.onchange = () => updateAirports(type);
                 }
-                
-                div.innerHTML = `
-                    <i class="${icon} item-icon"></i>
-                    <div style="flex: 1;">
-                        <div class="item-main">${item.name} ${item.code ? `(${item.code})` : ''}</div>
-                        ${subText ? `<div class="item-sub">${subText}</div>` : ''}
-                    </div>
-                `;
-                
-                container.appendChild(div);
-            });
+            } else {
+                citySelect.disabled = true;
+                airportSelect.disabled = true;
+            }
         }
         
-        // اختيار عنصر من البحث
-        function selectSearchItem(field, item) {
-            const searchInput = document.getElementById(field + 'Search');
-            const select = document.getElementById(field);
-            const resultsDiv = document.getElementById(field + 'Results');
+        // تحديث المطارات
+        function updateAirports(type) {
+            const countrySelect = document.getElementById(`${type}Country`);
+            const citySelect = document.getElementById(`${type}City`);
+            const airportSelect = document.getElementById(`${type}Airport`);
             
-            searchInput.value = item.name + (item.code ? ` (${item.code})` : '');
-            select.value = item.id;
-            resultsDiv.style.display = 'none';
+            const countryCode = countrySelect.value;
+            const cityCode = citySelect.value;
             
-            // تفعيل الحقول التالية
-            enableNextFields(field);
+            airportSelect.innerHTML = '<option value="">اختر المطار</option>';
             
-            // إظهار رسالة نجاح
-            showSuccessMessage(`تم اختيار ${item.name} بنجاح!`);
-        }
-        
-        // تفعيل الحقول التالية
-        function enableNextFields(field) {
-            const fieldsFlow = {
-                'originCountry': 'originCity',
-                'originCity': 'originAirport',
-                'destinationCountry': 'destinationCity', 
-                'destinationCity': 'destinationAirport'
-            };
-            
-            const nextField = fieldsFlow[field];
-            if (nextField) {
-                const searchInput = document.getElementById(nextField + 'Search');
-                searchInput.disabled = false;
-                searchInput.placeholder = "ابحث...";
-                
-                // مسح القيم القديمة في الحقول التالية
-                if (nextField === 'originCity' || nextField === 'destinationCity') {
-                    const airportField = nextField.replace('City', 'Airport');
-                    document.getElementById(airportField + 'Search').value = '';
-                    document.getElementById(airportField + 'Search').disabled = true;
-                    document.getElementById(airportField + 'Search').placeholder = "اختر المدينة أولاً";
-                    document.getElementById(airportField).value = '';
+            if (countryCode && cityCode) {
+                const country = airportsData.countries.find(c => c.code === countryCode);
+                if (country) {
+                    const city = country.cities.find(c => c.code === cityCode);
+                    if (city) {
+                        airportSelect.disabled = false;
+                        city.airports.forEach(airport => {
+                            const option = document.createElement('option');
+                            option.value = airport.code;
+                            option.textContent = `${airport.name} (${airport.code})`;
+                            airportSelect.appendChild(option);
+                        });
+                    }
                 }
+            } else {
+                airportSelect.disabled = true;
             }
         }
         
@@ -1591,21 +951,233 @@
             
             // إظهار/إخفاء الحقول
             const returnDateGroup = document.getElementById('returnDateGroup');
-            const multiFlightSection = document.getElementById('multiFlightSection');
+            const basicForm = document.getElementById('basicFlightForm');
+            const multiForm = document.getElementById('multiFlightForm');
             
             if (type === 'one-way') {
                 returnDateGroup.style.display = 'none';
-                multiFlightSection.style.display = 'none';
+                basicForm.style.display = 'block';
+                multiForm.style.display = 'none';
             } else if (type === 'round-trip') {
                 returnDateGroup.style.display = 'block';
-                multiFlightSection.style.display = 'none';
+                basicForm.style.display = 'block';
+                multiForm.style.display = 'none';
             } else if (type === 'multi-city') {
-                returnDateGroup.style.display = 'none';
-                multiFlightSection.style.display = 'block';
+                basicForm.style.display = 'none';
+                multiForm.style.display = 'block';
             }
+        }
+        
+        // تبديل تنسيق التاريخ
+        function toggleDateFormat(btn) {
+            const format = btn.dataset.format;
+            const allToggleBtns = btn.parentElement.querySelectorAll('.toggle-btn');
             
-            // إظهار رسالة نجاح
-            showSuccessMessage(`تم تغيير نوع الرحلة إلى ${document.querySelector('.tab-btn.active').textContent.trim()}`);
+            // تحديث حالة الأزرار
+            allToggleBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // تحديث تنسيق التاريخ
+            dateFormat = format;
+            
+            // تحديث عرض التواريخ إذا لزم الأمر
+            if (document.getElementById('flightSummary').style.display !== 'none') {
+                updateSummaryData();
+            }
+        }
+        
+        // إضافة رحلة جديدة للرحلات المتعددة
+        function addMultiFlightSegment() {
+            const container = document.getElementById('multiFlightContainer');
+            const segmentIndex = multiFlightSegments.length;
+            
+            const segmentHTML = `
+                <div class="flight-segment" id="segment-${segmentIndex}">
+                    <div class="segment-header">
+                        <h3 class="segment-title">الرحلة ${segmentIndex + 1}</h3>
+                        ${segmentIndex > 0 ? `<button type="button" class="remove-segment" onclick="removeMultiFlightSegment(${segmentIndex})">
+                            <i class="fas fa-trash"></i>
+                            حذف
+                        </button>` : ''}
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="multiOriginCountry-${segmentIndex}">
+                                <i class="fas fa-flag"></i>
+                                الدولة الأصل
+                            </label>
+                            <select id="multiOriginCountry-${segmentIndex}" class="form-select multi-origin-country" required>
+                                <option value="">اختر الدولة</option>
+                                ${airportsData.countries.map(country => 
+                                    `<option value="${country.code}">${country.name}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="multiOriginCity-${segmentIndex}">
+                                <i class="fas fa-city"></i>
+                                المدينة الأصل
+                            </label>
+                            <select id="multiOriginCity-${segmentIndex}" class="form-select multi-origin-city" disabled required>
+                                <option value="">اختر المدينة</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="multiOriginAirport-${segmentIndex}">
+                                <i class="fas fa-plane-departure"></i>
+                                المطار الأصل
+                            </label>
+                            <select id="multiOriginAirport-${segmentIndex}" class="form-select multi-origin-airport" disabled required>
+                                <option value="">اختر المطار</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="multiDestinationCountry-${segmentIndex}">
+                                <i class="fas fa-flag-checkered"></i>
+                                الدولة الوجهة
+                            </label>
+                            <select id="multiDestinationCountry-${segmentIndex}" class="form-select multi-destination-country" required>
+                                <option value="">اختر الدولة</option>
+                                ${airportsData.countries.map(country => 
+                                    `<option value="${country.code}">${country.name}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="multiDestinationCity-${segmentIndex}">
+                                <i class="fas fa-city"></i>
+                                المدينة الوجهة
+                            </label>
+                            <select id="multiDestinationCity-${segmentIndex}" class="form-select multi-destination-city" disabled required>
+                                <option value="">اختر المدينة</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="multiDestinationAirport-${segmentIndex}">
+                                <i class="fas fa-plane-arrival"></i>
+                                المطار الوجهة
+                            </label>
+                            <select id="multiDestinationAirport-${segmentIndex}" class="form-select multi-destination-airport" disabled required>
+                                <option value="">اختر المطار</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="multiDepartureDate-${segmentIndex}">
+                                <i class="fas fa-calendar-alt"></i>
+                                تاريخ المغادرة
+                            </label>
+                            <input type="date" id="multiDepartureDate-${segmentIndex}" class="form-input multi-departure-date" required>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', segmentHTML);
+            
+            // إضافة مستمعي الأحداث للحقول الجديدة
+            const originCountry = document.getElementById(`multiOriginCountry-${segmentIndex}`);
+            const destinationCountry = document.getElementById(`multiDestinationCountry-${segmentIndex}`);
+            
+            originCountry.addEventListener('change', () => updateMultiCities(segmentIndex, 'origin'));
+            destinationCountry.addEventListener('change', () => updateMultiCities(segmentIndex, 'destination'));
+            
+            // إضافة الرحلة إلى المصفوفة
+            multiFlightSegments.push({
+                origin: { country: '', city: '', airport: '' },
+                destination: { country: '', city: '', airport: '' },
+                date: ''
+            });
+        }
+        
+        // تحديث المدن في الرحلات المتعددة
+        function updateMultiCities(segmentIndex, type) {
+            const countrySelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Country-${segmentIndex}`);
+            const citySelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}City-${segmentIndex}`);
+            const airportSelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Airport-${segmentIndex}`);
+            
+            const countryCode = countrySelect.value;
+            citySelect.innerHTML = '<option value="">اختر المدينة</option>';
+            airportSelect.innerHTML = '<option value="">اختر المطار</option>';
+            
+            if (countryCode) {
+                const country = airportsData.countries.find(c => c.code === countryCode);
+                if (country) {
+                    citySelect.disabled = false;
+                    country.cities.forEach(city => {
+                        const option = document.createElement('option');
+                        option.value = city.code;
+                        option.textContent = city.name;
+                        citySelect.appendChild(option);
+                    });
+                    
+                    // تحديث مستمع المدن
+                    citySelect.onchange = () => updateMultiAirports(segmentIndex, type);
+                }
+            } else {
+                citySelect.disabled = true;
+                airportSelect.disabled = true;
+            }
+        }
+        
+        // تحديث المطارات في الرحلات المتعددة
+        function updateMultiAirports(segmentIndex, type) {
+            const countrySelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Country-${segmentIndex}`);
+            const citySelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}City-${segmentIndex}`);
+            const airportSelect = document.getElementById(`multi${type === 'origin' ? 'Origin' : 'Destination'}Airport-${segmentIndex}`);
+            
+            const countryCode = countrySelect.value;
+            const cityCode = citySelect.value;
+            
+            airportSelect.innerHTML = '<option value="">اختر المطار</option>';
+            
+            if (countryCode && cityCode) {
+                const country = airportsData.countries.find(c => c.code === countryCode);
+                if (country) {
+                    const city = country.cities.find(c => c.code === cityCode);
+                    if (city) {
+                        airportSelect.disabled = false;
+                        city.airports.forEach(airport => {
+                            const option = document.createElement('option');
+                            option.value = airport.code;
+                            option.textContent = `${airport.name} (${airport.code})`;
+                            airportSelect.appendChild(option);
+                        });
+                    }
+                }
+            } else {
+                airportSelect.disabled = true;
+            }
+        }
+        
+        // حذف رحلة من الرحلات المتعددة
+        function removeMultiFlightSegment(segmentIndex) {
+            const segment = document.getElementById(`segment-${segmentIndex}`);
+            segment.remove();
+            multiFlightSegments.splice(segmentIndex, 1);
+            
+            // إعادة ترقيم المقاطع المتبقية
+            const container = document.getElementById('multiFlightContainer');
+            const segments = container.querySelectorAll('.flight-segment');
+            
+            segments.forEach((seg, index) => {
+                const title = seg.querySelector('.segment-title');
+                title.textContent = `الرحلة ${index + 1}`;
+                
+                // تحديث معرف المقطع
+                seg.id = `segment-${index}`;
+                
+                // تحديث الأزرار إن وجدت
+                const removeBtn = seg.querySelector('.remove-segment');
+                if (removeBtn) {
+                    removeBtn.setAttribute('onclick', `removeMultiFlightSegment(${index})`);
+                }
+            });
         }
         
         // تعيين التواريخ الافتراضية
@@ -1614,494 +1186,215 @@
             const nextWeek = new Date(today);
             nextWeek.setDate(today.getDate() + 7);
             
-            // تنسيق التاريخ بشكل صحيح للعناصر input[type="date"]
-            const formatDate = (date) => {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            };
+            document.getElementById('departureDate').valueAsDate = today;
+            document.getElementById('returnDate').valueAsDate = nextWeek;
             
-            document.getElementById('departureDate').value = formatDate(today);
-            document.getElementById('returnDate').value = formatDate(nextWeek);
-        }
-        
-        // إضافة رحلة في الرحلات المتعددة
-        function addFlightSegment() {
-            const segmentId = multiFlightSegments.length + 1;
-            multiFlightSegments.push({
-                id: segmentId,
-                country: '',
-                city: '',
-                airport: '',
-                date: ''
-            });
-            
-            const segmentDiv = document.createElement('div');
-            segmentDiv.className = 'flight-segment';
-            segmentDiv.id = `flightSegment${segmentId}`;
-            
-            segmentDiv.innerHTML = `
-                <button type="button" class="remove-flight-btn" onclick="removeFlightSegment(${segmentId})">
-                    <i class="fas fa-times"></i>
-                </button>
-                <h4>الرحلة ${segmentId}</h4>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">الدولة الوجهة</label>
-                        <div class="searchable-select">
-                            <input type="text" class="search-input" id="multiCountry${segmentId}" 
-                                   placeholder="ابحث عن الدولة..." onfocus="showMultiSearch(${segmentId}, 'country')" autocomplete="off">
-                            <i class="fas fa-search search-icon"></i>
-                            <div class="search-results" id="multiCountryResults${segmentId}"></div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">المدينة الوجهة</label>
-                        <div class="searchable-select">
-                            <input type="text" class="search-input" id="multiCity${segmentId}" 
-                                   placeholder="اختر الدولة أولاً" disabled autocomplete="off">
-                            <i class="fas fa-search search-icon"></i>
-                            <div class="search-results" id="multiCityResults${segmentId}"></div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">المطار الوجهة</label>
-                        <div class="searchable-select">
-                            <input type="text" class="search-input" id="multiAirport${segmentId}" 
-                                   placeholder="اختر المدينة أولاً" disabled autocomplete="off">
-                            <i class="fas fa-search search-icon"></i>
-                            <div class="search-results" id="multiAirportResults${segmentId}"></div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">تاريخ المغادرة</label>
-                        <input type="date" class="form-input" id="multiDate${segmentId}">
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('multiFlightSegments').appendChild(segmentDiv);
-            
-            // إضافة مستمعي الأحداث
-            setupMultiSegmentEvents(segmentId);
-            
-            // إظهار رسالة نجاح
-            showSuccessMessage('تم إضافة رحلة جديدة بنجاح!');
-        }
-        
-        // إعداد أحداث القطعة المتعددة
-        function setupMultiSegmentEvents(segmentId) {
-            const countryInput = document.getElementById(`multiCountry${segmentId}`);
-            countryInput.addEventListener('input', (e) => handleMultiSearch(segmentId, 'country', e.target.value));
-        }
-        
-        // إزالة رحلة
-        function removeFlightSegment(segmentId) {
-            const segment = document.getElementById(`flightSegment${segmentId}`);
-            if (segment) {
-                segment.remove();
-                multiFlightSegments = multiFlightSegments.filter(s => s.id !== segmentId);
-                
-                // إظهار رسالة نجاح
-                showSuccessMessage('تم إزالة الرحلة بنجاح!');
+            // تعيين التواريخ للرحلات المتعددة
+            if (document.getElementById('multiDepartureDate-0')) {
+                document.getElementById('multiDepartureDate-0').valueAsDate = today;
             }
-        }
-        
-        // البحث في الرحلات المتعددة
-        function showMultiSearch(segmentId, type) {
-            const resultsDiv = document.getElementById(`multi${type.charAt(0).toUpperCase() + type.slice(1)}Results${segmentId}`);
-            let items = [];
-            
-            switch(type) {
-                case 'country':
-                    items = searchIndex.countries;
-                    break;
-                case 'city':
-                    // تصفية المدن بناءً على الدولة المحددة
-                    const countryCode = multiFlightSegments.find(s => s.id === segmentId)?.country;
-                    if (countryCode) {
-                        items = searchIndex.cities.filter(city => city.country === countryCode);
-                    } else {
-                        items = [];
-                    }
-                    break;
-                case 'airport':
-                    // تصفية المطارات بناءً على المدينة المحددة
-                    const cityCode = multiFlightSegments.find(s => s.id === segmentId)?.city;
-                    if (cityCode) {
-                        items = searchIndex.airports.filter(airport => airport.city === cityCode);
-                    } else {
-                        items = [];
-                    }
-                    break;
-            }
-            
-            displayMultiSearchResults(resultsDiv, items, segmentId, type);
-            resultsDiv.style.display = 'block';
-        }
-        
-        // معالجة البحث المتعدد
-        function handleMultiSearch(segmentId, type, query) {
-            const resultsDiv = document.getElementById(`multi${type.charAt(0).toUpperCase() + type.slice(1)}Results${segmentId}`);
-            let items = [];
-            
-            switch(type) {
-                case 'country':
-                    items = searchIndex.countries.filter(item => 
-                        item.name.includes(query) || item.id.includes(query.toUpperCase())
-                    );
-                    break;
-                case 'city':
-                    // تصفية المدن بناءً على الدولة المحددة والاستعلام
-                    const countryCode = multiFlightSegments.find(s => s.id === segmentId)?.country;
-                    if (countryCode) {
-                        items = searchIndex.cities.filter(city => 
-                            city.country === countryCode && city.name.includes(query)
-                        );
-                    } else {
-                        items = [];
-                    }
-                    break;
-                case 'airport':
-                    // تصفية المطارات بناءً على المدينة المحددة والاستعلام
-                    const cityCode = multiFlightSegments.find(s => s.id === segmentId)?.city;
-                    if (cityCode) {
-                        items = searchIndex.airports.filter(airport => 
-                            airport.city === cityCode && 
-                            (airport.name.includes(query) || airport.code.includes(query.toUpperCase()))
-                        );
-                    } else {
-                        items = [];
-                    }
-                    break;
-            }
-            
-            displayMultiSearchResults(resultsDiv, items, segmentId, type);
-        }
-        
-        // عرض نتائج البحث المتعدد
-        function displayMultiSearchResults(container, items, segmentId, type) {
-            container.innerHTML = '';
-            
-            if (items.length === 0) {
-                container.innerHTML = '<div class="search-item">لا توجد نتائج</div>';
-                return;
-            }
-            
-            items.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'search-item';
-                div.onclick = () => selectMultiSearchItem(segmentId, type, item);
-                
-                let icon = 'fas fa-flag';
-                let subText = '';
-                
-                switch(item.type) {
-                    case 'country':
-                        icon = 'fas fa-flag';
-                        subText = item.flag;
-                        break;
-                    case 'city':
-                        icon = 'fas fa-city';
-                        const country = airportsData.countries.find(c => c.code === item.country);
-                        subText = country?.name || '';
-                        break;
-                    case 'airport':
-                        icon = 'fas fa-plane';
-                        const city = searchIndex.cities.find(c => c.id === item.city);
-                        const country = airportsData.countries.find(c => c.code === item.country);
-                        subText = `${city?.name || ''}, ${country?.name || ''}`;
-                        break;
-                }
-                
-                div.innerHTML = `
-                    <i class="${icon} item-icon"></i>
-                    <div style="flex: 1;">
-                        <div class="item-main">${item.name} ${item.code ? `(${item.code})` : ''}</div>
-                        ${subText ? `<div class="item-sub">${subText}</div>` : ''}
-                    </div>
-                `;
-                
-                container.appendChild(div);
-            });
-        }
-        
-        // اختيار عنصر في البحث المتعدد
-        function selectMultiSearchItem(segmentId, type, item) {
-            const searchInput = document.getElementById(`multi${type.charAt(0).toUpperCase() + type.slice(1)}${segmentId}`);
-            const resultsDiv = document.getElementById(`multi${type.charAt(0).toUpperCase() + type.slice(1)}Results${segmentId}`);
-            
-            searchInput.value = item.name + (item.code ? ` (${item.code})` : '');
-            resultsDiv.style.display = 'none';
-            
-            // تحديث البيانات
-            const segment = multiFlightSegments.find(s => s.id === segmentId);
-            if (segment) {
-                segment[type] = item.id;
-                
-                // تفعيل الحقول التالية
-                if (type === 'country') {
-                    document.getElementById(`multiCity${segmentId}`).disabled = false;
-                    document.getElementById(`multiCity${segmentId}`).placeholder = "ابحث...";
-                } else if (type === 'city') {
-                    document.getElementById(`multiAirport${segmentId}`).disabled = false;
-                    document.getElementById(`multiAirport${segmentId}`).placeholder = "ابحث...";
-                }
-            }
-            
-            // إظهار رسالة نجاح
-            showSuccessMessage(`تم اختيار ${item.name} بنجاح!`);
         }
         
         // عرض ملخص الرحلة
         function showFlightSummary() {
+            // التحقق من صحة البيانات
             if (!validateForm()) return;
             
+            // تحديث بيانات الملخص
             updateSummaryData();
-            buildRouteDisplay();
             
+            // إظهار الملخص
             document.getElementById('searchForm').style.display = 'none';
             document.getElementById('flightSummary').style.display = 'block';
-            document.getElementById('flightSummary').classList.add('fade-in');
-            
-            // تمرير إلى ملخص الرحلة
-            document.getElementById('flightSummary').scrollIntoView({ behavior: 'smooth' });
         }
         
         // التحقق من صحة النموذج
         function validateForm() {
-            const requiredFields = [
-                'originCountry', 'originCity', 'originAirport',
-                'destinationCountry', 'destinationCity', 'destinationAirport',
-                'departureDate'
-            ];
-            
-            for (const fieldId of requiredFields) {
-                const field = document.getElementById(fieldId);
-                if (!field.value) {
-                    const fieldName = getFieldDisplayName(fieldId);
-                    showErrorMessage(`يرجى ملء حقل ${fieldName}`);
-                    return false;
+            if (currentTripType === 'multi-city') {
+                // التحقق من صحة كل رحلة في الرحلات المتعددة
+                const segments = document.querySelectorAll('.flight-segment');
+                for (let i = 0; i < segments.length; i++) {
+                    const requiredFields = [
+                        `multiOriginCountry-${i}`, `multiOriginCity-${i}`, `multiOriginAirport-${i}`,
+                        `multiDestinationCountry-${i}`, `multiDestinationCity-${i}`, `multiDestinationAirport-${i}`,
+                        `multiDepartureDate-${i}`
+                    ];
+                    
+                    for (const fieldId of requiredFields) {
+                        const field = document.getElementById(fieldId);
+                        if (!field || !field.value) {
+                            alert(`يرجى ملء جميع الحقول في الرحلة ${i + 1}`);
+                            if (field) field.focus();
+                            return false;
+                        }
+                    }
                 }
-            }
-            
-            if (currentTripType === 'multi-city' && multiFlightSegments.length === 0) {
-                showErrorMessage('يرجى إضافة رحلة واحدة على الأقل في الرحلات المتعددة');
-                return false;
-            }
-            
-            // التحقق من صحة التواريخ
-            const departureDate = new Date(document.getElementById('departureDate').value);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            if (departureDate < today) {
-                showErrorMessage('لا يمكن اختيار تاريخ مغادرة في الماضي');
-                return false;
-            }
-            
-            if (currentTripType === 'round-trip') {
-                const returnDate = new Date(document.getElementById('returnDate').value);
-                if (returnDate <= departureDate) {
-                    showErrorMessage('يجب أن يكون تاريخ العودة بعد تاريخ المغادرة');
-                    return false;
+            } else {
+                // التحقق من صحة النموذج الأساسي
+                const requiredFields = [
+                    'originCountry', 'originCity', 'originAirport',
+                    'destinationCountry', 'destinationCity', 'destinationAirport',
+                    'departureDate'
+                ];
+                
+                if (currentTripType === 'round-trip') {
+                    requiredFields.push('returnDate');
+                }
+                
+                for (const fieldId of requiredFields) {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value) {
+                        alert(`يرجى ملء حقل ${field.labels[0].textContent}`);
+                        field.focus();
+                        return false;
+                    }
                 }
             }
             
             return true;
         }
         
-        // الحصول على اسم الحقل للعرض
-        function getFieldDisplayName(fieldId) {
-            const names = {
-                'originCountry': 'الدولة الأصل',
-                'originCity': 'المدينة الأصل',
-                'originAirport': 'المطار الأصل',
-                'destinationCountry': 'الدولة الوجهة',
-                'destinationCity': 'المدينة الوجهة',
-                'destinationAirport': 'المطار الوجهة',
-                'departureDate': 'تاريخ المغادرة'
-            };
-            
-            return names[fieldId] || fieldId;
-        }
-        
         // تحديث بيانات الملخص
         function updateSummaryData() {
-            // بيانات الركاب والفئة
+            // تحديث بيانات الرحلة حسب النوع
+            if (currentTripType === 'multi-city') {
+                updateMultiCitySummary();
+            } else {
+                updateBasicSummary();
+            }
+            
+            // تحديث البيانات المشتركة
             document.getElementById('passengersText').textContent = 
+                currentTripType === 'multi-city' ? 
+                document.getElementById('multiPassengers').options[document.getElementById('multiPassengers').selectedIndex].text :
                 document.getElementById('passengers').options[document.getElementById('passengers').selectedIndex].text;
+                
             document.getElementById('classText').textContent = 
+                currentTripType === 'multi-city' ? 
+                document.getElementById('multiFlightClass').options[document.getElementById('multiFlightClass').selectedIndex].text :
                 document.getElementById('flightClass').options[document.getElementById('flightClass').selectedIndex].text;
+                
             document.getElementById('tripTypeText').textContent = 
                 document.querySelector('.tab-btn.active').textContent.trim();
             document.getElementById('bookingDateText').textContent = formatDate(new Date());
         }
         
-        // بناء عرض المسار
-        function buildRouteDisplay() {
+        // تحديث ملخص الرحلة الأساسية
+        function updateBasicSummary() {
             const routeDisplay = document.getElementById('routeDisplay');
-            routeDisplay.innerHTML = '';
             
             if (currentTripType === 'one-way') {
-                buildOneWayRoute(routeDisplay);
-            } else if (currentTripType === 'round-trip') {
-                buildRoundTripRoute(routeDisplay);
-            } else if (currentTripType === 'multi-city') {
-                buildMultiCityRoute(routeDisplay);
+                // عرض سهم واحد للذهاب فقط
+                routeDisplay.innerHTML = `
+                    <div class="route-display">
+                        <div class="route-point">
+                            <div class="airport-code">${document.getElementById('originAirport').value}</div>
+                            <div class="city-name">${document.getElementById('originCity').options[document.getElementById('originCity').selectedIndex].text}</div>
+                            <div class="flight-date">${formatDate(new Date(document.getElementById('departureDate').value))}</div>
+                        </div>
+                        
+                        <div class="route-line"></div>
+                        <div class="route-arrow">
+                            <i class="fas fa-long-arrow-alt-right"></i>
+                        </div>
+                        
+                        <div class="route-point">
+                            <div class="airport-code">${document.getElementById('destinationAirport').value}</div>
+                            <div class="city-name">${document.getElementById('destinationCity').options[document.getElementById('destinationCity').selectedIndex].text}</div>
+                            <div class="flight-date">${formatDate(new Date(document.getElementById('departureDate').value))}</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // عرض سهمين للذهاب والعودة
+                routeDisplay.innerHTML = `
+                    <div class="route-display">
+                        <div class="route-point">
+                            <div class="airport-code">${document.getElementById('originAirport').value}</div>
+                            <div class="city-name">${document.getElementById('originCity').options[document.getElementById('originCity').selectedIndex].text}</div>
+                            <div class="flight-date">${formatDate(new Date(document.getElementById('departureDate').value))}</div>
+                        </div>
+                        
+                        <div class="route-line"></div>
+                        <div class="route-arrow">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        
+                        <div class="route-point">
+                            <div class="airport-code">${document.getElementById('destinationAirport').value}</div>
+                            <div class="city-name">${document.getElementById('destinationCity').options[document.getElementById('destinationCity').selectedIndex].text}</div>
+                            <div class="flight-date">${formatDate(new Date(document.getElementById('returnDate').value))}</div>
+                        </div>
+                    </div>
+                `;
             }
         }
         
-        // بناء مسار ذهاب فقط
-        function buildOneWayRoute(container) {
-            const origin = getLocationData('origin');
-            const destination = getLocationData('destination');
-            const departureDate = new Date(document.getElementById('departureDate').value);
+        // تحديث ملخص الرحلات المتعددة
+        function updateMultiCitySummary() {
+            const routeDisplay = document.getElementById('routeDisplay');
+            let routeHTML = '<div class="multi-route-display">';
             
-            container.innerHTML = `
-                <div class="route-display" style="display: flex; justify-content: center; align-items: center; gap: 30px;">
-                    <div class="route-point">
-                        <div class="airport-code">${origin.airportCode}</div>
-                        <div class="city-name">${origin.cityName}</div>
-                        <div class="flight-date">${formatDate(departureDate)}</div>
-                    </div>
-                    
-                    <div class="route-arrow">
-                        <i class="fas fa-long-arrow-alt-right"></i>
-                    </div>
-                    
-                    <div class="route-point">
-                        <div class="airport-code">${destination.airportCode}</div>
-                        <div class="city-name">${destination.cityName}</div>
-                        <div class="flight-date">${formatDate(departureDate)}</div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // بناء مسار ذهاب وعودة
-        function buildRoundTripRoute(container) {
-            const origin = getLocationData('origin');
-            const destination = getLocationData('destination');
-            const departureDate = new Date(document.getElementById('departureDate').value);
-            const returnDate = new Date(document.getElementById('returnDate').value);
+            // جمع بيانات الرحلات
+            const segments = document.querySelectorAll('.flight-segment');
+            const flightData = [];
             
-            container.innerHTML = `
-                <div class="route-display" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div class="route-point">
-                        <div class="airport-code">${origin.airportCode}</div>
-                        <div class="city-name">${origin.cityName}</div>
-                        <div class="flight-date">${formatDate(departureDate)}</div>
-                    </div>
-                    
-                    <div class="route-line"></div>
-                    
-                    <div class="route-arrow">
-                        <i class="fas fa-long-arrow-alt-right"></i>
-                    </div>
-                    
-                    <div class="route-point">
-                        <div class="airport-code">${destination.airportCode}</div>
-                        <div class="city-name">${destination.cityName}</div>
-                        <div class="flight-date">${formatDate(departureDate)}</div>
-                    </div>
-                    
-                    <div class="route-arrow">
-                        <i class="fas fa-long-arrow-alt-left"></i>
-                    </div>
-                    
-                    <div class="route-point">
-                        <div class="airport-code">${origin.airportCode}</div>
-                        <div class="city-name">${origin.cityName}</div>
-                        <div class="flight-date">${formatDate(returnDate)}</div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // بناء مسار متعدد المدن
-        function buildMultiCityRoute(container) {
-            const origin = getLocationData('origin');
-            const departureDate = new Date(document.getElementById('departureDate').value);
+            segments.forEach((segment, index) => {
+                const originAirport = document.getElementById(`multiOriginAirport-${index}`).value;
+                const originCity = document.getElementById(`multiOriginCity-${index}`).options[document.getElementById(`multiOriginCity-${index}`).selectedIndex].text;
+                const destinationAirport = document.getElementById(`multiDestinationAirport-${index}`).value;
+                const destinationCity = document.getElementById(`multiDestinationCity-${index}`).options[document.getElementById(`multiDestinationCity-${index}`).selectedIndex].text;
+                const date = document.getElementById(`multiDepartureDate-${index}`).value;
+                
+                flightData.push({
+                    origin: { airport: originAirport, city: originCity },
+                    destination: { airport: destinationAirport, city: destinationCity },
+                    date: date
+                });
+            });
             
-            let routeHTML = '<div class="multi-route">';
-            
-            // نقطة البداية
-            routeHTML += `
-                <div class="multi-route-point">
-                    <div class="airport-code">${origin.airportCode}</div>
-                    <div class="city-name">${origin.cityName}</div>
-                    <div class="flight-date">${formatDate(departureDate)}</div>
-                </div>
-            `;
-            
-            // الرحلات المتوسطة
-            multiFlightSegments.forEach((segment, index) => {
-                const segmentData = getMultiSegmentData(segment.id);
-                if (segmentData) {
-                    routeHTML += `
-                        <div class="multi-route-arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+            // بناء عرض المسار
+            flightData.forEach((flight, index) => {
+                routeHTML += `
+                    <div class="multi-route-segment">
                         <div class="multi-route-point">
-                            <div class="airport-code">${segmentData.airportCode}</div>
-                            <div class="city-name">${segmentData.cityName}</div>
-                            <div class="flight-date">${formatDate(segmentData.date)}</div>
+                            <div class="airport-code">${flight.origin.airport}</div>
+                            <div class="city-name">${flight.origin.city}</div>
+                            <div class="flight-date">${formatDate(new Date(flight.date))}</div>
+                        </div>
+                        
+                        <div class="multi-route-line"></div>
+                        <div class="multi-route-arrow">
+                            <i class="fas fa-long-arrow-alt-left"></i>
+                        </div>
+                        
+                        <div class="multi-route-point">
+                            <div class="airport-code">${flight.destination.airport}</div>
+                            <div class="city-name">${flight.destination.city}</div>
+                            <div class="flight-date">${formatDate(new Date(flight.date))}</div>
+                        </div>
+                    </div>
+                `;
+                
+                // إضافة نقطة انتقال إذا كانت هناك رحلة تالية
+                if (index < flightData.length - 1) {
+                    routeHTML += `
+                        <div style="text-align: center; margin: 10px 0;">
+                            <i class="fas fa-plane" style="color: var(--accent);"></i>
+                            <span style="color: #64748b; font-size: 0.9rem;">انتقال إلى الرحلة التالية</span>
                         </div>
                     `;
                 }
             });
             
             routeHTML += '</div>';
-            container.innerHTML = routeHTML;
-        }
-        
-        // الحصول على بيانات الموقع
-        function getLocationData(type) {
-            const countryCode = document.getElementById(`${type}Country`).value;
-            const cityCode = document.getElementById(`${type}City`).value;
-            const airportCode = document.getElementById(`${type}Airport`).value;
-            
-            const country = airportsData.countries.find(c => c.code === countryCode);
-            const city = country?.cities.find(c => c.code === cityCode);
-            const airport = city?.airports.find(a => a.code === airportCode);
-            
-            return {
-                countryName: country?.name || '',
-                cityName: city?.name || '',
-                airportCode: airport?.code || '',
-                airportName: airport?.name || ''
-            };
-        }
-        
-        // الحصول على بيانات القطعة المتعددة
-        function getMultiSegmentData(segmentId) {
-            const segment = multiFlightSegments.find(s => s.id === segmentId);
-            if (!segment) return null;
-            
-            const country = airportsData.countries.find(c => c.code === segment.country);
-            const city = country?.cities.find(c => c.code === segment.city);
-            const airport = city?.airports.find(a => a.code === segment.airport);
-            const dateInput = document.getElementById(`multiDate${segmentId}`);
-            const date = dateInput?.value ? new Date(dateInput.value) : new Date();
-            
-            return {
-                countryName: country?.name || '',
-                cityName: city?.name || '',
-                airportCode: airport?.code || '',
-                airportName: airport?.name || '',
-                date: date
-            };
+            routeDisplay.innerHTML = routeHTML;
         }
         
         // تعديل الرحلة
         function editFlight() {
             document.getElementById('flightSummary').style.display = 'none';
             document.getElementById('searchForm').style.display = 'block';
-            
-            // تمرير إلى نموذج البحث
-            document.getElementById('searchForm').scrollIntoView({ behavior: 'smooth' });
         }
         
         // إرسال الطلب عبر واتساب
@@ -2109,37 +1402,39 @@
             const phone = "+967781333149";
             let message = `طلب حجز جديد:\n\n`;
             
-            message += `🛫 نوع الرحلة: ${document.getElementById('tripTypeText').textContent}\n`;
-            
             if (currentTripType === 'multi-city') {
-                message += `🗺️ مسار الرحلة:\n`;
-                const origin = getLocationData('origin');
-                message += `• ${origin.cityName} (${origin.airportCode})\n`;
+                message += `🛫 نوع الرحلة: رحلات متعددة\n\n`;
                 
-                multiFlightSegments.forEach(segment => {
-                    const data = getMultiSegmentData(segment.id);
-                    if (data) {
-                        message += `• ${data.cityName} (${data.airportCode})\n`;
-                    }
+                // جمع بيانات الرحلات المتعددة
+                const segments = document.querySelectorAll('.flight-segment');
+                segments.forEach((segment, index) => {
+                    const originAirport = document.getElementById(`multiOriginAirport-${index}`).value;
+                    const originCity = document.getElementById(`multiOriginCity-${index}`).options[document.getElementById(`multiOriginCity-${index}`).selectedIndex].text;
+                    const destinationAirport = document.getElementById(`multiDestinationAirport-${index}`).value;
+                    const destinationCity = document.getElementById(`multiDestinationCity-${index}`).options[document.getElementById(`multiDestinationCity-${index}`).selectedIndex].text;
+                    const date = formatDate(new Date(document.getElementById(`multiDepartureDate-${index}`).value));
+                    
+                    message += `الرحلة ${index + 1}:\n`;
+                    message += `📍 من: ${originCity} (${originAirport})\n`;
+                    message += `🛬 إلى: ${destinationCity} (${destinationAirport})\n`;
+                    message += `📅 التاريخ: ${date}\n\n`;
                 });
             } else {
-                const origin = getLocationData('origin');
-                const destination = getLocationData('destination');
-                const departureDate = new Date(document.getElementById('departureDate').value);
-                
-                message += `📍 من: ${origin.cityName} (${origin.airportCode})\n`;
-                message += `🛬 إلى: ${destination.cityName} (${destination.airportCode})\n`;
-                message += `📅 المغادرة: ${formatDate(departureDate)}\n`;
+                message += `🛫 نوع الرحلة: ${document.getElementById('tripTypeText').textContent}\n`;
+                message += `📍 من: ${document.getElementById('originCityName').textContent} (${document.getElementById('originAirportCode').textContent})\n`;
+                message += `🛬 إلى: ${document.getElementById('destinationCityName').textContent} (${document.getElementById('destinationAirportCode').textContent})\n`;
+                message += `📅 المغادرة: ${document.getElementById('departureDateText').textContent}\n`;
                 
                 if (currentTripType === 'round-trip') {
-                    const returnDate = new Date(document.getElementById('returnDate').value);
-                    message += `📅 العودة: ${formatDate(returnDate)}\n`;
+                    message += `📅 العودة: ${document.getElementById('returnDateText').textContent}\n`;
                 }
+                
+                message += `\n`;
             }
             
-            message += `\n👥 المسافرون: ${document.getElementById('passengersText').textContent}\n`;
+            message += `👥 المسافرون: ${document.getElementById('passengersText').textContent}\n`;
             message += `💺 الفئة: ${document.getElementById('classText').textContent}\n\n`;
-            message += `طلب من تطبيق حجز الطيران - أمان للسفريات`;
+            message += `طلب من تطبيق حجز الطيران`;
             
             const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
@@ -2147,70 +1442,25 @@
         
         // تنسيق التاريخ
         function formatDate(date) {
-            return date.toLocaleDateString('ar-SA', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-        }
-        
-        // إظهار رسالة نجاح
-        function showSuccessMessage(message) {
-            // إزالة أي رسالة نجاح سابقة
-            const existingMessage = document.querySelector('.success-message');
-            if (existingMessage) {
-                existingMessage.remove();
-            }
-            
-            const successDiv = document.createElement('div');
-            successDiv.className = 'success-message fade-in';
-            successDiv.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                ${message}
-            `;
-            
-            document.getElementById('searchForm').insertBefore(successDiv, document.getElementById('searchForm').firstChild);
-            
-            // إزالة الرسالة بعد 3 ثوانٍ
-            setTimeout(() => {
-                successDiv.remove();
-            }, 3000);
-        }
-        
-        // إظهار رسالة خطأ
-        function showErrorMessage(message) {
-            // إزالة أي رسالة خطأ سابقة
-            const existingMessage = document.querySelector('.error-message:not(#error)');
-            if (existingMessage) {
-                existingMessage.remove();
-            }
-            
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error-message fade-in';
-            errorDiv.innerHTML = `
-                <i class="fas fa-exclamation-triangle"></i>
-                ${message}
-            `;
-            
-            document.getElementById('searchForm').insertBefore(errorDiv, document.getElementById('searchForm').firstChild);
-            
-            // إزالة الرسالة بعد 5 ثوانٍ
-            setTimeout(() => {
-                errorDiv.remove();
-            }, 5000);
-        }
-        
-        // بدء التحميل
-        document.addEventListener('DOMContentLoaded', loadAirportsData);
-        
-        // إغلاق نتائج البحث عند النقر خارجها
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.searchable-select')) {
-                document.querySelectorAll('.search-results').forEach(el => {
-                    el.style.display = 'none';
+            if (dateFormat === 'hijri') {
+                // محاكاة للتحويل إلى التاريخ الهجري (في التطبيق الحقيقي سيتم استخدام مكتبة متخصصة)
+                const hijriMonths = ['محرم', 'صفر', 'ربيع الأول', 'ربيع الآخر', 'جمادى الأولى', 'جمادى الآخرة', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذو القعدة', 'ذو الحجة'];
+                const hijriYear = Math.floor((date.getFullYear() - 622) * (33/32));
+                const hijriMonth = hijriMonths[date.getMonth()];
+                const hijriDay = date.getDate();
+                
+                return `${hijriDay} ${hijriMonth} ${hijriYear} هـ`;
+            } else {
+                return date.toLocaleDateString('ar-SA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                 });
             }
-        });
+        }
+        
+        // بدء التحميل عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', loadAirportsData);
     </script>
 </body>
 </html>
