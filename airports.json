@@ -2,7 +2,7 @@
   "countries": [
     {
       "code": "SA",
-      "name": "السعودية",
+      "name": "اليمن",
       "cities": [
         {
           "code": "RUH",
@@ -12,7 +12,7 @@
               "code": "RUH",
               "name": "مطار الملك خالد الدولي",
               "city": "الرياض",
-              "country": "السعودية",
+              "country": "اليمن",
               "timezone": "Asia/Riyadh"
             }
           ]
@@ -25,7 +25,7 @@
               "code": "JED",
               "name": "مطار الملك عبدالعزيز الدولي",
               "city": "جدة",
-              "country": "السعودية", 
+              "country": "اليمن", 
               "timezone": "Asia/Riyadh"
             }
           ]
