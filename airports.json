@@ -1,0 +1,52 @@
+{
+  "countries": [
+    {
+      "code": "SA",
+      "name": "السعودية",
+      "cities": [
+        {
+          "code": "RUH",
+          "name": "الرياض",
+          "airports": [
+            {
+              "code": "RUH",
+              "name": "مطار الملك خالد الدولي",
+              "city": "الرياض",
+              "country": "السعودية"
+            }
+          ]
+        },
+        {
+          "code": "JED", 
+          "name": "جدة",
+          "airports": [
+            {
+              "code": "JED",
+              "name": "مطار الملك عبدالعزيز الدولي",
+              "city": "جدة", 
+              "country": "السعودية"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "AE",
+      "name": "الإمارات",
+      "cities": [
+        {
+          "code": "DXB",
+          "name": "دبي",
+          "airports": [
+            {
+              "code": "DXB",
+              "name": "مطار دبي الدولي",
+              "city": "دبي",
+              "country": "الإمارات"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
