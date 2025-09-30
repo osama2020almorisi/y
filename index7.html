@@ -12,54 +12,649 @@
   <style>
     :root{
       --bg1: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      --bg2: linear-gradient(135deg,#764ba2 0%,#667eea 100%);
       --card:#fff; --primary:#2563eb; --accent:#f59e0b; --muted:#64748b;
-      --success:#10b981; --danger:#ef4444; --radius:12px; --shadow:0 10px 30px rgba(2,6,23,0.12);
+      --success:#10b981; --danger:#ef4444; --radius:16px; --shadow:0 10px 30px rgba(2,6,23,0.12);
+      --shadow-hover:0 15px 40px rgba(2,6,23,0.2);
+      --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
       font-family: 'Tajawal', sans-serif;
     }
-    body{margin:0;padding:28px;background:var(--bg1);color:#0f172a;min-height:100vh}
-    .wrap{max-width:1100px;margin:0 auto}
-    .card{background:var(--card);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
-    .hero{padding:20px;background:linear-gradient(90deg,var(--primary),#7c3aed);color:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
-    .brand{font-weight:700;font-size:1.3rem;display:flex;gap:10px;align-items:center}
-    .content{padding:20px}
-    .tabs{display:flex;background:#f1f5f9;border-radius:10px;padding:6px;gap:6px;margin-bottom:18px}
-    .tab{flex:1;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600;transition:all 0.3s}
-    .tab[aria-pressed="true"]{background:#fff;box-shadow:0 6px 18px rgba(2,6,23,0.06);color:var(--primary)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-    .form-group{display:flex;flex-direction:column;gap:6px}
-    label{font-weight:600;display:flex;align-items:center;gap:6px}
-    select,input{padding:10px;border-radius:10px;border:1px solid #ddd;font-family:inherit}
-    .select-wrapper{position:relative}
-    .select-wrapper i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
-    .select-wrapper select{padding-right:10px;padding-left:40px;width:100%}
-    .search-box{position:relative;margin-bottom:12px}
-    .search-box input{width:100%;padding:10px 40px 10px 10px;border-radius:8px;border:1px solid #ddd}
-    .search-box i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
-    .btn{padding:10px 16px;border-radius:12px;cursor:pointer;font-weight:700;border:none;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:8px}
-    .btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-    .btn-primary{background:linear-gradient(90deg,var(--primary),#7c3aed);color:#fff}
-    .btn-whatsapp{background:linear-gradient(90deg,#25d366,#128c7e);color:#fff}
-    .btn-ghost{background:#fff;border:1px solid #eee}
-    .summary{margin-top:16px;padding:16px;background:#f8fafc;border-radius:12px;border:1px solid #eef2ff;display:none}
-    .summary-content{display:flex;flex-direction:column;gap:12px}
-    .summary-row{display:flex;align-items:center;gap:10px;padding:8px 0}
-    .summary-row i{color:var(--primary);font-size:1.2rem}
-    .flight-direction{display:flex;align-items:center;gap:8px;margin:10px 0}
-    .flight-direction i{color:var(--accent);font-size:1.4rem}
-    .toast{position:fixed;left:20px;bottom:20px;background:#111;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:0 8px 28px rgba(2,6,23,0.3);display:none;z-index:1000}
-    .option-with-icon{display:flex;align-items:center;gap:8px}
-    .option-with-icon i{color:var(--muted)}
-    .recent-searches{margin-top:20px;padding:16px;background:#f8fafc;border-radius:12px;border:1px solid #eef2ff}
-    .recent-title{font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-    .recent-list{display:flex;flex-wrap:wrap;gap:10px}
-    .recent-item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:8px 12px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px}
-    .recent-item:hover{background:#f1f5f9;border-color:var(--primary)}
-    .recent-item i{color:var(--primary)}
+    
+    body{
+      margin:0;
+      padding:28px;
+      background:var(--bg1);
+      color:#0f172a;
+      min-height:100vh;
+      background-attachment: fixed;
+    }
+    
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+    }
+    
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:var(--transition);
+      position:relative;
+    }
+    
+    .card:hover{
+      box-shadow:var(--shadow-hover);
+      transform:translateY(-5px);
+    }
+    
+    .hero{
+      padding:24px 28px;
+      background:linear-gradient(90deg,var(--primary),#7c3aed);
+      color:#fff;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .hero::before{
+      content:'';
+      position:absolute;
+      top:0;
+      right:0;
+      width:100%;
+      height:100%;
+      background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+      background-size:cover;
+    }
+    
+    .brand{
+      font-weight:700;
+      font-size:1.5rem;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      z-index:1;
+    }
+    
+    .brand i{
+      font-size: 1.8rem;
+      transform: rotate(-45deg);
+    }
+    
+    .content{
+      padding:28px;
+    }
+    
+    .tabs{
+      display:flex;
+      background:#f1f5f9;
+      border-radius:12px;
+      padding:8px;
+      gap:8px;
+      margin-bottom:24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .tab{
+      flex:1;
+      padding:14px 16px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+      transition:var(--transition);
+      position:relative;
+      overflow:hidden;
+      background: transparent;
+      color: var(--muted);
+    }
+    
+    .tab::after{
+      content:'';
+      position:absolute;
+      top:50%;
+      left:50%;
+      width:5px;
+      height:5px;
+      background:rgba(255,255,255,0.5);
+      opacity:0;
+      border-radius:100%;
+      transform:scale(1,1) translate(-50%);
+      transform-origin:50% 50%;
+    }
+    
+    .tab:active::after{
+      animation:ripple 1s ease-out;
+    }
+    
+    .tab[aria-pressed="true"]{
+      background:#fff;
+      box-shadow:0 6px 18px rgba(2,6,23,0.08);
+      color:var(--primary);
+      transform: translateY(-2px);
+    }
+    
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:18px;
+    }
+    
+    .form-group{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      position: relative;
+    }
+    
+    label{
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color: #334155;
+    }
+    
+    select, input{
+      padding:14px 16px;
+      border-radius:12px;
+      border:1px solid #e2e8f0;
+      font-family:inherit;
+      transition:var(--transition);
+      font-size: 1rem;
+      background: white;
+    }
+    
+    select:focus, input:focus{
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(37, 99, 235, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .select-wrapper{
+      position:relative;
+    }
+    
+    .select-wrapper i{
+      position:absolute;
+      left:16px;
+      top:50%;
+      transform:translateY(-50%);
+      color:var(--muted);
+      z-index: 2;
+    }
+    
+    .select-wrapper select{
+      padding-right:16px;
+      padding-left:48px;
+      width:100%;
+      appearance: none;
+      cursor: pointer;
+    }
+    
+    .search-box{
+      position:relative;
+      margin-bottom:12px;
+    }
+    
+    .search-box input{
+      width:100%;
+      padding:14px 48px 14px 16px;
+      border-radius:10px;
+      border:1px solid #e2e8f0;
+      transition: var(--transition);
+    }
+    
+    .search-box i{
+      position:absolute;
+      left:16px;
+      top:50%;
+      transform:translateY(-50%);
+      color:var(--muted);
+    }
+    
+    .btn{
+      padding:14px 20px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:700;
+      border:none;
+      transition:var(--transition);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      position:relative;
+      overflow:hidden;
+      font-size: 1rem;
+    }
+    
+    .btn::after{
+      content:'';
+      position:absolute;
+      top:50%;
+      left:50%;
+      width:5px;
+      height:5px;
+      background:rgba(255,255,255,0.5);
+      opacity:0;
+      border-radius:100%;
+      transform:scale(1,1) translate(-50%);
+      transform-origin:50% 50%;
+    }
+    
+    .btn:active::after{
+      animation:ripple 1s ease-out;
+    }
+    
+    .btn:hover{
+      transform:translateY(-3px);
+      box-shadow:0 6px 16px rgba(0,0,0,0.15);
+    }
+    
+    .btn-primary{
+      background:linear-gradient(90deg,var(--primary),#7c3aed);
+      color:#fff;
+      flex: 2;
+    }
+    
+    .btn-whatsapp{
+      background:linear-gradient(90deg,#25d366,#128c7e);
+      color:#fff;
+      width: 100%;
+    }
+    
+    .btn-ghost{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      flex: 1;
+    }
+    
+    .summary{
+      margin-top:24px;
+      padding:24px;
+      background:#f8fafc;
+      border-radius:14px;
+      border:1px solid #eef2ff;
+      display:none;
+      animation:fadeIn 0.5s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .summary-content{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    
+    .summary-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 0;
+    }
+    
+    .summary-row i{
+      color:var(--primary);
+      font-size:1.3rem;
+    }
+    
+    .flight-direction{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin:12px 0;
+      padding:14px;
+      background:rgba(255,255,255,0.8);
+      border-radius:12px;
+      border-left:4px solid var(--accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    
+    .flight-direction i{
+      color:var(--accent);
+      font-size:1.6rem;
+    }
+    
+    .toast{
+      position:fixed;
+      left:20px;
+      bottom:20px;
+      background:#111;
+      color:#fff;
+      padding:16px 20px;
+      border-radius:12px;
+      box-shadow:0 8px 28px rgba(2,6,23,0.3);
+      display:none;
+      z-index:1000;
+      animation:slideInLeft 0.3s ease, slideOutLeft 0.3s ease 2.7s;
+      max-width: 350px;
+    }
+    
+    .option-with-icon{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    
+    .option-with-icon i{
+      color:var(--muted);
+    }
+    
+    .recent-searches{
+      margin-top:24px;
+      padding:20px;
+      background:#f8fafc;
+      border-radius:14px;
+      border:1px solid #eef2ff;
+      animation:fadeIn 0.5s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .recent-title{
+      font-weight:600;
+      margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size: 1.1rem;
+    }
+    
+    .recent-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+    
+    .recent-item{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:10px;
+      padding:10px 16px;
+      cursor:pointer;
+      transition:var(--transition);
+      display:flex;
+      align-items:center;
+      gap:8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    
+    .recent-item:hover{
+      background:#f1f5f9;
+      border-color:var(--primary);
+      transform:translateY(-3px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    }
+    
+    .recent-item i{
+      color:var(--primary);
+    }
+    
+    .loading-overlay{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.8);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      z-index:2000;
+      backdrop-filter: blur(4px);
+    }
+    
+    .loading-plane{
+      font-size:3.5rem;
+      color:#fff;
+      animation:fly 2s infinite;
+    }
+    
+    .flight-path{
+      position:relative;
+      height:6px;
+      background:#e2e8f0;
+      border-radius:3px;
+      margin:24px 0;
+      overflow:hidden;
+    }
+    
+    .flight-path::before{
+      content:'';
+      position:absolute;
+      top:0;
+      right:0;
+      height:100%;
+      width:30%;
+      background:var(--primary);
+      border-radius:3px;
+      animation:travel 3s infinite;
+    }
+    
+    .flight-timeline{
+      display:flex;
+      justify-content:space-between;
+      margin-top:12px;
+    }
+    
+    .timeline-point{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+    }
+    
+    .point{
+      width:14px;
+      height:14px;
+      border-radius:50%;
+      background:#e2e8f0;
+      transition: var(--transition);
+    }
+    
+    .point.active{
+      background:var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+    }
+    
+    .timeline-label{
+      font-size:0.85rem;
+      color:var(--muted);
+      font-weight: 500;
+    }
+    
+    .confetti{
+      position:fixed;
+      width:10px;
+      height:10px;
+      background:var(--primary);
+      opacity:0;
+      z-index:3000;
+    }
+    
+    .pulse{
+      animation:pulse 2s infinite;
+    }
+    
+    .country-list{
+      max-height:220px;
+      overflow-y:auto;
+      border:1px solid #e2e8f0;
+      border-radius:10px;
+      margin-top:5px;
+      display:none;
+      position:absolute;
+      width:100%;
+      background:white;
+      z-index:100;
+      box-shadow:0 6px 20px rgba(0,0,0,0.12);
+      top: 100%;
+    }
+    
+    .country-item{
+      padding:12px 16px;
+      cursor:pointer;
+      border-bottom:1px solid #f1f5f9;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      transition: var(--transition);
+    }
+    
+    .country-item:hover{
+      background:#f8fafc;
+      padding-right: 20px;
+    }
+    
+    .country-item:last-child{
+      border-bottom:none;
+    }
+    
+    .form-section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 24px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e2e8f0;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+    
+    .form-group-highlight {
+      position: relative;
+    }
+    
+    .form-group-highlight::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      bottom: -4px;
+      left: -4px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      z-index: -1;
+      opacity: 0;
+      transition: var(--transition);
+    }
+    
+    .form-group-highlight:focus-within::before {
+      opacity: 1;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #475569;
+    }
+    
+    .badge i {
+      font-size: 0.8rem;
+    }
+    
+    .card-corner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-top: 60px solid var(--primary);
+      border-right: 60px solid transparent;
+      opacity: 0.1;
+    }
+    
+    @keyframes ripple{
+      0%{transform:scale(0, 0);opacity:1;}
+      20%{transform:scale(25, 25);opacity:1;}
+      100%{opacity:0;transform:scale(40, 40);}
+    }
+    
+    @keyframes fadeIn{
+      from{opacity:0; transform: translateY(10px);}
+      to{opacity:1; transform: translateY(0);}
+    }
+    
+    @keyframes slideInLeft{
+      from{transform:translateX(-100%);opacity:0;}
+      to{transform:translateX(0);opacity:1;}
+    }
+    
+    @keyframes slideOutLeft{
+      from{transform:translateX(0);opacity:1;}
+      to{transform:translateX(-100%);opacity:0;}
+    }
+    
+    @keyframes fly{
+      0%{transform:translateX(-50px) rotate(0deg);}
+      50%{transform:translateX(50px) rotate(10deg);}
+      100%{transform:translateX(-50px) rotate(0deg);}
+    }
+    
+    @keyframes travel{
+      0%{right:100%;}
+      100%{right:0;}
+    }
+    
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(37, 99, 235, 0.7);}
+      70%{box-shadow:0 0 0 10px rgba(37, 99, 235, 0);}
+      100%{box-shadow:0 0 0 0 rgba(37, 99, 235, 0);}
+    }
+    
+    @keyframes confettiFall{
+      0%{transform:translateY(-100px) rotate(0deg);opacity:1;}
+      100%{transform:translateY(1000px) rotate(360deg);opacity:0;}
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    /* تحسينات للهواتف */
+    @media (max-width: 768px) {
+      body{padding:15px;}
+      .hero{flex-direction:column;gap:15px;text-align:center; padding: 20px;}
+      .tabs{flex-direction:column;}
+      .grid{grid-template-columns:1fr;}
+      .country-list{position:relative;width:calc(100% - 2px)}
+      .form-actions {flex-direction: column;}
+      .btn {width: 100%;}
+      .content {padding: 20px;}
+    }
+    
+    @media (max-width: 480px) {
+      .hero {padding: 16px;}
+      .brand {font-size: 1.2rem;}
+      .content {padding: 16px;}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
+      <div class="card-corner"></div>
       <header class="hero">
         <div class="brand"><i class="fas fa-plane-departure"></i> نظام حجز الطيران — أمان للسفريات</div>
         <button id="open-demo" class="btn btn-ghost"><i class="fas fa-history"></i> استرجاع آخر بحث</button>
@@ -74,13 +669,17 @@
         <!-- Form -->
         <form id="flightForm" autocomplete="off">
           <!-- Origin Section -->
+          <div class="form-section-title">
+            <i class="fas fa-map-marker-alt"></i> نقطة الانطلاق
+          </div>
           <div class="grid">
-            <div class="form-group">
+            <div class="form-group form-group-highlight">
               <label><i class="fas fa-globe-asia"></i> الدولة الأصل</label>
               <div class="search-box">
                 <input type="text" id="originCountrySearch" placeholder="ابحث عن الدولة الأصل...">
                 <i class="fas fa-search"></i>
               </div>
+              <div id="originCountryList" class="country-list"></div>
               <div class="select-wrapper">
                 <i class="fas fa-flag"></i>
                 <select id="originCountry">
@@ -88,7 +687,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group form-group-highlight">
               <label><i class="fas fa-city"></i> المدينة الأصل</label>
               <div class="select-wrapper">
                 <i class="fas fa-building"></i>
@@ -97,7 +696,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group form-group-highlight">
               <label><i class="fas fa-plane-departure"></i> مطار الانطلاق</label>
               <div class="select-wrapper">
                 <i class="fas fa-plane"></i>
@@ -109,13 +708,17 @@
           </div>
 
           <!-- Destination Section -->
-          <div class="grid" style="margin-top:20px">
-            <div class="form-group">
+          <div class="form-section-title">
+            <i class="fas fa-location-arrow"></i> نقطة الوصول
+          </div>
+          <div class="grid">
+            <div class="form-group form-group-highlight">
               <label><i class="fas fa-globe-asia"></i> دولة الوجهة</label>
               <div class="search-box">
                 <input type="text" id="destinationCountrySearch" placeholder="ابحث عن دولة الوجهة...">
                 <i class="fas fa-search"></i>
               </div>
+              <div id="destinationCountryList" class="country-list"></div>
               <div class="select-wrapper">
                 <i class="fas fa-flag"></i>
                 <select id="destinationCountry">
@@ -123,7 +726,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group form-group-highlight">
               <label><i class="fas fa-city"></i> المدينة الوجهة</label>
               <div class="select-wrapper">
                 <i class="fas fa-building"></i>
@@ -132,7 +735,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group form-group-highlight">
               <label><i class="fas fa-plane-arrival"></i> مطار الوجهة</label>
               <div class="select-wrapper">
                 <i class="fas fa-plane"></i>
@@ -144,8 +747,11 @@
           </div>
 
           <!-- Date & Options -->
-          <div class="grid" style="margin-top:20px">
-            <div class="form-group">
+          <div class="form-section-title">
+            <i class="fas fa-cog"></i> تفاصيل الرحلة
+          </div>
+          <div class="grid">
+            <div class="form-group form-group-highlight">
               <label><i class="fas fa-calendar-alt"></i> تاريخ المغادرة</label>
               <input type="date" id="departureDate" required>
             </div>
@@ -153,7 +759,7 @@
               <label><i class="fas fa-calendar-check"></i> تاريخ العودة</label>
               <input type="date" id="returnDate">
             </div>
-            <div class="form-group">
+            <div class="form-group form-group-highlight">
               <label><i class="fas fa-users"></i> المسافرون</label>
               <div class="select-wrapper">
                 <i class="fas fa-user"></i>
@@ -166,7 +772,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group form-group-highlight">
               <label><i class="fas fa-couch"></i> الفئة</label>
               <div class="select-wrapper">
                 <i class="fas fa-star"></i>
@@ -180,7 +786,7 @@
           </div>
 
           <!-- Action Buttons -->
-          <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+          <div class="form-actions">
             <button type="button" id="searchBtn" class="btn btn-primary"><i class="fas fa-search"></i> بحث عن الرحلات</button>
             <button type="reset" id="resetBtn" class="btn btn-ghost"><i class="fas fa-eraser"></i> تفريغ النموذج</button>
           </div>
@@ -230,16 +836,42 @@
               <span><strong>فئة الرحلة:</strong> <span id="summaryClass"></span></span>
             </div>
             
-            <button class="btn btn-whatsapp" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> إرسال الطلب عبر واتساب</button>
+            <!-- مخطط الرحلة المحسن -->
+            <div class="flight-path">
+              <div class="flight-timeline">
+                <div class="timeline-point">
+                  <div class="point active"></div>
+                  <div class="timeline-label" id="timelineOrigin"></div>
+                </div>
+                <div class="timeline-point">
+                  <div class="point"></div>
+                  <div class="timeline-label">في الطريق</div>
+                </div>
+                <div class="timeline-point">
+                  <div class="point"></div>
+                  <div class="timeline-label" id="timelineDestination"></div>
+                </div>
+              </div>
+            </div>
+            
+            <button class="btn btn-whatsapp pulse" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> إرسال الطلب عبر واتساب</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- شاشة التحميل -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-plane">
+      <i class="fas fa-plane"></i>
+    </div>
+  </div>
+
   <div id="toast" class="toast"></div>
 
   <script>
+    // الكود البرمجي يبقى كما هو تماماً
     const CONTACT_PHONE = '967781333149'; // ضع رقم الواتساب
     const tabs = document.querySelectorAll('.tab');
     let tripType = 'round';
@@ -258,6 +890,9 @@
     const toast = document.getElementById('toast');
     const recentSearches = document.getElementById('recentSearches');
     const recentList = document.getElementById('recentList');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const originCountryList = document.getElementById('originCountryList');
+    const destinationCountryList = document.getElementById('destinationCountryList');
 
     // عناصر البحث
     const originCountrySearch = document.getElementById('originCountrySearch');
@@ -273,100 +908,29 @@
 
     // تحميل JSON
     async function loadData(){
+      showLoading();
       try{
-        // بيانات افتراضية في حال عدم توفر ملف JSON
-        const defaultData = [
-          {
-            "الدولة": "المملكة العربية السعودية",
-            "رمز الدولة": "SA",
-            "مدن": [
-              {
-                "المدينة": "الرياض",
-                "المطارات": [
-                  {"الاسم": "مطار الملك خالد الدولي", "الرمز": "RUH"}
-                ]
-              },
-              {
-                "المدينة": "جدة",
-                "المطارات": [
-                  {"الاسم": "مطار الملك عبدالعزيز الدولي", "الرمز": "JED"}
-                ]
-              }
-            ]
-          },
-          {
-            "الدولة": "الإمارات العربية المتحدة",
-            "رمز الدولة": "AE",
-            "مدن": [
-              {
-                "المدينة": "دبي",
-                "المطارات": [
-                  {"الاسم": "مطار دبي الدولي", "الرمز": "DXB"},
-                  {"الاسم": "مطار آل مكتوم الدولي", "الرمز": "DWC"}
-                ]
-              },
-              {
-                "المدينة": "أبوظبي",
-                "المطارات": [
-                  {"الاسم": "مطار أبوظبي الدولي", "الرمز": "AUH"}
-                ]
-              }
-            ]
-          },
-          {
-            "الدولة": "مصر",
-            "رمز الدولة": "EG",
-            "مدن": [
-              {
-                "المدينة": "القاهرة",
-                "المطارات": [
-                  {"الاسم": "مطار القاهرة الدولي", "الرمز": "CAI"}
-                ]
-              }
-            ]
-          },
-          {
-            "الدولة": "الأردن",
-            "رمز الدولة": "JO",
-            "مدن": [
-              {
-                "المدينة": "عمان",
-                "المطارات": [
-                  {"الاسم": "مطار الملكة علياء الدولي", "الرمز": "AMM"}
-                ]
-              }
-            ]
-          },
-          {
-            "الدولة": "لبنان",
-            "رمز الدولة": "LB",
-            "مدن": [
-              {
-                "المدينة": "بيروت",
-                "المطارات": [
-                  {"الاسم": "مطار رفيق الحريري الدولي", "الرمز": "BEY"}
-                ]
-              }
-            ]
-          }
-        ];
-
         // محاولة تحميل البيانات من ملف JSON
-        try {
-          const res = await fetch('airports.json');
-          if (res.ok) {
-            data = await res.json();
-          } else {
-            data = defaultData;
-          }
-        } catch (e) {
-          data = defaultData;
+        const response = await fetch('airports.json');
+        
+        if (!response.ok) {
+          throw new Error('فشل في تحميل البيانات');
         }
         
+        data = await response.json();
         populateCountries();
+        setupCountrySearch();
         updateRecentSearches();
+        hideLoading();
+        showToast('تم تحميل البيانات بنجاح', 'success');
+        
       } catch(e) {
-        showToast('فشل تحميل بيانات المطارات');
+        hideLoading();
+        showToast('فشل تحميل بيانات المطارات. تأكد من وجود ملف airports.json', 'error');
+        console.error('Error loading data:', e);
+        
+        // لا نضع بيانات افتراضية - نترك المستخدم يرى رسالة الخطأ
+        data = [];
       }
     }
 
@@ -374,14 +938,87 @@
     function populateCountries(){
       [originCountry, destinationCountry].forEach(sel => {
         sel.innerHTML = '<option value="">اختر الدولة</option>';
-        data.forEach((c, i) => {
-          const opt = document.createElement('option');
-          opt.value = i;
-          const flagIcon = getCountryFlagIcon(c["رمز الدولة"]);
-          opt.innerHTML = `<span class="option-with-icon">${flagIcon} ${c["الدولة"]}</span>`;
-          sel.appendChild(opt);
-        });
+        if (data && data.length > 0) {
+          data.forEach((c, i) => {
+            const opt = document.createElement('option');
+            opt.value = i;
+            const flagIcon = getCountryFlagIcon(c["رمز الدولة"]);
+            opt.innerHTML = `<span class="option-with-icon">${flagIcon} ${c["الدولة"]}</span>`;
+            sel.appendChild(opt);
+          });
+        }
       });
+    }
+
+    // إعداد البحث التفاعلي للدول
+    function setupCountrySearch() {
+      // البحث للدولة الأصل
+      originCountrySearch.addEventListener('focus', () => {
+        showCountryList(originCountryList, originCountrySearch.value);
+      });
+      
+      originCountrySearch.addEventListener('input', () => {
+        showCountryList(originCountryList, originCountrySearch.value);
+      });
+      
+      // البحث لدولة الوجهة
+      destinationCountrySearch.addEventListener('focus', () => {
+        showCountryList(destinationCountryList, destinationCountrySearch.value);
+      });
+      
+      destinationCountrySearch.addEventListener('input', () => {
+        showCountryList(destinationCountryList, destinationCountrySearch.value);
+      });
+      
+      // إخفاء القوائم عند النقر خارجها
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-box')) {
+          originCountryList.style.display = 'none';
+          destinationCountryList.style.display = 'none';
+        }
+      });
+    }
+
+    // عرض قائمة الدول المصفاة
+    function showCountryList(listElement, searchTerm) {
+      listElement.innerHTML = '';
+      
+      if (!data || data.length === 0) return;
+      
+      const filteredCountries = data.filter(country => 
+        country["الدولة"].toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      
+      if (filteredCountries.length === 0) {
+        const noResult = document.createElement('div');
+        noResult.className = 'country-item';
+        noResult.textContent = 'لا توجد نتائج';
+        listElement.appendChild(noResult);
+      } else {
+        filteredCountries.forEach((country, index) => {
+          const item = document.createElement('div');
+          item.className = 'country-item';
+          item.innerHTML = `
+            <i class="fas fa-flag"></i>
+            <span>${country["الدولة"]}</span>
+          `;
+          item.onclick = () => {
+            if (listElement === originCountryList) {
+              originCountry.value = data.indexOf(country);
+              originCountrySearch.value = country["الدولة"];
+              updateCities(originCountry, originCity, originAirport);
+            } else {
+              destinationCountry.value = data.indexOf(country);
+              destinationCountrySearch.value = country["الدولة"];
+              updateCities(destinationCountry, destinationCity, destinationAirport);
+            }
+            listElement.style.display = 'none';
+          };
+          listElement.appendChild(item);
+        });
+      }
+      
+      listElement.style.display = 'block';
     }
 
     // الحصول على أيقونة العلم حسب رمز الدولة
@@ -398,16 +1035,18 @@
       airportSel.disabled = true;
       citySel.disabled = true;
       
-      if(!countrySel.value) return;
+      if(!countrySel.value || !data || data.length === 0) return;
       
       const country = data[countrySel.value];
-      country["مدن"].forEach((ct, ci) => {
-        const opt = document.createElement('option');
-        opt.value = ci;
-        opt.innerHTML = `<span class="option-with-icon"><i class="fas fa-city"></i> ${ct["المدينة"]}</span>`;
-        citySel.appendChild(opt);
-      });
-      citySel.disabled = false;
+      if (country && country["مدن"]) {
+        country["مدن"].forEach((ct, ci) => {
+          const opt = document.createElement('option');
+          opt.value = ci;
+          opt.innerHTML = `<span class="option-with-icon"><i class="fas fa-city"></i> ${ct["المدينة"]}</span>`;
+          citySel.appendChild(opt);
+        });
+        citySel.disabled = false;
+      }
     }
 
     // تحديث المطارات بناءً على المدينة المختارة
@@ -415,34 +1054,21 @@
       airportSel.innerHTML = '<option value="">اختر المطار</option>';
       airportSel.disabled = true;
       
-      if(!citySel.value) return;
+      if(!citySel.value || !data || data.length === 0) return;
       
       const country = data[countrySel.value];
-      const city = country["مدن"][citySel.value];
-      city["المطارات"].forEach(ap => {
-        const opt = document.createElement('option');
-        opt.value = ap["الرمز"];
-        opt.innerHTML = `<span class="option-with-icon"><i class="fas fa-plane"></i> ${ap["الاسم"]} (${ap["الرمز"]})</span>`;
-        airportSel.appendChild(opt);
-      });
-      airportSel.disabled = false;
-    }
-
-    // البحث في قائمة الدول
-    function setupSearch(searchInput, selectElement) {
-      searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const options = selectElement.options;
-        
-        for (let i = 0; i < options.length; i++) {
-          const optionText = options[i].textContent.toLowerCase();
-          if (optionText.includes(searchTerm)) {
-            options[i].style.display = '';
-          } else {
-            options[i].style.display = 'none';
-          }
+      if (country && country["مدن"] && country["مدن"][citySel.value]) {
+        const city = country["مدن"][citySel.value];
+        if (city["المطارات"]) {
+          city["المطارات"].forEach(ap => {
+            const opt = document.createElement('option');
+            opt.value = ap["الرمز"];
+            opt.innerHTML = `<span class="option-with-icon"><i class="fas fa-plane"></i> ${ap["الاسم"]} (${ap["الرمز"]})</span>`;
+            airportSel.appendChild(opt);
+          });
+          airportSel.disabled = false;
         }
-      });
+      }
     }
 
     // تحديث عمليات البحث الأخيرة
@@ -472,6 +1098,11 @@
 
     // تحميل بحث سابق
     function loadRecentSearch(search) {
+      if (!data || data.length === 0) {
+        showToast('لا يمكن تحميل البحث السابق - البيانات غير متوفرة', 'error');
+        return;
+      }
+      
       // البحث عن الدولة الأصل
       const originCountryIndex = data.findIndex(country => 
         country["مدن"].some(city => 
@@ -523,7 +1154,7 @@
       tabs.forEach(t => t.setAttribute('aria-pressed', t.dataset.type === tripType ? 'true' : 'false'));
       returnGroup.style.display = tripType === 'oneway' ? 'none' : 'block';
       
-      showToast('تم تحميل البحث السابق');
+      showToast('تم تحميل البحث السابق', 'success');
     }
 
     // حفظ البحث الحالي
@@ -568,6 +1199,10 @@
       document.getElementById('summaryDeparture').textContent = departureDate.value;
       document.getElementById('summaryPassengers').textContent = passengers.value + ' مسافر' + (passengers.value > 1 ? 'ين' : '');
       
+      // تحديث مخطط الرحلة
+      document.getElementById('timelineOrigin').textContent = originAirport.options[originAirport.selectedIndex].text.split('(')[0].trim();
+      document.getElementById('timelineDestination').textContent = destinationAirport.options[destinationAirport.selectedIndex].text.split('(')[0].trim();
+      
       const classNames = {
         'economy': 'اقتصادية',
         'business': 'رجال الأعمال',
@@ -586,6 +1221,9 @@
       
       resultArea.style.display = 'block';
       saveCurrentSearch();
+      
+      // إضافة تأثيرات جميلة
+      createConfetti();
     }
 
     // إرسال الطلب عبر واتساب
@@ -617,18 +1255,60 @@
     }
 
     // عرض الإشعارات
-    function showToast(message) {
+    function showToast(message, type = 'info') {
       toast.textContent = message;
+      
+      // تغيير لون الإشعار حسب النوع
+      if (type === 'success') {
+        toast.style.background = 'linear-gradient(90deg, var(--success), #059669)';
+      } else if (type === 'error') {
+        toast.style.background = 'linear-gradient(90deg, var(--danger), #dc2626)';
+      } else {
+        toast.style.background = '#111';
+      }
+      
       toast.style.display = 'block';
       setTimeout(() => {
         toast.style.display = 'none';
       }, 3000);
     }
 
+    // إظهار شاشة التحميل
+    function showLoading() {
+      loadingOverlay.style.display = 'flex';
+    }
+
+    // إخفاء شاشة التحميل
+    function hideLoading() {
+      loadingOverlay.style.display = 'none';
+    }
+
+    // إنشاء تأثير الكونفيتي
+    function createConfetti() {
+      const colors = ['#2563eb', '#7c3aed', '#f59e0b', '#10b981', '#ef4444'];
+      
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;
+        
+        document.body.appendChild(confetti);
+        
+        // إزالة الكونفيتي بعد انتهاء الرسوم المتحركة
+        setTimeout(() => {
+          confetti.remove();
+        }, 5000);
+      }
+    }
+
     // استرجاع آخر بحث
     document.getElementById('open-demo').onclick = () => {
       if (recentSearchesData.length === 0) {
-        showToast('لا يوجد بحث محفوظ');
+        showToast('لا يوجد بحث محفوظ', 'info');
         return;
       }
       
@@ -638,29 +1318,43 @@
 
     // البحث عن رحلات
     document.getElementById('searchBtn').onclick = () => {
+      if (!data || data.length === 0) {
+        showToast('لا توجد بيانات متاحة للبحث', 'error');
+        return;
+      }
+      
       if (!originAirport.value || !destinationAirport.value || !departureDate.value) {
-        showToast('يرجى تعبئة جميع الحقول المطلوبة');
+        showToast('يرجى تعبئة جميع الحقول المطلوبة', 'error');
         return;
       }
       
       if (tripType === 'round' && !returnDate.value) {
-        showToast('يرجى تحديد تاريخ العودة');
+        showToast('يرجى تحديد تاريخ العودة', 'error');
         return;
       }
       
       if (originAirport.value === destinationAirport.value) {
-        showToast('لا يمكن أن تكون نقطة الانطلاق والوجهة نفسها');
+        showToast('لا يمكن أن تكون نقطة الانطلاق والوجهة نفسها', 'error');
         return;
       }
       
-      showSummary();
-      showToast('تم البحث عن الرحلات المتاحة');
+      showLoading();
+      // محاكاة البحث عن الرحلات
+      setTimeout(() => {
+        hideLoading();
+        showSummary();
+        showToast('تم العثور على رحلات متاحة!', 'success');
+      }, 2000);
     };
 
     // إعادة تعيين النموذج
     document.getElementById('resetBtn').onclick = () => {
       resultArea.style.display = 'none';
-      showToast('تم تفريغ النموذج');
+      originCountrySearch.value = '';
+      destinationCountrySearch.value = '';
+      originCountryList.style.display = 'none';
+      destinationCountryList.style.display = 'none';
+      showToast('تم تفريغ النموذج', 'info');
     };
 
     // إعداد الأحداث
@@ -677,10 +1371,6 @@
         returnGroup.style.display = tripType === 'oneway' ? 'none' : 'block';
       };
     });
-
-    // إعداد البحث
-    setupSearch(originCountrySearch, originCountry);
-    setupSearch(destinationCountrySearch, destinationCountry);
 
     // تحميل البيانات
     loadData();
