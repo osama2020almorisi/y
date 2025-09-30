@@ -941,6 +941,31 @@
                 document.querySelector('input[name="arrivalPeriod"][value="مساءً"]').checked = true;
             }
             
+            // دالة جديدة: حساب اليوم من التاريخ المدخل
+            function calculateDayName(day, month, year) {
+                const monthNames = {
+                    "يناير": 0, "فبراير": 1, "مارس": 2, "أبريل": 3,
+                    "مايو": 4, "يونيو": 5, "يوليو": 6, "أغسطس": 7,
+                    "سبتمبر": 8, "أكتوبر": 9, "نوفمبر": 10, "ديسمبر": 11
+                };
+                
+                const dayNames = {
+                    0: "الأحد",
+                    1: "الاثنين",
+                    2: "الثلاثاء",
+                    3: "الأربعاء",
+                    4: "الخميس",
+                    5: "الجمعة",
+                    6: "السبت"
+                };
+                
+                if (day && month && year && monthNames[month] !== undefined) {
+                    const date = new Date(year, monthNames[month], day);
+                    return dayNames[date.getDay()];
+                }
+                return "الأربعاء"; // القيمة الافتراضية
+            }
+            
             // إضافة خط رحلة جديد
             function addFlight() {
                 flightCount++;
@@ -1090,6 +1115,9 @@
                 const year = document.getElementById('year').value;
                 const travelDate = day && month && year ? `${day} ${month} ${year}م` : "28 يوليو 2025م";
                 
+                // حساب اليوم تلقائياً من التاريخ المدخل
+                const dayName = calculateDayName(day, month, year);
+                
                 // جمع بيانات وقت الحضور
                 const arrivalHour = document.getElementById('arrivalHour').value;
                 const arrivalMinute = document.getElementById('arrivalMinute').value;
@@ -1208,11 +1236,11 @@ _🛬 الوصـول: *${arrivalTime}* إلى ${to}._`;
                     const message = `عميلنا العـزيز ...💼🤵‍♂
 > ${clientName}✓
 
-> 📄إليكم تفـاصـيل رحلتـكم القـادمـة بـإذن الله والمقررة يوم الأربعـاء تـأريخ ${travelDate}.
+> 📄إليكم تفـاصـيل رحلتـكم القـادمـة بـإذن الله والمقررة يوم ${dayName} تـأريخ ${travelDate}.
 
       *💥 تنـبـــــــــــيـه هــام⚠️*
-يرجـى حضوركم إلى المطـار يوم الأربعـاء تأريخ ${travelDate.replace('م', '')}م على *الســـــاعـة: ${arrivalTime}*‼️🚸
-_•(قبل الرحــــلة بـ اربع ســـاعات)•*_
+يرجـى حضوركم إلى المطـار يوم ${dayName} تأريخ ${travelDate.replace('م', '')}م على *الســـــاعـة: ${arrivalTime}*‼️🚸
+_*•(قبل الرحــــلة بـ اربع ســـاعات)•*_
 
 📃تفـــاصــيل رحــلة الذهاب🔻
 ➖️➖️➖️➖️➖️➖️➖️➖
@@ -1332,6 +1360,11 @@ _*يتمنى لكم رحلة سعيدة🌹*_
                     updateReminderFlightSelector();
                 }
             });
+            
+            // تحديث الرسالة عند تغيير التاريخ
+            document.getElementById('day').addEventListener('change', generateMessage);
+            document.getElementById('month').addEventListener('change', generateMessage);
+            document.getElementById('year').addEventListener('change', generateMessage);
             
             // تهيئة التطبيق
             initializeSelectOptions();
