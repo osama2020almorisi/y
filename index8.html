@@ -75,6 +75,10 @@
     .timeline-label{font-size:0.8rem;color:var(--muted)}
     .confetti{position:fixed;width:10px;height:10px;background:var(--primary);opacity:0;z-index:3000}
     .pulse{animation:pulse 2s infinite}
+    .country-list{max-height:200px;overflow-y:auto;border:1px solid #ddd;border-radius:8px;margin-top:5px;display:none;position:absolute;width:100%;background:white;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+    .country-item{padding:10px;cursor:pointer;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:8px}
+    .country-item:hover{background:#f8fafc}
+    .country-item:last-child{border-bottom:none}
     
     @keyframes ripple{0%{transform:scale(0, 0);opacity:1;}20%{transform:scale(25, 25);opacity:1;}100%{opacity:0;transform:scale(40, 40);}}
     @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
@@ -91,6 +95,7 @@
       .hero{flex-direction:column;gap:15px;text-align:center;}
       .tabs{flex-direction:column;}
       .grid{grid-template-columns:1fr;}
+      .country-list{position:relative;width:calc(100% - 2px)}
     }
   </style>
 </head>
@@ -118,6 +123,7 @@
                 <input type="text" id="originCountrySearch" placeholder="ابحث عن الدولة الأصل...">
                 <i class="fas fa-search"></i>
               </div>
+              <div id="originCountryList" class="country-list"></div>
               <div class="select-wrapper">
                 <i class="fas fa-flag"></i>
                 <select id="originCountry">
@@ -153,6 +159,7 @@
                 <input type="text" id="destinationCountrySearch" placeholder="ابحث عن دولة الوجهة...">
                 <i class="fas fa-search"></i>
               </div>
+              <div id="destinationCountryList" class="country-list"></div>
               <div class="select-wrapper">
                 <i class="fas fa-flag"></i>
                 <select id="destinationCountry">
@@ -321,6 +328,8 @@
     const recentSearches = document.getElementById('recentSearches');
     const recentList = document.getElementById('recentList');
     const loadingOverlay = document.getElementById('loadingOverlay');
+    const originCountryList = document.getElementById('originCountryList');
+    const destinationCountryList = document.getElementById('destinationCountryList');
 
     // عناصر البحث
     const originCountrySearch = document.getElementById('originCountrySearch');
@@ -338,95 +347,27 @@
     async function loadData(){
       showLoading();
       try{
-        // محاكاة تحميل البيانات من قاعدة البيانات
-        setTimeout(() => {
-          // بيانات افتراضية في حال عدم توفر ملف JSON
-          const defaultData = [
-            {
-              "الدولة": "المملكة العربية السعودية",
-              "رمز الدولة": "SA",
-              "مدن": [
-                {
-                  "المدينة": "الرياض",
-                  "المطارات": [
-                    {"الاسم": "مطار الملك خالد الدولي", "الرمز": "RUH"}
-                  ]
-                },
-                {
-                  "المدينة": "جدة",
-                  "المطارات": [
-                    {"الاسم": "مطار الملك عبدالعزيز الدولي", "الرمز": "JED"}
-                  ]
-                }
-              ]
-            },
-            {
-              "الدولة": "الإمارات العربية المتحدة",
-              "رمز الدولة": "AE",
-              "مدن": [
-                {
-                  "المدينة": "دبي",
-                  "المطارات": [
-                    {"الاسم": "مطار دبي الدولي", "الرمز": "DXB"},
-                    {"الاسم": "مطار آل مكتوم الدولي", "الرمز": "DWC"}
-                  ]
-                },
-                {
-                  "المدينة": "أبوظبي",
-                  "المطارات": [
-                    {"الاسم": "مطار أبوظبي الدولي", "الرمز": "AUH"}
-                  ]
-                }
-              ]
-            },
-            {
-              "الدولة": "مصر",
-              "رمز الدولة": "EG",
-              "مدن": [
-                {
-                  "المدينة": "القاهرة",
-                  "المطارات": [
-                    {"الاسم": "مطار القاهرة الدولي", "الرمز": "CAI"}
-                  ]
-                }
-              ]
-            },
-            {
-              "الدولة": "الأردن",
-              "رمز الدولة": "JO",
-              "مدن": [
-                {
-                  "المدينة": "عمان",
-                  "المطارات": [
-                    {"الاسم": "مطار الملكة علياء الدولي", "الرمز": "AMM"}
-                  ]
-                }
-              ]
-            },
-            {
-              "الدولة": "لبنان",
-              "رمز الدولة": "LB",
-              "مدن": [
-                {
-                  "المدينة": "بيروت",
-                  "المطارات": [
-                    {"الاسم": "مطار رفيق الحريري الدولي", "الرمز": "BEY"}
-                  ]
-                }
-              ]
-            }
-          ];
-          
-          data = defaultData;
-          populateCountries();
-          updateRecentSearches();
-          hideLoading();
-          showToast('تم تحميل البيانات بنجاح', 'success');
-        }, 1500);
+        // محاولة تحميل البيانات من ملف JSON
+        const response = await fetch('airports.json');
+        
+        if (!response.ok) {
+          throw new Error('فشل في تحميل البيانات');
+        }
+        
+        data = await response.json();
+        populateCountries();
+        setupCountrySearch();
+        updateRecentSearches();
+        hideLoading();
+        showToast('تم تحميل البيانات بنجاح', 'success');
         
       } catch(e) {
         hideLoading();
-        showToast('فشل تحميل بيانات المطارات', 'error');
+        showToast('فشل تحميل بيانات المطارات. تأكد من وجود ملف airports.json', 'error');
+        console.error('Error loading data:', e);
+        
+        // لا نضع بيانات افتراضية - نترك المستخدم يرى رسالة الخطأ
+        data = [];
       }
     }
 
@@ -434,14 +375,87 @@
     function populateCountries(){
       [originCountry, destinationCountry].forEach(sel => {
         sel.innerHTML = '<option value="">اختر الدولة</option>';
-        data.forEach((c, i) => {
-          const opt = document.createElement('option');
-          opt.value = i;
-          const flagIcon = getCountryFlagIcon(c["رمز الدولة"]);
-          opt.innerHTML = `<span class="option-with-icon">${flagIcon} ${c["الدولة"]}</span>`;
-          sel.appendChild(opt);
-        });
+        if (data && data.length > 0) {
+          data.forEach((c, i) => {
+            const opt = document.createElement('option');
+            opt.value = i;
+            const flagIcon = getCountryFlagIcon(c["رمز الدولة"]);
+            opt.innerHTML = `<span class="option-with-icon">${flagIcon} ${c["الدولة"]}</span>`;
+            sel.appendChild(opt);
+          });
+        }
       });
+    }
+
+    // إعداد البحث التفاعلي للدول
+    function setupCountrySearch() {
+      // البحث للدولة الأصل
+      originCountrySearch.addEventListener('focus', () => {
+        showCountryList(originCountryList, originCountrySearch.value);
+      });
+      
+      originCountrySearch.addEventListener('input', () => {
+        showCountryList(originCountryList, originCountrySearch.value);
+      });
+      
+      // البحث لدولة الوجهة
+      destinationCountrySearch.addEventListener('focus', () => {
+        showCountryList(destinationCountryList, destinationCountrySearch.value);
+      });
+      
+      destinationCountrySearch.addEventListener('input', () => {
+        showCountryList(destinationCountryList, destinationCountrySearch.value);
+      });
+      
+      // إخفاء القوائم عند النقر خارجها
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-box')) {
+          originCountryList.style.display = 'none';
+          destinationCountryList.style.display = 'none';
+        }
+      });
+    }
+
+    // عرض قائمة الدول المصفاة
+    function showCountryList(listElement, searchTerm) {
+      listElement.innerHTML = '';
+      
+      if (!data || data.length === 0) return;
+      
+      const filteredCountries = data.filter(country => 
+        country["الدولة"].toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      
+      if (filteredCountries.length === 0) {
+        const noResult = document.createElement('div');
+        noResult.className = 'country-item';
+        noResult.textContent = 'لا توجد نتائج';
+        listElement.appendChild(noResult);
+      } else {
+        filteredCountries.forEach((country, index) => {
+          const item = document.createElement('div');
+          item.className = 'country-item';
+          item.innerHTML = `
+            <i class="fas fa-flag"></i>
+            <span>${country["الدولة"]}</span>
+          `;
+          item.onclick = () => {
+            if (listElement === originCountryList) {
+              originCountry.value = data.indexOf(country);
+              originCountrySearch.value = country["الدولة"];
+              updateCities(originCountry, originCity, originAirport);
+            } else {
+              destinationCountry.value = data.indexOf(country);
+              destinationCountrySearch.value = country["الدولة"];
+              updateCities(destinationCountry, destinationCity, destinationAirport);
+            }
+            listElement.style.display = 'none';
+          };
+          listElement.appendChild(item);
+        });
+      }
+      
+      listElement.style.display = 'block';
     }
 
     // الحصول على أيقونة العلم حسب رمز الدولة
@@ -458,16 +472,18 @@
       airportSel.disabled = true;
       citySel.disabled = true;
       
-      if(!countrySel.value) return;
+      if(!countrySel.value || !data || data.length === 0) return;
       
       const country = data[countrySel.value];
-      country["مدن"].forEach((ct, ci) => {
-        const opt = document.createElement('option');
-        opt.value = ci;
-        opt.innerHTML = `<span class="option-with-icon"><i class="fas fa-city"></i> ${ct["المدينة"]}</span>`;
-        citySel.appendChild(opt);
-      });
-      citySel.disabled = false;
+      if (country && country["مدن"]) {
+        country["مدن"].forEach((ct, ci) => {
+          const opt = document.createElement('option');
+          opt.value = ci;
+          opt.innerHTML = `<span class="option-with-icon"><i class="fas fa-city"></i> ${ct["المدينة"]}</span>`;
+          citySel.appendChild(opt);
+        });
+        citySel.disabled = false;
+      }
     }
 
     // تحديث المطارات بناءً على المدينة المختارة
@@ -475,34 +491,21 @@
       airportSel.innerHTML = '<option value="">اختر المطار</option>';
       airportSel.disabled = true;
       
-      if(!citySel.value) return;
+      if(!citySel.value || !data || data.length === 0) return;
       
       const country = data[countrySel.value];
-      const city = country["مدن"][citySel.value];
-      city["المطارات"].forEach(ap => {
-        const opt = document.createElement('option');
-        opt.value = ap["الرمز"];
-        opt.innerHTML = `<span class="option-with-icon"><i class="fas fa-plane"></i> ${ap["الاسم"]} (${ap["الرمز"]})</span>`;
-        airportSel.appendChild(opt);
-      });
-      airportSel.disabled = false;
-    }
-
-    // البحث في قائمة الدول
-    function setupSearch(searchInput, selectElement) {
-      searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const options = selectElement.options;
-        
-        for (let i = 0; i < options.length; i++) {
-          const optionText = options[i].textContent.toLowerCase();
-          if (optionText.includes(searchTerm)) {
-            options[i].style.display = '';
-          } else {
-            options[i].style.display = 'none';
-          }
+      if (country && country["مدن"] && country["مدن"][citySel.value]) {
+        const city = country["مدن"][citySel.value];
+        if (city["المطارات"]) {
+          city["المطارات"].forEach(ap => {
+            const opt = document.createElement('option');
+            opt.value = ap["الرمز"];
+            opt.innerHTML = `<span class="option-with-icon"><i class="fas fa-plane"></i> ${ap["الاسم"]} (${ap["الرمز"]})</span>`;
+            airportSel.appendChild(opt);
+          });
+          airportSel.disabled = false;
         }
-      });
+      }
     }
 
     // تحديث عمليات البحث الأخيرة
@@ -532,6 +535,11 @@
 
     // تحميل بحث سابق
     function loadRecentSearch(search) {
+      if (!data || data.length === 0) {
+        showToast('لا يمكن تحميل البحث السابق - البيانات غير متوفرة', 'error');
+        return;
+      }
+      
       // البحث عن الدولة الأصل
       const originCountryIndex = data.findIndex(country => 
         country["مدن"].some(city => 
@@ -625,7 +633,7 @@
       document.getElementById('summaryType').textContent = tripType === 'oneway' ? 'ذهاب فقط' : 'ذهاب وعودة';
       document.getElementById('summaryOrigin').textContent = originText;
       document.getElementById('summaryDestination').textContent = destinationText;
-      document.getElementById('summaryDeparture').textContent = formatDate(departureDate.value);
+      document.getElementById('summaryDeparture').textContent = departureDate.value;
       document.getElementById('summaryPassengers').textContent = passengers.value + ' مسافر' + (passengers.value > 1 ? 'ين' : '');
       
       // تحديث مخطط الرحلة
@@ -640,7 +648,7 @@
       document.getElementById('summaryClass').textContent = classNames[flightClass.value] || flightClass.value;
       
       if (tripType === 'round') {
-        document.getElementById('summaryReturn').textContent = formatDate(returnDate.value);
+        document.getElementById('summaryReturn').textContent = returnDate.value;
         document.getElementById('summaryReturnRow').style.display = 'flex';
         document.getElementById('returnDirection').style.display = 'flex';
       } else {
@@ -655,12 +663,6 @@
       createConfetti();
     }
 
-    // تنسيق التاريخ
-    function formatDate(dateString) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      return new Date(dateString).toLocaleDateString('ar-SA', options);
-    }
-
     // إرسال الطلب عبر واتساب
     function sendWhatsApp(){
       const originText = originAirport.selectedOptions[0]?.textContent || '';
@@ -670,10 +672,10 @@
       message += `نوع الرحلة: ${tripType === 'oneway' ? 'ذهاب فقط' : 'ذهاب وعودة'}\n`;
       message += `من: ${originText}\n`;
       message += `إلى: ${destinationText}\n`;
-      message += `تاريخ المغادرة: ${formatDate(departureDate.value)}\n`;
+      message += `تاريخ المغادرة: ${departureDate.value}\n`;
       
       if (tripType === 'round') {
-        message += `تاريخ العودة: ${formatDate(returnDate.value)}\n`;
+        message += `تاريخ العودة: ${returnDate.value}\n`;
       }
       
       message += `عدد المسافرين: ${passengers.value}\n`;
@@ -753,6 +755,11 @@
 
     // البحث عن رحلات
     document.getElementById('searchBtn').onclick = () => {
+      if (!data || data.length === 0) {
+        showToast('لا توجد بيانات متاحة للبحث', 'error');
+        return;
+      }
+      
       if (!originAirport.value || !destinationAirport.value || !departureDate.value) {
         showToast('يرجى تعبئة جميع الحقول المطلوبة', 'error');
         return;
@@ -780,6 +787,10 @@
     // إعادة تعيين النموذج
     document.getElementById('resetBtn').onclick = () => {
       resultArea.style.display = 'none';
+      originCountrySearch.value = '';
+      destinationCountrySearch.value = '';
+      originCountryList.style.display = 'none';
+      destinationCountryList.style.display = 'none';
       showToast('تم تفريغ النموذج', 'info');
     };
 
@@ -797,10 +808,6 @@
         returnGroup.style.display = tripType === 'oneway' ? 'none' : 'block';
       };
     });
-
-    // إعداد البحث
-    setupSearch(originCountrySearch, originCountry);
-    setupSearch(destinationCountrySearch, destinationCountry);
 
     // تحميل البيانات
     loadData();
