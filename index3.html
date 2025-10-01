@@ -51,53 +51,47 @@
       <div class="content">
         <form>
           <div class="grid">
-            <!-- دولة الأصل -->
+            <!-- دولة -->
             <div class="form-group">
-              <label><i class="fas fa-flag"></i> الدولة الأصل</label>
-              <div class="dropdown" data-type="country">
+              <label><i class="fas fa-flag"></i> الدولة</label>
+              <div class="dropdown" id="countryDropdown">
                 <div class="dropdown-toggle">
                   <span class="selected-text">اختر الدولة</span>
                   <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="dropdown-menu">
                   <div class="dropdown-search"><input type="text" placeholder="ابحث عن دولة..."></div>
-                  <div class="dropdown-item"><i class="fas fa-flag"></i> <span>اليمن</span></div>
-                  <div class="dropdown-item"><i class="fas fa-flag"></i> <span>السعودية</span></div>
-                  <div class="dropdown-item"><i class="fas fa-flag"></i> <span>مصر</span></div>
+                  <div class="dropdown-list"></div>
                 </div>
               </div>
             </div>
 
-            <!-- مدينة الأصل -->
+            <!-- مدينة -->
             <div class="form-group">
-              <label><i class="fas fa-city"></i> المدينة الأصل</label>
-              <div class="dropdown" data-type="city">
+              <label><i class="fas fa-city"></i> المدينة</label>
+              <div class="dropdown" id="cityDropdown">
                 <div class="dropdown-toggle">
                   <span class="selected-text">اختر المدينة</span>
                   <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="dropdown-menu">
                   <div class="dropdown-search"><input type="text" placeholder="ابحث عن مدينة..."></div>
-                  <div class="dropdown-item"><i class="fas fa-city"></i> <span>صنعاء</span></div>
-                  <div class="dropdown-item"><i class="fas fa-city"></i> <span>عدن</span></div>
-                  <div class="dropdown-item"><i class="fas fa-city"></i> <span>الرياض</span></div>
+                  <div class="dropdown-list"></div>
                 </div>
               </div>
             </div>
 
-            <!-- مطار الأصل -->
+            <!-- مطار -->
             <div class="form-group">
-              <label><i class="fas fa-plane-departure"></i> مطار الانطلاق</label>
-              <div class="dropdown" data-type="airport">
+              <label><i class="fas fa-plane"></i> المطار</label>
+              <div class="dropdown" id="airportDropdown">
                 <div class="dropdown-toggle">
                   <span class="selected-text">اختر المطار</span>
                   <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="dropdown-menu">
                   <div class="dropdown-search"><input type="text" placeholder="ابحث عن مطار..."></div>
-                  <div class="dropdown-item"><i class="fas fa-plane"></i> <span>مطار صنعاء الدولي (SAH)</span></div>
-                  <div class="dropdown-item"><i class="fas fa-plane"></i> <span>مطار عدن (ADE)</span></div>
-                  <div class="dropdown-item"><i class="fas fa-plane"></i> <span>مطار القاهرة (CAI)</span></div>
+                  <div class="dropdown-list"></div>
                 </div>
               </div>
             </div>
@@ -113,42 +107,119 @@
   </div>
 
   <script>
-    // تفعيل القوائم المنسدلة مع البحث
-    document.querySelectorAll('.dropdown').forEach(dropdown=>{
-      const toggle = dropdown.querySelector('.dropdown-toggle');
-      const menu = dropdown.querySelector('.dropdown-menu');
-      const items = menu.querySelectorAll('.dropdown-item');
-      const selectedText = dropdown.querySelector('.selected-text');
-      const searchInput = menu.querySelector('input');
+    let airportsData = [];
+    let selectedCountry = null;
+    let selectedCity = null;
 
-      // فتح / إغلاق
-      toggle.addEventListener('click',()=>{
-        dropdown.classList.toggle('open');
+    // تحميل JSON
+    async function loadAirports(){
+      try {
+        const res = await fetch("airports.json"); // ضع مسار ملفك
+        airportsData = await res.json();
+        fillCountries();
+      } catch(e){
+        console.error("خطأ بتحميل الملف", e);
+      }
+    }
+
+    // تعبئة الدول
+    function fillCountries(){
+      const list = document.querySelector("#countryDropdown .dropdown-list");
+      list.innerHTML = "";
+      airportsData.forEach((c, idx)=>{
+        const item = document.createElement("div");
+        item.className="dropdown-item";
+        item.innerHTML=`<i class="fas fa-flag"></i><span>${c["الدولة"]}</span>`;
+        item.onclick=()=>{
+          selectCountry(c);
+        }
+        list.appendChild(item);
       });
+      setupDropdown(document.getElementById("countryDropdown"));
+    }
 
-      // اختيار عنصر
+    function selectCountry(country){
+      selectedCountry = country;
+      document.querySelector("#countryDropdown .selected-text").textContent = country["الدولة"];
+      document.getElementById("countryDropdown").classList.remove("open");
+      fillCities(country["مدن"]);
+    }
+
+    // تعبئة المدن
+    function fillCities(cities){
+      const list = document.querySelector("#cityDropdown .dropdown-list");
+      list.innerHTML = "";
+      document.querySelector("#cityDropdown .selected-text").textContent = "اختر المدينة";
+      document.querySelector("#airportDropdown .dropdown-list").innerHTML = "";
+      document.querySelector("#airportDropdown .selected-text").textContent = "اختر المطار";
+      cities.forEach(city=>{
+        const item = document.createElement("div");
+        item.className="dropdown-item";
+        item.innerHTML=`<i class="fas fa-city"></i><span>${city["المدينة"]}</span>`;
+        item.onclick=()=>{
+          selectCity(city);
+        }
+        list.appendChild(item);
+      });
+      setupDropdown(document.getElementById("cityDropdown"));
+    }
+
+    function selectCity(city){
+      selectedCity = city;
+      document.querySelector("#cityDropdown .selected-text").textContent = city["المدينة"];
+      document.getElementById("cityDropdown").classList.remove("open");
+      fillAirports(city["المطارات"]);
+    }
+
+    // تعبئة المطارات
+    function fillAirports(airports){
+      const list = document.querySelector("#airportDropdown .dropdown-list");
+      list.innerHTML = "";
+      document.querySelector("#airportDropdown .selected-text").textContent = "اختر المطار";
+      airports.forEach(ap=>{
+        const item = document.createElement("div");
+        item.className="dropdown-item";
+        item.innerHTML=`<i class="fas fa-plane"></i><span>${ap["الاسم"]} (${ap["الرمز"]})</span>`;
+        item.onclick=()=>{
+          document.querySelector("#airportDropdown .selected-text").textContent = `${ap["الاسم"]} (${ap["الرمز"]})`;
+          document.getElementById("airportDropdown").classList.remove("open");
+        }
+        list.appendChild(item);
+      });
+      setupDropdown(document.getElementById("airportDropdown"));
+    }
+
+    // إعداد الـ dropdown مع البحث
+    function setupDropdown(dropdown){
+      const toggle = dropdown.querySelector(".dropdown-toggle");
+      const menu = dropdown.querySelector(".dropdown-menu");
+      const items = dropdown.querySelectorAll(".dropdown-item");
+      const searchInput = dropdown.querySelector("input");
+
+      toggle.onclick=()=> dropdown.classList.toggle("open");
+
       items.forEach(item=>{
-        item.addEventListener('click',()=>{
-          selectedText.textContent = item.textContent.trim();
-          dropdown.classList.remove('open');
-        });
-      });
-
-      // بحث حي
-      searchInput.addEventListener('input',()=>{
-        const val = searchInput.value.toLowerCase();
-        items.forEach(it=>{
-          it.style.display = it.textContent.toLowerCase().includes(val) ? 'flex':'none';
-        });
-      });
-
-      // إغلاق عند النقر خارج
-      document.addEventListener('click',(e)=>{
-        if(!dropdown.contains(e.target)){
-          dropdown.classList.remove('open');
+        item.onclick=()=>{
+          dropdown.classList.remove("open");
         }
       });
-    });
+
+      searchInput.oninput=()=>{
+        const val = searchInput.value.toLowerCase();
+        items.forEach(it=>{
+          it.style.display = it.textContent.toLowerCase().includes(val) ? "flex":"none";
+        });
+      };
+
+      document.addEventListener("click",(e)=>{
+        if(!dropdown.contains(e.target)){
+          dropdown.classList.remove("open");
+        }
+      });
+    }
+
+    // تشغيل
+    loadAirports();
   </script>
 </body>
 </html>
