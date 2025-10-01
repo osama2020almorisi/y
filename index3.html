@@ -11,15 +11,18 @@
 
   <style>
     :root{
-      --bg1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --bg2: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      --bg1: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+      --bg2: linear-gradient(135deg, #3730a3 0%, #1e3a8a 100%);
       --card: #fff; 
       --primary: #2563eb; 
       --primary-light: #3b82f6;
+      --primary-dark: #1d4ed8;
       --accent: #f59e0b; 
       --accent-light: #fbbf24;
+      --accent-dark: #d97706;
       --muted: #64748b;
       --muted-light: #94a3b8;
+      --muted-lighter: #e2e8f0;
       --success: #10b981; 
       --danger: #ef4444; 
       --radius: 16px; 
@@ -29,9 +32,13 @@
       font-family: 'Tajawal', sans-serif;
     }
     
+    * {
+      box-sizing: border-box;
+    }
+    
     body{
       margin:0;
-      padding:28px;
+      padding:20px;
       background:var(--bg1);
       color:#0f172a;
       min-height:100vh;
@@ -73,7 +80,7 @@
     
     .hero{
       padding: 25px 30px;
-      background: linear-gradient(90deg, var(--primary), #7c3aed);
+      background: linear-gradient(90deg, var(--primary-dark), var(--primary));
       color:#fff;
       display:flex;
       justify-content:space-between;
@@ -133,6 +140,7 @@
       overflow:hidden;
       background: transparent;
       color: var(--muted);
+      font-size: 0.95rem;
     }
     
     .tab::after{
@@ -184,6 +192,7 @@
       gap:8px;
       color: var(--muted);
       transition: var(--transition);
+      font-size: 0.95rem;
     }
     
     .form-group:focus-within label {
@@ -198,6 +207,7 @@
       transition:var(--transition);
       background: white;
       font-size: 1rem;
+      width: 100%;
     }
     
     select:focus, input:focus{
@@ -265,6 +275,8 @@
       position:relative;
       overflow:hidden;
       font-size: 1rem;
+      flex: 1;
+      min-width: 140px;
     }
     
     .btn::after{
@@ -291,9 +303,8 @@
     }
     
     .btn-primary{
-      background:linear-gradient(90deg, var(--primary), #7c3aed);
+      background:linear-gradient(90deg, var(--primary-dark), var(--primary));
       color:#fff;
-      flex: 1;
     }
     
     .btn-whatsapp{
@@ -331,7 +342,7 @@
       right: 0;
       width: 100%;
       height: 4px;
-      background: linear-gradient(90deg, var(--primary), #7c3aed);
+      background: linear-gradient(90deg, var(--primary-dark), var(--primary));
     }
     
     .summary-content{
@@ -434,6 +445,7 @@
       display:flex;
       align-items:center;
       gap:8px;
+      font-size: 0.9rem;
     }
     
     .recent-item:hover{
@@ -518,6 +530,7 @@
       font-size:0.85rem;
       color:var(--muted);
       font-weight: 500;
+      text-align: center;
     }
     
     .confetti{
@@ -553,6 +566,7 @@
       justify-content: space-between;
       transition: var(--transition);
       min-height: 52px;
+      font-size: 1rem;
     }
     
     .custom-select:hover {
@@ -613,6 +627,7 @@
       padding: 10px 14px;
       border-radius: 8px;
       border: 1px solid #e2e8f0;
+      font-size: 0.95rem;
     }
     
     .custom-select-options {
@@ -628,6 +643,7 @@
       gap: 10px;
       transition: var(--transition);
       border-bottom: 1px solid #f8fafc;
+      font-size: 0.95rem;
     }
     
     .custom-select-option:last-child {
@@ -695,7 +711,7 @@
       left: 30px;
       width: 60px;
       height: 60px;
-      background: linear-gradient(135deg, var(--primary), #7c3aed);
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -804,6 +820,19 @@
       .btn {
         padding: 12px 16px;
         font-size: 0.9rem;
+        min-width: 120px;
+      }
+      .btn-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .brand {
+        font-size: 1.3rem;
+      }
+      .hero .btn {
+        width: 100%;
+        margin-top: 10px;
       }
     }
     
@@ -816,6 +845,49 @@
       }
       .content {
         padding: 15px;
+      }
+      .custom-select {
+        padding: 12px 45px 12px 12px;
+        min-height: 48px;
+        font-size: 0.95rem;
+      }
+      .form-group label, .tab {
+        font-size: 0.9rem;
+      }
+      .recent-item {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+      }
+    }
+    
+    /* تحسينات إضافية للشاشات الصغيرة جداً */
+    @media (max-width: 360px) {
+      body {
+        padding: 10px;
+      }
+      .content {
+        padding: 12px;
+      }
+      .hero {
+        padding: 12px;
+      }
+      .brand {
+        font-size: 1.1rem;
+      }
+      .btn {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+      }
+      .custom-select {
+        padding: 10px 40px 10px 10px;
+        min-height: 44px;
+      }
+    }
+    
+    /* تحسينات لشاشات كبيرة */
+    @media (min-width: 1200px) {
+      .wrap {
+        max-width: 1200px;
       }
     }
   </style>
@@ -983,7 +1055,7 @@
           </div>
 
           <!-- Action Buttons -->
-          <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+          <div class="btn-container" style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
             <button type="button" id="searchBtn" class="btn btn-primary"><i class="fas fa-search"></i> بحث عن الرحلات</button>
             <button type="reset" id="resetBtn" class="btn btn-ghost"><i class="fas fa-eraser"></i> تفريغ النموذج</button>
           </div>
