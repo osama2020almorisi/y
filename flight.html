@@ -742,6 +742,32 @@
       box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
     }
     
+    /* زر العودة إلى القائمة الرئيسية - تم نقله إلى الأسفل */
+    .back-to-main {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+      transition: var(--transition);
+      z-index: 100;
+      font-family: inherit;
+    }
+    
+    .back-to-main:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(245, 158, 11, 0.5);
+    }
+    
     /* تحسينات للرسوم المتحركة */
     @keyframes ripple{
       0%{transform:scale(0, 0);opacity:1;}
@@ -826,6 +852,12 @@
         height: 50px;
         font-size: 1.3rem;
       }
+      .back-to-main {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+      }
       .content {
         padding: 20px;
       }
@@ -870,6 +902,12 @@
         font-size: 0.85rem;
         padding: 8px 12px;
       }
+      .back-to-main {
+        bottom: 15px;
+        right: 15px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
     }
     
     /* تحسينات إضافية للشاشات الصغيرة جداً */
@@ -894,6 +932,12 @@
         padding: 10px 40px 10px 10px;
         min-height: 44px;
       }
+      .back-to-main {
+        bottom: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+      }
     }
     
     /* تحسينات لشاشات كبيرة */
@@ -905,6 +949,11 @@
   </style>
 </head>
 <body>
+  <!-- زر العودة إلى القائمة الرئيسية - تم نقله إلى أسفل الشاشة -->
+  <button class="back-to-main" id="backToMainBtn">
+    <i class="fas fa-home"></i> الرئيسية
+  </button>
+
   <div class="wrap">
     <div class="card">
       <header class="hero">
@@ -1210,6 +1259,7 @@
     const recentList = document.getElementById('recentList');
     const loadingOverlay = document.getElementById('loadingOverlay');
     const floatingAction = document.getElementById('floatingAction');
+    const backToMainBtn = document.getElementById('backToMainBtn');
 
     let data = [];
     let recentSearchesData = JSON.parse(localStorage.getItem('recentSearches')) || [];
@@ -1720,32 +1770,37 @@
     }
 
     // إرسال الطلب عبر واتساب
-    function sendWhatsApp(){
-      const originText = originAirportText.textContent || '';
-      const destinationText = destinationAirportText.textContent || '';
-      
-      let message = `طلب حجز رحلة طيران\n`;
-      message += `نوع الرحلة: ${tripType === 'oneway' ? 'ذهاب فقط' : 'ذهاب وعودة'}\n`;
-      message += `من: ${originText}\n`;
-      message += `إلى: ${destinationText}\n`;
-      message += `تاريخ المغادرة: ${departureDate.value}\n`;
-      
-      if (tripType === 'round') {
-        message += `تاريخ العودة: ${returnDate.value}\n`;
-      }
-      
-      message += `عدد المسافرين: ${passengers.value}\n`;
-      
-      const classNames = {
-        'economy': 'اقتصادية',
-        'business': 'رجال الأعمال',
-        'first': 'الأولى'
-      };
-      message += `فئة الرحلة: ${classNames[flightClass.value] || flightClass.value}\n\n`;
-      message += `أرغب في الحصول على تفاصيل أكثر عن هذه الرحلة.`;
-      
-      window.open(`https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(message)}`, '_blank');
-    }
+  // إرسال الطلب عبر واتساب
+function sendWhatsApp(){
+  const originText = originAirportText.textContent || '';
+  const destinationText = destinationAirportText.textContent || '';
+  
+  // تنظيف النص من المسافات الزائدة وأكواد HTML
+  const cleanOrigin = originText.replace(/\s+/g, ' ').trim();
+  const cleanDestination = destinationText.replace(/\s+/g, ' ').trim();
+  
+  let message = `طلب حجز رحلة طيران\n`;
+  message += `• نوع الرحلة: ${tripType === 'oneway' ? 'ذهاب فقط' : 'ذهاب وعودة'}\n`;
+  message += `> من :*_${cleanOrigin}_*\n`;
+  message += `> إلى:*_${cleanDestination}_*\n`;
+  message += `تاريخ المغادرة: ${departureDate.value}\n`;
+  
+  if (tripType === 'round') {
+    message += `تاريخ العودة: ${returnDate.value}\n`;
+  }
+  
+  message += `• عدد المسافرين:_*${passengers.value}*_\n`;
+  
+  const classNames = {
+    'economy': 'اقتصادية',
+    'business': 'رجال الأعمال',
+    'first': 'الأولى'
+  };
+  message += `• فئة الرحلة:_*${classNames[flightClass.value] || flightClass.value}*_\n\n`;
+  message += `> أرغب في الحصول على تفاصيل أكثر عن هذه الرحلة.🍬`;
+  
+  window.open(`https://wa.me/${CONTACT_PHONE}?text=${encodeURIComponent(message)}`, '_blank');
+}
 
     // عرض الإشعارات
     function showToast(message, type = 'info') {
@@ -1889,6 +1944,29 @@
       document.getElementById('searchBtn').click();
     };
 
+    // زر العودة إلى القائمة الرئيسية - تم تحسينه
+    backToMainBtn.onclick = () => {
+      // إعادة تعيين النموذج
+      document.getElementById('resetBtn').click();
+      // إخفاء منطقة النتائج
+      resultArea.style.display = 'none';
+      // إخفاء عمليات البحث الأخيرة
+      recentSearches.style.display = 'none';
+      // إظهار رسالة تأكيد
+      showToast('تم العودة إلى القائمة الرئيسية', 'success');
+      
+      // إضافة تأثير بصري عند النقر
+      backToMainBtn.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        backToMainBtn.style.transform = '';
+      }, 200);
+      
+      // الانتقال إلى الصفحة الرئيسية (index.html)
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 500);
+    };
+
     tabs.forEach(t => {
       t.onclick = () => {
         tabs.forEach(x => x.setAttribute('aria-pressed', 'false'));
@@ -1896,6 +1974,14 @@
         tripType = t.dataset.type;
         returnGroup.style.display = tripType === 'oneway' ? 'none' : 'block';
       };
+    });
+
+    // إخفاء لوحة المفاتيح عند النقر خارج حقول الإدخال
+    document.addEventListener('click', function(e) {
+      if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+        // إخفاء لوحة المفاتيح عن طريق إزالة التركيز من جميع حقول الإدخال
+        document.activeElement.blur();
+      }
     });
 
     // تحميل البيانات
