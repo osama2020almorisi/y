@@ -6,6 +6,7 @@
     <title>نظام إدارة بيانات التأشيرات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* أنماط CSS الحالية (نفسها) */
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
@@ -1447,7 +1448,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeRequirements();
             initializeAdvancedFilters();
-            loadDataFromFile(); // تحميل البيانات تلقائياً عند فتح الصفحة
+            loadDataFromLocalStorage(); // تحميل البيانات من localStorage تلقائياً عند فتح الصفحة
             
             // إضافة مستمعي الأحداث
             visaForm.addEventListener('submit', handleFormSubmit);
@@ -1511,6 +1512,11 @@
             filterProcessingMax.addEventListener('input', updateProcessingRange);
             filterValidityMin.addEventListener('input', updateValidityRange);
             filterValidityMax.addEventListener('input', updateValidityRange);
+            
+            // حفظ البيانات تلقائياً قبل إغلاق الصفحة
+            window.addEventListener('beforeunload', function() {
+                saveDataToLocalStorage();
+            });
         });
         
         // تهيئة متطلبات التأشيرة
@@ -1604,7 +1610,7 @@
             };
             
             visaData.push(newVisa);
-            saveDataToFile();
+            saveDataToLocalStorage(); // حفظ البيانات في localStorage
             resetForm();
             showAlert('تم إضافة بيانات التأشيرة بنجاح', 'success');
             
@@ -1641,13 +1647,55 @@
                     updatedBy: 'المسؤول'
                 };
                 
-                saveDataToFile();
+                saveDataToLocalStorage(); // حفظ البيانات في localStorage
                 editModal.style.display = 'none';
                 showAlert('تم تحديث بيانات التأشيرة بنجاح', 'success');
             }
         }
         
-        // تحميل البيانات من ملف JSON
+        // تحميل البيانات من localStorage
+        function loadDataFromLocalStorage() {
+            showLoading();
+            databaseStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري تحميل البيانات...';
+            
+            try {
+                const savedData = localStorage.getItem('visaData');
+                if (savedData) {
+                    visaData = JSON.parse(savedData);
+                    renderTable();
+                    updateStats();
+                    updateDashboard();
+                    updateLastUpdateTime();
+                    databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم تحميل البيانات بنجاح من التخزين المحلي';
+                    showAlert('تم تحميل البيانات بنجاح من التخزين المحلي', 'success');
+                } else {
+                    // إذا لم توجد بيانات محفوظة، جرب تحميل البيانات من الملف
+                    loadDataFromFile();
+                }
+            } catch (error) {
+                console.error('Error loading data from localStorage:', error);
+                databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في تحميل البيانات المحلية';
+                showAlert('فشل في تحميل البيانات من التخزين المحلي. جاري تحميل البيانات من الملف.', 'error');
+                loadDataFromFile();
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // حفظ البيانات إلى localStorage
+        function saveDataToLocalStorage() {
+            try {
+                localStorage.setItem('visaData', JSON.stringify(visaData));
+                databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم حفظ البيانات محلياً';
+                updateLastUpdateTime();
+            } catch (error) {
+                console.error('Error saving data to localStorage:', error);
+                databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في حفظ البيانات محلياً';
+                showAlert('فشل في حفظ البيانات في التخزين المحلي', 'error');
+            }
+        }
+        
+        // تحميل البيانات من ملف JSON (للتوافق مع الإصدار السابق)
         function loadDataFromFile() {
             showLoading();
             databaseStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري تحميل البيانات...';
@@ -1665,77 +1713,30 @@
                     return response.json();
                 })
                 .then(data => {
-                    visaData = Array.isArray(data) ? data : [];
+                    const fileData = Array.isArray(data) ? data : [];
+                    
+                    // دمج البيانات من الملف مع البيانات المحلية
+                    if (fileData.length > 0) {
+                        const existingIds = new Set(visaData.map(item => item.id));
+                        const newData = fileData.filter(item => !existingIds.has(item.id));
+                        visaData = [...visaData, ...newData];
+                        saveDataToLocalStorage(); // حفظ البيانات المدمجة
+                    }
+                    
                     renderTable();
                     updateStats();
                     updateDashboard();
                     updateLastUpdateTime();
                     databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم تحميل البيانات بنجاح';
-                    showAlert('تم تحميل البيانات بنجاح من trip_data.json', 'success');
+                    showAlert('تم تحميل البيانات بنجاح', 'success');
                     hideLoading();
                 })
                 .catch(error => {
                     console.error('Error loading data:', error);
-                    // في حالة الخطأ، نبدأ بمصفوفة فارغة
-                    visaData = [];
-                    renderTable();
-                    updateStats();
-                    updateDashboard();
-                    updateLastUpdateTime();
                     databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في التحميل - استخدام البيانات المحلية';
                     showAlert('فشل في تحميل البيانات من trip_data.json: ' + error.message + '. استخدام البيانات المحلية.', 'error');
                     hideLoading();
                 });
-        }
-        
-        // حفظ البيانات إلى ملف JSON
-        function saveDataToFile() {
-            showLoading();
-            databaseStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري حفظ البيانات...';
-            
-            // في بيئة GitHub Pages، لا يمكننا حفظ البيانات مباشرة في الملف
-            // لذلك سنستخدم localStorage كبديل، ونعرض تعليمات للحفظ اليدوي
-            localStorage.setItem('trip_data', JSON.stringify(visaData));
-            
-            renderTable();
-            updateStats();
-            updateDashboard();
-            updateLastUpdateTime();
-            databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم حفظ البيانات محلياً';
-            hideLoading();
-            
-            // عرض تعليمات للحفظ في ملف GitHub
-            showSaveInstructions();
-        }
-        
-        // عرض تعليمات الحفظ
-        function showSaveInstructions() {
-            const dataStr = JSON.stringify(visaData, null, 2);
-            
-            const instructions = `
-لحفظ البيانات في ملف trip_data.json على GitHub، يرجى اتباع الخطوات التالية:
-
-1. انسخ البيانات التالية:
-\`\`\`json
-${dataStr}
-\`\`\`
-
-2. اذهب إلى ملف trip_data.json في مستودع GitHub الخاص بك
-3. انقر على زر "Edit" (قلم التعديل)
-4. استبدل المحتوى الحالي بالبيانات أعلاه
-5. انزل إلى أسفل الصفحة وأضف رسالة commit مثل "تحديث بيانات التأشيرات"
-6. انقر على "Commit changes"
-
-بهذه الطريقة سيتم حفظ البيانات على GitHub ويمكن للموظفين رؤيتها فوراً.
-            `;
-            
-            // يمكنك إظهار التعليمات في alert أو في modal
-            // alert(instructions);
-            
-            // أو يمكنك عرضها في console للمطورين
-            console.log(instructions);
-            
-            showAlert('تم حفظ البيانات محلياً. راجع console للتعليمات الكاملة لحفظ البيانات على GitHub.', 'success');
         }
         
         // تحميل ملف البيانات
@@ -2003,7 +2004,7 @@ ${dataStr}
         function deleteVisa(id) {
             if (confirm('هل أنت متأكد من حذف هذه البيانات؟')) {
                 visaData = visaData.filter(item => item.id !== id);
-                saveDataToFile();
+                saveDataToLocalStorage(); // حفظ البيانات في localStorage بعد الحذف
                 showAlert('تم حذف بيانات التأشيرة بنجاح', 'success');
             }
         }
@@ -2012,7 +2013,7 @@ ${dataStr}
         function handleClearAll() {
             if (confirm('هل أنت متأكد من حذف جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.')) {
                 visaData = [];
-                saveDataToFile();
+                saveDataToLocalStorage(); // حفظ البيانات الفارغة في localStorage
                 showAlert('تم حذف جميع البيانات بنجاح', 'success');
             }
         }
@@ -2369,7 +2370,7 @@ ${visa.notes ? `ملاحظات: ${visa.notes}` : ''}
                         visaData = [...visaData, ...newData];
                     }
                     
-                    saveDataToFile();
+                    saveDataToLocalStorage(); // حفظ البيانات المستوردة في localStorage
                     importModal.style.display = 'none';
                     showAlert(`تم استيراد البيانات بنجاح (${method === 'replace' ? 'استبدال' : 'دمج'})`, 'success');
                 } catch (error) {
