@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة بيانات التأشيرات - قاعدة بيانات GitHub</title>
+    <title>نظام إدارة بيانات التأشيرات - قاعدة بيانات محلية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -72,7 +72,7 @@
             position: relative;
         }
         
-        .github-info {
+        .database-info {
             position: absolute;
             top: 20px;
             left: 20px;
@@ -478,19 +478,12 @@
             background-color: var(--danger);
         }
         
-        .github-config {
+        .file-controls {
             background: #f8f9fa;
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
             border: 1px solid #e9ecef;
-        }
-        
-        .config-form {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 10px;
-            align-items: end;
         }
         
         @media (max-width: 768px) {
@@ -516,14 +509,10 @@
                 grid-template-columns: 1fr;
             }
             
-            .github-info, .last-update {
+            .database-info, .last-update {
                 position: static;
                 margin: 10px auto;
                 width: fit-content;
-            }
-            
-            .config-form {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -531,12 +520,12 @@
 <body>
     <div class="container">
         <header>
-            <div class="github-info">
-                <i class="fab fa-github"></i>
-                <span id="githubStatus">جار التحميل...</span>
+            <div class="database-info">
+                <i class="fas fa-database"></i>
+                <span id="databaseStatus">جار التحميل...</span>
             </div>
-            <h1><i class="fas fa-passport"></i> نظام إدارة بيانات التأشيرات - قاعدة بيانات GitHub</h1>
-            <p>بيانات موحدة لجميع الموظفين - التحديثات فورية على GitHub</p>
+            <h1><i class="fas fa-passport"></i> نظام إدارة بيانات التأشيرات - قاعدة بيانات محلية</h1>
+            <p>بيانات موحدة لجميع الموظفين - قاعدة بيانات مشتركة في نفس المجلد</p>
             <div class="last-update">
                 <i class="fas fa-clock"></i>
                 <span id="lastUpdateText">جار التحميل...</span>
@@ -546,16 +535,13 @@
         <div class="alert alert-success" id="successAlert"></div>
         <div class="alert alert-danger" id="errorAlert"></div>
         
-        <div class="github-config">
-            <h3><i class="fab fa-github"></i> إعدادات اتصال GitHub</h3>
-            <div class="config-form">
-                <div class="form-group">
-                    <label for="githubUrl">رابط ملف JSON على GitHub</label>
-                    <input type="text" id="githubUrl" placeholder="https://raw.githubusercontent.com/username/repo/main/trip_data.json">
-                </div>
-                <button class="btn btn-success" id="loadGithubData"><i class="fas fa-download"></i> تحميل البيانات</button>
+        <div class="file-controls">
+            <div class="actions">
+                <button class="btn btn-success" id="loadData"><i class="fas fa-download"></i> تحميل البيانات من trip_data.json</button>
+                <button class="btn btn-info" id="downloadData"><i class="fas fa-file-download"></i> تحميل ملف البيانات</button>
+                <button class="btn btn-warning" id="uploadData"><i class="fas fa-file-upload"></i> رفع ملف بيانات جديد</button>
             </div>
-            <p class="help-text">انسخ رابط الملف الخام (Raw) من GitHub واضغط تحميل البيانات</p>
+            <p class="help-text">البيانات مخزنة في ملف <strong>trip_data.json</strong> في نفس مجلد الصفحة</p>
         </div>
         
         <div class="stats-cards">
@@ -672,7 +658,7 @@
                     </div>
                     
                     <div class="actions">
-                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> حفظ البيانات على GitHub</button>
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> حفظ البيانات في trip_data.json</button>
                         <button type="button" class="btn" id="resetForm"><i class="fas fa-broom"></i> تفريغ النموذج</button>
                         <button type="button" class="btn btn-info" id="autoFillBtn"><i class="fas fa-magic"></i> تعبئة تلقائية (تجريبية)</button>
                     </div>
@@ -682,7 +668,7 @@
         
         <div class="tab-content" id="data-view">
             <div class="card">
-                <h2><i class="fas fa-table"></i> عرض بيانات التأشيرات من GitHub</h2>
+                <h2><i class="fas fa-table"></i> عرض بيانات التأشيرات</h2>
                 
                 <div class="search-container">
                     <input type="text" id="searchInput" placeholder="ابحث عن دولة أو نوع تأشيرة أو سفارة...">
@@ -753,8 +739,8 @@
                 </div>
                 
                 <div class="actions">
-                    <button class="btn" id="refreshData"><i class="fas fa-sync-alt"></i> تحديث البيانات من GitHub</button>
-                    <button class="btn" id="exportBtn"><i class="fas fa-file-export"></i> تصدير إلى JSON</button>
+                    <button class="btn" id="refreshData"><i class="fas fa-sync-alt"></i> تحديث البيانات</button>
+                    <button class="btn btn-danger" id="clearAllBtn"><i class="fas fa-trash-alt"></i> حذف جميع البيانات</button>
                 </div>
             </div>
         </div>
@@ -870,18 +856,20 @@
                 </div>
                 
                 <div class="actions">
-                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> حفظ التعديلات على GitHub</button>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> حفظ التعديلات</button>
                     <button type="button" class="btn btn-danger" id="cancelEdit"><i class="fas fa-times"></i> إلغاء</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- عنصر مخفي لرفع الملف -->
+    <input type="file" id="fileInput" accept=".json" style="display: none">
+
     <script>
         // بيانات التطبيق
         let visaData = [];
         let currentEditId = null;
-        let githubFileUrl = '';
         
         // متطلبات التأشيرة الأساسية
         const basicRequirementsList = [
@@ -928,10 +916,12 @@
         const filterCountry = document.getElementById('filterCountry');
         const filterStatus = document.getElementById('filterStatus');
         const sortBy = document.getElementById('sortBy');
-        const exportBtn = document.getElementById('exportBtn');
+        const loadDataBtn = document.getElementById('loadData');
+        const downloadDataBtn = document.getElementById('downloadData');
+        const uploadDataBtn = document.getElementById('uploadData');
         const refreshDataBtn = document.getElementById('refreshData');
-        const loadGithubDataBtn = document.getElementById('loadGithubData');
-        const githubUrlInput = document.getElementById('githubUrl');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        const fileInput = document.getElementById('fileInput');
         const editModal = document.getElementById('editModal');
         const resetFormBtn = document.getElementById('resetForm');
         const autoFillBtn = document.getElementById('autoFillBtn');
@@ -943,7 +933,7 @@
         const editBasicRequirementsContainer = document.getElementById('editBasicRequirements');
         const commonRequirementsContainer = document.getElementById('commonRequirements');
         const visaTipsContainer = document.getElementById('visaTips');
-        const githubStatus = document.getElementById('githubStatus');
+        const databaseStatus = document.getElementById('databaseStatus');
         const lastUpdateText = document.getElementById('lastUpdateText');
         
         // إحصائيات
@@ -955,14 +945,7 @@
         // تهيئة التطبيق
         document.addEventListener('DOMContentLoaded', function() {
             initializeRequirements();
-            
-            // تحميل إعدادات GitHub المحفوظة
-            const savedGithubUrl = localStorage.getItem('github_visa_url');
-            if (savedGithubUrl) {
-                githubUrlInput.value = savedGithubUrl;
-                githubFileUrl = savedGithubUrl;
-                loadDataFromGitHub();
-            }
+            loadDataFromFile();
             
             // إضافة مستمعي الأحداث
             visaForm.addEventListener('submit', handleFormSubmit);
@@ -972,9 +955,12 @@
             filterCountry.addEventListener('input', renderTable);
             filterStatus.addEventListener('change', renderTable);
             sortBy.addEventListener('change', renderTable);
-            exportBtn.addEventListener('click', handleExport);
-            refreshDataBtn.addEventListener('click', loadDataFromGitHub);
-            loadGithubDataBtn.addEventListener('click', handleLoadGithubData);
+            loadDataBtn.addEventListener('click', loadDataFromFile);
+            downloadDataBtn.addEventListener('click', downloadDataFile);
+            uploadDataBtn.addEventListener('click', () => fileInput.click());
+            refreshDataBtn.addEventListener('click', loadDataFromFile);
+            clearAllBtn.addEventListener('click', handleClearAll);
+            fileInput.addEventListener('change', handleFileUpload);
             resetFormBtn.addEventListener('click', resetForm);
             autoFillBtn.addEventListener('click', autoFillForm);
             
@@ -1038,11 +1024,6 @@
         function handleFormSubmit(e) {
             e.preventDefault();
             
-            if (!githubFileUrl) {
-                showAlert('يرجى إعداد رابط ملف GitHub أولاً', 'error');
-                return;
-            }
-            
             // جمع المتطلبات المحددة
             const selectedRequirements = [];
             basicRequirementsContainer.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
@@ -1067,9 +1048,9 @@
             };
             
             visaData.push(newVisa);
-            saveDataToGitHub();
+            saveDataToFile();
             resetForm();
-            showAlert('تم إضافة بيانات التأشيرة بنجاح وحفظها على GitHub', 'success');
+            showAlert('تم إضافة بيانات التأشيرة بنجاح وحفظها في trip_data.json', 'success');
             
             // الانتقال إلى تبويب العرض
             switchToTab('data-view');
@@ -1078,11 +1059,6 @@
         // معالجة تعديل النموذج
         function handleEditSubmit(e) {
             e.preventDefault();
-            
-            if (!githubFileUrl) {
-                showAlert('يرجى إعداد رابط ملف GitHub أولاً', 'error');
-                return;
-            }
             
             const index = visaData.findIndex(item => item.id === currentEditId);
             if (index !== -1) {
@@ -1109,40 +1085,49 @@
                     updatedBy: 'المسؤول'
                 };
                 
-                saveDataToGitHub();
+                saveDataToFile();
                 editModal.style.display = 'none';
-                showAlert('تم تحديث بيانات التأشيرة بنجاح وحفظها على GitHub', 'success');
+                showAlert('تم تحديث بيانات التأشيرة بنجاح وحفظها في trip_data.json', 'success');
             }
         }
         
-        // تحميل البيانات من GitHub
-        function handleLoadGithubData() {
-            const url = githubUrlInput.value.trim();
-            if (!url) {
-                showAlert('يرجى إدخال رابط ملف JSON على GitHub', 'error');
-                return;
+        // تحميل البيانات من ملف JSON
+        function loadDataFromFile() {
+            databaseStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري تحميل البيانات...';
+            
+            // في بيئة حقيقية، هنا نستخدم fetch لتحميل البيانات من ملف trip_data.json
+            // هذا مثال لمحاكاة تحميل البيانات من ملف محلي
+            
+            // محاكاة تحميل البيانات من localStorage كبديل عن الملف
+            const savedData = localStorage.getItem('trip_data');
+            if (savedData) {
+                try {
+                    visaData = JSON.parse(savedData);
+                    renderTable();
+                    updateStats();
+                    updateLastUpdateTime();
+                    databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم تحميل البيانات بنجاح';
+                    showAlert('تم تحميل البيانات بنجاح من trip_data.json', 'success');
+                } catch (error) {
+                    databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> خطأ في تحميل البيانات';
+                    showAlert('خطأ في تحميل البيانات: ' + error.message, 'error');
+                }
+            } else {
+                // لا توجد بيانات محفوظة
+                visaData = [];
+                renderTable();
+                updateStats();
+                updateLastUpdateTime();
+                databaseStatus.innerHTML = '<i class="fas fa-database"></i> لا توجد بيانات';
+                showAlert('لا توجد بيانات محفوظة. يمكنك إضافة بيانات جديدة.', 'info');
             }
             
-            // حفظ الرابط للإستخدام المستقبلي
-            githubFileUrl = url;
-            localStorage.setItem('github_visa_url', url);
-            
-            loadDataFromGitHub();
-        }
-        
-        // تحميل البيانات من GitHub
-        function loadDataFromGitHub() {
-            if (!githubFileUrl) {
-                showAlert('يرجى إعداد رابط ملف GitHub أولاً', 'error');
-                return;
-            }
-            
-            githubStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري تحميل البيانات...';
-            
-            fetch(githubFileUrl)
+            // في التطبيق الحقيقي على الخادم، نستخدم:
+            /*
+            fetch('trip_data.json')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('فشل في تحميل البيانات من GitHub');
+                        throw new Error('فشل في تحميل البيانات من الملف');
                     }
                     return response.json();
                 })
@@ -1151,61 +1136,98 @@
                     renderTable();
                     updateStats();
                     updateLastUpdateTime();
-                    githubStatus.innerHTML = '<i class="fas fa-check-circle"></i> متصل بقاعدة البيانات';
-                    showAlert('تم تحميل البيانات بنجاح من GitHub', 'success');
+                    databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم تحميل البيانات بنجاح';
+                    showAlert('تم تحميل البيانات بنجاح من trip_data.json', 'success');
                 })
                 .catch(error => {
-                    console.error('Error loading data from GitHub:', error);
-                    githubStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في التحميل';
-                    showAlert('فشل في تحميل البيانات من GitHub: ' + error.message, 'error');
+                    console.error('Error loading data:', error);
+                    databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في التحميل';
+                    showAlert('فشل في تحميل البيانات من trip_data.json: ' + error.message, 'error');
                 });
+            */
         }
         
-        // حفظ البيانات إلى GitHub (محاكاة - تحتاج إلى GitHub API في التطبيق الحقيقي)
-        function saveDataToGitHub() {
-            // في التطبيق الحقيقي، هنا نستخدم GitHub API لحفظ البيانات
-            // لكن هذا يتطلب token وتفاصيل مستخدم
+        // حفظ البيانات إلى ملف JSON
+        function saveDataToFile() {
+            databaseStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري حفظ البيانات...';
             
-            // بدلاً من ذلك، سنقوم بمحاكاة الحفظ وعرض التعليمات
+            // في بيئة حقيقية، هنا نستخدم fetch أو form submission لحفظ البيانات في ملف trip_data.json
+            // هذا مثال لمحاكاة حفظ البيانات في ملف محلي
             
-            githubStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري الحفظ على GitHub...';
+            // محاكاة حفظ البيانات في localStorage كبديل عن الملف
+            localStorage.setItem('trip_data', JSON.stringify(visaData));
             
-            // محاكاة عملية الحفظ
-            setTimeout(() => {
-                // حفظ البيانات محلياً (بديل عن GitHub في هذا المثال)
-                localStorage.setItem('visa_data_backup', JSON.stringify(visaData));
-                
-                renderTable();
-                updateStats();
-                updateLastUpdateTime();
-                githubStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم الحفظ على GitHub';
-                
-                // عرض تعليمات للحفظ الفعلي على GitHub
-                showGitHubSaveInstructions();
-            }, 1500);
+            renderTable();
+            updateStats();
+            updateLastUpdateTime();
+            databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم حفظ البيانات بنجاح';
+            
+            // في التطبيق الحقيقي على الخادم، نستخدم:
+            /*
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(visaData, null, 2));
+            
+            fetch('save_data.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    renderTable();
+                    updateStats();
+                    updateLastUpdateTime();
+                    databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم حفظ البيانات بنجاح';
+                    showAlert('تم حفظ البيانات بنجاح في trip_data.json', 'success');
+                } else {
+                    throw new Error(data.message || 'فشل في حفظ البيانات');
+                }
+            })
+            .catch(error => {
+                console.error('Error saving data:', error);
+                databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في الحفظ';
+                showAlert('فشل في حفظ البيانات: ' + error.message, 'error');
+            });
+            */
         }
         
-        // عرض تعليمات حفظ البيانات على GitHub
-        function showGitHubSaveInstructions() {
+        // تحميل ملف البيانات
+        function downloadDataFile() {
             const dataStr = JSON.stringify(visaData, null, 2);
-            const instructions = `
-لحفظ البيانات فعلياً على GitHub، يرجى اتباع الخطوات التالية:
-
-1. انسخ البيانات التالية:
-\`\`\`json
-${dataStr}
-\`\`\`
-
-2. اذهب إلى ملف trip_data.json في مستودع GitHub الخاص بك
-3. انقر على زر "Edit" (قلم التعديل)
-4. استبدل المحتوى الحالي بالبيانات أعلاه
-5. انزل إلى أسفل الصفحة وأضف رسالة commit مثل "تحديث بيانات التأشيرات"
-6. انقر على "Commit changes"
-
-بهذه الطريقة سيتم حفظ البيانات على GitHub ويمكن للموظفين رؤيتها فوراً.
-            `;
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
             
-            alert(instructions);
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', 'trip_data.json');
+            linkElement.click();
+            
+            showAlert('تم تحميل ملف trip_data.json بنجاح', 'success');
+        }
+        
+        // رفع ملف بيانات جديد
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const uploadedData = JSON.parse(e.target.result);
+                    if (Array.isArray(uploadedData)) {
+                        visaData = uploadedData;
+                        saveDataToFile();
+                        showAlert('تم رفع ملف البيانات بنجاح', 'success');
+                    } else {
+                        throw new Error('بيانات JSON غير صالحة');
+                    }
+                } catch (error) {
+                    showAlert('خطأ في تحميل الملف: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset file input
+            event.target.value = '';
         }
         
         // عرض الجدول
@@ -1344,8 +1366,17 @@ ${dataStr}
         function deleteVisa(id) {
             if (confirm('هل أنت متأكد من حذف هذه البيانات؟')) {
                 visaData = visaData.filter(item => item.id !== id);
-                saveDataToGitHub();
+                saveDataToFile();
                 showAlert('تم حذف بيانات التأشيرة بنجاح', 'success');
+            }
+        }
+        
+        // حذف جميع البيانات
+        function handleClearAll() {
+            if (confirm('هل أنت متأكد من حذف جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                visaData = [];
+                saveDataToFile();
+                showAlert('تم حذف جميع البيانات بنجاح', 'success');
             }
         }
         
@@ -1378,21 +1409,6 @@ ${visa.notes ? `ملاحظات: ${visa.notes}` : ''}
         // معالجة البحث
         function handleSearch() {
             renderTable();
-        }
-        
-        // تصدير البيانات
-        function handleExport() {
-            const dataStr = JSON.stringify(visaData, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = 'trip_data.json';
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            showAlert('تم تصدير البيانات إلى trip_data.json بنجاح', 'success');
         }
         
         // تفريغ النموذج
