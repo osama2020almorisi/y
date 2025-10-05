@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة بيانات التأشيرات - قاعدة بيانات محلية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>نظام إدارة بيانات التأشيرات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -554,37 +553,6 @@
             flex-wrap: wrap;
         }
         
-        .data-card {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid var(--secondary);
-        }
-        
-        .data-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .data-card-title {
-            font-weight: 600;
-            color: var(--primary);
-        }
-        
-        .data-card-content {
-            color: #555;
-        }
-        
-        .data-card-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 10px;
-        }
-        
         .quick-actions {
             display: flex;
             gap: 10px;
@@ -679,6 +647,82 @@
             margin-top: 5px;
         }
         
+        .visa-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            color: #555;
+        }
+        
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: #f0f8ff;
+            border-radius: 5px;
+        }
+        
+        .requirement-item i {
+            color: var(--success);
+        }
+        
+        .share-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .share-option:hover {
+            background: #e9ecef;
+            transform: translateY(-3px);
+        }
+        
+        .share-option i {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
         @media (max-width: 768px) {
             .filters {
                 flex-direction: column;
@@ -715,6 +759,10 @@
             .quick-action-btn {
                 min-width: 100px;
             }
+            
+            .visa-details {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -725,8 +773,8 @@
                 <i class="fas fa-database"></i>
                 <span id="databaseStatus">جار التحميل...</span>
             </div>
-            <h1><i class="fas fa-passport"></i> نظام إدارة بيانات التأشيرات - قاعدة بيانات محلية</h1>
-            <p>بيانات موحدة لجميع الموظفين - قاعدة بيانات مشتركة في نفس المجلد</p>
+            <h1><i class="fas fa-passport"></i> نظام إدارة بيانات التأشيرات</h1>
+            <p>بيانات موحدة لجميع الموظفين - قاعدة بيانات مشتركة</p>
             <div class="last-update">
                 <i class="fas fa-clock"></i>
                 <span id="lastUpdateText">جار التحميل...</span>
@@ -739,7 +787,7 @@
         
         <div class="file-controls">
             <div class="actions">
-                <button class="btn btn-success" id="loadData"><i class="fas fa-download"></i> تحميل البيانات من trip_data.json</button>
+                <button class="btn btn-success" id="loadData"><i class="fas fa-download"></i> تحميل البيانات</button>
                 <button class="btn btn-info" id="downloadData"><i class="fas fa-file-download"></i> تحميل ملف البيانات</button>
                 <button class="btn btn-light" id="exportJson"><i class="fas fa-file-code"></i> تصدير JSON</button>
                 <button class="btn btn-light" id="exportCsv"><i class="fas fa-file-csv"></i> تصدير CSV</button>
@@ -786,10 +834,6 @@
             <div class="quick-action-btn" data-tab="requirements">
                 <i class="fas fa-tasks"></i>
                 <span>المتطلبات</span>
-            </div>
-            <div class="quick-action-btn" id="quickShare">
-                <i class="fas fa-share-alt"></i>
-                <span>مشاركة</span>
             </div>
         </div>
         
@@ -842,8 +886,8 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="validity">فترة الصلاحية (أشهر)</label>
-                                <input type="number" id="validity" min="1" placeholder="مثال: 6">
+                                <label for="validity">فترة الصلاحية (أيام)</label>
+                                <input type="number" id="validity" min="1" placeholder="مثال: 90">
                             </div>
                             
                             <div class="form-group">
@@ -887,7 +931,7 @@
                     <div class="actions">
                         <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> حفظ البيانات</button>
                         <button type="button" class="btn" id="resetForm"><i class="fas fa-broom"></i> تفريغ النموذج</button>
-                        <button type="button" class="btn btn-info" id="autoFillBtn"><i class="fas fa-magic"></i> تعبئة تلقائية (تجريبية)</button>
+                        <button type="button" class="btn btn-info" id="autoFillBtn"><i class="fas fa-magic"></i> تعبئة تلقائية</button>
                     </div>
                 </form>
             </div>
@@ -995,15 +1039,6 @@
                         <!-- سيتم ملؤها بالجافاسكريبت -->
                     </div>
                 </div>
-                
-                <div class="dashboard-card">
-                    <h3><i class="fas fa-bolt"></i> إجراءات سريعة</h3>
-                    <div class="actions">
-                        <button class="btn btn-success" id="dashboardAddVisa"><i class="fas fa-plus"></i> إضافة تأشيرة</button>
-                        <button class="btn btn-info" id="dashboardExport"><i class="fas fa-file-export"></i> تصدير البيانات</button>
-                        <button class="btn btn-light" id="dashboardShare"><i class="fas fa-share-alt"></i> مشاركة النظام</button>
-                    </div>
-                </div>
             </div>
         </div>
         
@@ -1075,7 +1110,7 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="editValidity">فترة الصلاحية (أشهر)</label>
+                            <label for="editValidity">فترة الصلاحية (أيام)</label>
                             <input type="number" id="editValidity" min="1">
                         </div>
                         
@@ -1125,27 +1160,29 @@
         </div>
     </div>
 
-    <!-- نموذج المشاركة -->
-    <div class="modal" id="shareModal">
+    <!-- نموذج عرض التفاصيل والمشاركة -->
+    <div class="modal" id="detailsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-share-alt"></i> مشاركة بيانات التأشيرات</h2>
+                <h2><i class="fas fa-info-circle"></i> تفاصيل التأشيرة</h2>
                 <span class="close">&times;</span>
             </div>
-            <div class="form-group">
-                <label>رابط المشاركة</label>
-                <div style="display: flex;">
-                    <input type="text" id="shareLink" value="" readonly style="flex: 1;">
-                    <button class="btn" id="copyShareLink"><i class="fas fa-copy"></i> نسخ</button>
+            <div id="visaDetailsContent">
+                <!-- سيتم ملؤها بالجافاسكريبت -->
+            </div>
+            <div class="share-options">
+                <div class="share-option" id="copyVisaDetails">
+                    <i class="fas fa-copy"></i>
+                    <span>نسخ البيانات</span>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>كود تضمين البيانات</label>
-                <textarea id="embedCode" readonly rows="5"></textarea>
-                <button class="btn" id="copyEmbedCode"><i class="fas fa-copy"></i> نسخ الكود</button>
-            </div>
-            <div class="help-text">
-                يمكنك مشاركة هذا الرابط مع الآخرين للوصول إلى بيانات التأشيرات الحالية.
+                <div class="share-option" id="shareVisaDetails">
+                    <i class="fas fa-share-alt"></i>
+                    <span>مشاركة</span>
+                </div>
+                <div class="share-option" id="printVisaDetails">
+                    <i class="fas fa-print"></i>
+                    <span>طباعة</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1154,6 +1191,7 @@
         // بيانات التطبيق
         let visaData = [];
         let currentEditId = null;
+        let currentVisaDetails = null;
         
         // متطلبات التأشيرة الأساسية
         const basicRequirementsList = [
@@ -1205,6 +1243,7 @@
         const refreshDataBtn = document.getElementById('refreshData');
         const clearAllBtn = document.getElementById('clearAllBtn');
         const editModal = document.getElementById('editModal');
+        const detailsModal = document.getElementById('detailsModal');
         const resetFormBtn = document.getElementById('resetForm');
         const autoFillBtn = document.getElementById('autoFillBtn');
         const successAlert = document.getElementById('successAlert');
@@ -1222,18 +1261,10 @@
         const exportCsvBtn = document.getElementById('exportCsv');
         const copyTableBtn = document.getElementById('copyTableBtn');
         const quickActionBtns = document.querySelectorAll('.quick-action-btn');
-        const quickShareBtn = document.getElementById('quickShare');
-        const shareModal = document.getElementById('shareModal');
-        const shareLink = document.getElementById('shareLink');
-        const embedCode = document.getElementById('embedCode');
-        const copyShareLinkBtn = document.getElementById('copyShareLink');
-        const copyEmbedCodeBtn = document.getElementById('copyEmbedCode');
-        const dashboardAddVisaBtn = document.getElementById('dashboardAddVisa');
-        const dashboardExportBtn = document.getElementById('dashboardExport');
-        const dashboardShareBtn = document.getElementById('dashboardShare');
-        const visaTypeChart = document.getElementById('visaTypeChart');
-        const topCountries = document.getElementById('topCountries');
-        const recentUpdates = document.getElementById('recentUpdates');
+        const visaDetailsContent = document.getElementById('visaDetailsContent');
+        const copyVisaDetailsBtn = document.getElementById('copyVisaDetails');
+        const shareVisaDetailsBtn = document.getElementById('shareVisaDetails');
+        const printVisaDetailsBtn = document.getElementById('printVisaDetails');
 
         // إحصائيات
         const totalCountriesElement = document.getElementById('totalCountries');
@@ -1263,12 +1294,9 @@
             exportJsonBtn.addEventListener('click', exportToJson);
             exportCsvBtn.addEventListener('click', exportToCsv);
             copyTableBtn.addEventListener('click', copyTableToClipboard);
-            quickShareBtn.addEventListener('click', showShareModal);
-            copyShareLinkBtn.addEventListener('click', copyShareLink);
-            copyEmbedCodeBtn.addEventListener('click', copyEmbedCode);
-            dashboardAddVisaBtn.addEventListener('click', function() { switchToTab('data-entry'); });
-            dashboardExportBtn.addEventListener('click', function() { downloadDataFile(); });
-            dashboardShareBtn.addEventListener('click', showShareModal);
+            copyVisaDetailsBtn.addEventListener('click', copyVisaDetailsToClipboard);
+            shareVisaDetailsBtn.addEventListener('click', shareVisaDetails);
+            printVisaDetailsBtn.addEventListener('click', printVisaDetails);
             
             // إغلاق النماذج
             document.querySelectorAll('.close').forEach(closeBtn => {
@@ -1291,12 +1319,10 @@
             
             // إجراءات سريعة
             quickActionBtns.forEach(btn => {
-                if (btn.id !== 'quickShare') {
-                    btn.addEventListener('click', function() {
-                        const tabId = this.getAttribute('data-tab');
-                        switchToTab(tabId);
-                    });
-                }
+                btn.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    switchToTab(tabId);
+                });
             });
             
             // البحث أثناء الكتابة
@@ -1659,11 +1685,9 @@ ${dataStr}
                             <span class="status-indicator status-${getStatusClass(item.status)}"></span>
                         </td>
                         <td>
-                            <button class="btn btn-warning" onclick="editVisa('${item.id}')"><i class="fas fa-edit"></i> تعديل</button>
-                            <button class="btn btn-danger" onclick="deleteVisa('${item.id}')"><i class="fas fa-trash"></i> حذف</button>
-                            <button class="btn btn-info" onclick="viewDetails('${item.id}')"><i class="fas fa-eye"></i> تفاصيل</button>
-                            <button class="copy-btn" onclick="copyVisaData('${item.id}')" title="نسخ البيانات"><i class="fas fa-copy"></i></button>
-                            <button class="share-btn" onclick="shareVisaData('${item.id}')" title="مشاركة"><i class="fas fa-share-alt"></i></button>
+                            <button class="btn btn-warning" onclick="editVisa('${item.id}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger" onclick="deleteVisa('${item.id}')"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-info" onclick="showVisaDetails('${item.id}')"><i class="fas fa-eye"></i></button>
                         </td>
                     </tr>
                 `).join('');
@@ -1746,89 +1770,165 @@ ${dataStr}
             }
         }
         
-        // عرض التفاصيل
-        function viewDetails(id) {
+        // عرض تفاصيل التأشيرة
+        function showVisaDetails(id) {
             const visa = visaData.find(item => item.id === id);
             if (visa) {
-                const requirementsList = visa.requirements && visa.requirements.length > 0 
-                    ? visa.requirements.map(req => `• ${req}`).join('\n') 
-                    : 'لا توجد متطلبات محددة';
+                currentVisaDetails = visa;
                 
-                const details = `
-الدولة: ${visa.country}
-السفارة/القنصلية: ${visa.embassy}
-نوع التأشيرة: ${visa.visaType}
-نوع الدخول: ${visa.entryType || 'غير محدد'}
-المتطلبات الأساسية:
-${requirementsList}
-${visa.additionalRequirements ? `متطلبات إضافية: ${visa.additionalRequirements}` : ''}
-مدة المعالجة: ${visa.processingTime ? visa.processingTime + ' يوم' : 'غير محدد'}
-الرسوم: ${visa.fees ? '$' + visa.fees : 'غير محدد'}
-فترة الصلاحية: ${visa.validity ? visa.validity + ' شهر' : 'غير محدد'}
-الحالة: ${visa.status}
-${visa.notes ? `ملاحظات: ${visa.notes}` : ''}
+                const requirementsHtml = visa.requirements && visa.requirements.length > 0 
+                    ? visa.requirements.map(req => `
+                        <div class="requirement-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>${req}</span>
+                        </div>
+                    `).join('')
+                    : '<p>لا توجد متطلبات محددة</p>';
+                
+                visaDetailsContent.innerHTML = `
+                    <div class="visa-details">
+                        <div class="detail-item">
+                            <div class="detail-label">الدولة</div>
+                            <div class="detail-value">${visa.country}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">السفارة / القنصلية</div>
+                            <div class="detail-value">${visa.embassy}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">نوع التأشيرة</div>
+                            <div class="detail-value"><span class="badge badge-${getBadgeClass(visa.visaType)}">${visa.visaType}</span></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">نوع الدخول</div>
+                            <div class="detail-value">${visa.entryType || 'غير محدد'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">مدة المعالجة</div>
+                            <div class="detail-value">${visa.processingTime ? visa.processingTime + ' يوم' : 'غير محدد'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">الرسوم</div>
+                            <div class="detail-value">${visa.fees ? '$' + visa.fees : 'غير محدد'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">فترة الصلاحية</div>
+                            <div class="detail-value">${visa.validity ? visa.validity + ' يوم' : 'غير محدد'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">الحالة</div>
+                            <div class="detail-value">
+                                ${visa.status}
+                                <span class="status-indicator status-${getStatusClass(visa.status)}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>المتطلبات الأساسية</label>
+                        <div class="requirements-grid">
+                            ${requirementsHtml}
+                        </div>
+                    </div>
+                    
+                    ${visa.additionalRequirements ? `
+                    <div class="form-group">
+                        <label>متطلبات إضافية</label>
+                        <div class="detail-value">${visa.additionalRequirements}</div>
+                    </div>
+                    ` : ''}
+                    
+                    ${visa.notes ? `
+                    <div class="form-group">
+                        <label>ملاحظات إضافية</label>
+                        <div class="detail-value">${visa.notes}</div>
+                    </div>
+                    ` : ''}
                 `;
-                alert(details);
+                
+                detailsModal.style.display = 'flex';
             }
         }
         
-        // نسخ بيانات تأشيرة محددة
-        function copyVisaData(id) {
-            const visa = visaData.find(item => item.id === id);
-            if (visa) {
-                const text = `
+        // نسخ تفاصيل التأشيرة إلى الحافظة
+        function copyVisaDetailsToClipboard() {
+            if (!currentVisaDetails) return;
+            
+            const visa = currentVisaDetails;
+            const requirementsList = visa.requirements && visa.requirements.length > 0 
+                ? visa.requirements.map(req => `• ${req}`).join('\n') 
+                : 'لا توجد متطلبات محددة';
+            
+            const text = `
 بيانات تأشيرة ${visa.country}
 السفارة: ${visa.embassy}
 نوع التأشيرة: ${visa.visaType}
 نوع الدخول: ${visa.entryType || 'غير محدد'}
-المتطلبات: ${visa.requirements ? visa.requirements.join('، ') : 'لا توجد'}
+المتطلبات:
+${requirementsList}
 ${visa.additionalRequirements ? `متطلبات إضافية: ${visa.additionalRequirements}` : ''}
 مدة المعالجة: ${visa.processingTime ? visa.processingTime + ' يوم' : 'غير محدد'}
 الرسوم: ${visa.fees ? '$' + visa.fees : 'غير محدد'}
-فترة الصلاحية: ${visa.validity ? visa.validity + ' شهر' : 'غير محدد'}
+فترة الصلاحية: ${visa.validity ? visa.validity + ' يوم' : 'غير محدد'}
 الحالة: ${visa.status}
 ${visa.notes ? `ملاحظات: ${visa.notes}` : ''}
-                `;
-                
-                navigator.clipboard.writeText(text)
+            `;
+            
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    showCopyNotification();
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showAlert('فشل في نسخ البيانات إلى الحافظة', 'error');
+                });
+        }
+        
+        // مشاركة تفاصيل التأشيرة
+        function shareVisaDetails() {
+            if (!currentVisaDetails) return;
+            
+            const visa = currentVisaDetails;
+            const text = `بيانات تأشيرة ${visa.country} - ${visa.visaType}`;
+            const url = window.location.href.split('?')[0];
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `تأشيرة ${visa.country}`,
+                    text: text,
+                    url: url
+                })
+                .then(() => console.log('تمت المشاركة بنجاح'))
+                .catch((error) => console.log('خطأ في المشاركة', error));
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const shareUrl = `${url}?country=${encodeURIComponent(visa.country)}&type=${encodeURIComponent(visa.visaType)}`;
+                navigator.clipboard.writeText(shareUrl)
                     .then(() => {
-                        showCopyNotification();
+                        showAlert('تم نسخ رابط المشاركة إلى الحافظة', 'success');
                     })
                     .catch(err => {
                         console.error('Failed to copy: ', err);
-                        showAlert('فشل في نسخ البيانات إلى الحافظة', 'error');
+                        showAlert('فشل في نسخ رابط المشاركة', 'error');
                     });
             }
         }
         
-        // مشاركة بيانات تأشيرة محددة
-        function shareVisaData(id) {
-            const visa = visaData.find(item => item.id === id);
-            if (visa) {
-                const text = `بيانات تأشيرة ${visa.country} - ${visa.visaType}`;
-                const url = window.location.href.split('?')[0];
-                
-                if (navigator.share) {
-                    navigator.share({
-                        title: `تأشيرة ${visa.country}`,
-                        text: text,
-                        url: url
-                    })
-                    .then(() => console.log('تمت المشاركة بنجاح'))
-                    .catch((error) => console.log('خطأ في المشاركة', error));
-                } else {
-                    // Fallback for browsers that don't support Web Share API
-                    const shareUrl = `${url}?country=${encodeURIComponent(visa.country)}&type=${encodeURIComponent(visa.visaType)}`;
-                    navigator.clipboard.writeText(shareUrl)
-                        .then(() => {
-                            showAlert('تم نسخ رابط المشاركة إلى الحافظة', 'success');
-                        })
-                        .catch(err => {
-                            console.error('Failed to copy: ', err);
-                            showAlert('فشل في نسخ رابط المشاركة', 'error');
-                        });
-                }
-            }
+        // طباعة تفاصيل التأشيرة
+        function printVisaDetails() {
+            const printContent = visaDetailsContent.innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = `
+                <div style="padding: 20px; direction: rtl;">
+                    <h1 style="text-align: center; margin-bottom: 20px;">تفاصيل التأشيرة</h1>
+                    ${printContent}
+                </div>
+            `;
+            
+            window.print();
+            document.body.innerHTML = originalContent;
+            renderTable(); // إعادة تحميل الجدول بعد الطباعة
         }
         
         // معالجة البحث
@@ -1852,7 +1952,7 @@ ${visa.notes ? `ملاحظات: ${visa.notes}` : ''}
             document.getElementById('visaType').value = 'سياحية';
             document.getElementById('processingTime').value = '10';
             document.getElementById('fees').value = '60';
-            document.getElementById('validity').value = '3';
+            document.getElementById('validity').value = '90';
             document.getElementById('entryType').value = 'متعدد الدخول';
             document.getElementById('status').value = 'نشط';
             document.getElementById('additionalRequirements').value = 'حجز فندق مؤكد وتذكرة طيران';
@@ -1935,12 +2035,11 @@ ${visa.notes ? `ملاحظات: ${visa.notes}` : ''}
                 .sort((a, b) => b.count - a.count)
                 .slice(0, 5);
             
-            topCountries.innerHTML = sortedCountries.map(item => `
-                <div class="data-card">
-                    <div class="data-card-header">
-                        <div class="data-card-title">${item.country}</div>
-                        <span class="badge badge-tourist">${item.count} تأشيرة</span>
-                    </div>
+            const topCountriesElement = document.getElementById('topCountries');
+            topCountriesElement.innerHTML = sortedCountries.map(item => `
+                <div class="detail-item">
+                    <div class="detail-label">${item.country}</div>
+                    <div class="detail-value">${item.count} تأشيرة</div>
                 </div>
             `).join('');
             
@@ -1949,19 +2048,11 @@ ${visa.notes ? `ملاحظات: ${visa.notes}` : ''}
                 .sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt))
                 .slice(0, 5);
             
-            recentUpdates.innerHTML = sortedData.map(item => `
-                <div class="data-card">
-                    <div class="data-card-header">
-                        <div class="data-card-title">${item.country}</div>
-                        <span class="badge badge-${getBadgeClass(item.visaType)}">${item.visaType}</span>
-                    </div>
-                    <div class="data-card-content">
-                        ${item.embassy}
-                    </div>
-                    <div class="data-card-actions">
-                        <button class="btn btn-warning" onclick="editVisa('${item.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-info" onclick="viewDetails('${item.id}')"><i class="fas fa-eye"></i></button>
-                    </div>
+            const recentUpdatesElement = document.getElementById('recentUpdates');
+            recentUpdatesElement.innerHTML = sortedData.map(item => `
+                <div class="detail-item">
+                    <div class="detail-label">${item.country}</div>
+                    <div class="detail-value">${item.visaType} - ${new Date(item.updatedAt || item.createdAt).toLocaleDateString('ar-SA')}</div>
                 </div>
             `).join('');
         }
@@ -1998,73 +2089,6 @@ ${visa.notes ? `ملاحظات: ${visa.notes}` : ''}
             if (tabId === 'dashboard') {
                 updateDashboard();
             }
-        }
-        
-        // عرض نموذج المشاركة
-        function showShareModal() {
-            const currentUrl = window.location.href;
-            shareLink.value = currentUrl;
-            
-            const dataStr = JSON.stringify(visaData, null, 2);
-            embedCode.value = `<script>
-// بيانات التأشيرات
-const visaData = ${dataStr};
-
-// دالة لعرض البيانات
-function displayVisaData(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    
-    let html = '<table border="1" style="width:100%; border-collapse:collapse;">';
-    html += '<tr><th>الدولة</th><th>السفارة</th><th>نوع التأشيرة</th><th>الرسوم ($)</th><th>الحالة</th></tr>';
-    
-    visaData.forEach(item => {
-        html += '<tr>';
-        html += '<td>' + item.country + '</td>';
-        html += '<td>' + item.embassy + '</td>';
-        html += '<td>' + item.visaType + '</td>';
-        html += '<td>' + (item.fees ? '$' + item.fees : '') + '</td>';
-        html += '<td>' + item.status + '</td>';
-        html += '</tr>';
-    });
-    
-    html += '</table>';
-    container.innerHTML = html;
-}
-
-// استدعاء الدالة عند تحميل الصفحة
-window.addEventListener('DOMContentLoaded', function() {
-    displayVisaData('visaDataContainer');
-});
-<\/script>
-
-<div id="visaDataContainer"></div>`;
-            
-            shareModal.style.display = 'flex';
-        }
-        
-        // نسخ رابط المشاركة
-        function copyShareLink() {
-            navigator.clipboard.writeText(shareLink.value)
-                .then(() => {
-                    showCopyNotification();
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                    showAlert('فشل في نسخ الرابط', 'error');
-                });
-        }
-        
-        // نسخ كود التضمين
-        function copyEmbedCode() {
-            navigator.clipboard.writeText(embedCode.value)
-                .then(() => {
-                    showCopyNotification();
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                    showAlert('فشل في نسخ الكود', 'error');
-                });
         }
     </script>
 </body>
