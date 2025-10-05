@@ -17,6 +17,9 @@
             --dark: #2c3e50;
             --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, #2c3e50, #4a6491);
+            --gradient-secondary: linear-gradient(135deg, #3498db, #2c3e50);
+            --gradient-success: linear-gradient(135deg, #27ae60, #2ecc71);
         }
         
         * {
@@ -40,7 +43,7 @@
         }
         
         header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--gradient-primary);
             color: white;
             padding: 20px 0;
             border-radius: 10px;
@@ -104,6 +107,7 @@
             padding: 20px;
             margin-bottom: 20px;
             transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--secondary);
         }
         
         .card:hover {
@@ -395,6 +399,7 @@
             text-align: center;
             box-shadow: var(--card-shadow);
             transition: transform 0.3s;
+            border-top: 4px solid var(--secondary);
         }
         
         .stat-card:hover {
@@ -723,6 +728,84 @@
             color: var(--secondary);
         }
         
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .advanced-filters {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .advanced-filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-filters {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--secondary);
+            font-size: 14px;
+        }
+        
+        .filters-content {
+            display: none;
+        }
+        
+        .filters-content.active {
+            display: block;
+        }
+        
+        .range-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .range-filter {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .range-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+        
         @media (max-width: 768px) {
             .filters {
                 flex-direction: column;
@@ -767,6 +850,10 @@
     </style>
 </head>
 <body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+    
     <div class="container">
         <header>
             <div class="database-info">
@@ -791,6 +878,7 @@
                 <button class="btn btn-info" id="downloadData"><i class="fas fa-file-download"></i> تحميل ملف البيانات</button>
                 <button class="btn btn-light" id="exportJson"><i class="fas fa-file-code"></i> تصدير JSON</button>
                 <button class="btn btn-light" id="exportCsv"><i class="fas fa-file-csv"></i> تصدير CSV</button>
+                <button class="btn btn-warning" id="importData"><i class="fas fa-file-upload"></i> استيراد بيانات</button>
             </div>
             <p class="help-text">البيانات مخزنة في ملف <strong>trip_data.json</strong> في نفس مجلد الصفحة</p>
         </div>
@@ -836,14 +924,7 @@
                 <span>المتطلبات</span>
             </div>
         </div>
-        
-        <div class="tabs">
-            <div class="tab active" data-tab="data-entry"><i class="fas fa-plus-circle"></i> إضافة بيانات</div>
-            <div class="tab" data-tab="data-view"><i class="fas fa-table"></i> عرض البيانات</div>
-            <div class="tab" data-tab="dashboard"><i class="fas fa-chart-bar"></i> لوحة التحكم</div>
-            <div class="tab" data-tab="requirements"><i class="fas fa-tasks"></i> متطلبات شائعة</div>
-        </div>
-        
+
         <div class="tab-content active" id="data-entry">
             <div class="card">
                 <h2><i class="fas fa-passport"></i> إضافة بيانات تأشيرة جديدة</h2>
@@ -944,6 +1025,48 @@
                 <div class="search-container">
                     <input type="text" id="searchInput" placeholder="ابحث عن دولة أو نوع تأشيرة أو سفارة...">
                     <button class="btn" id="searchBtn"><i class="fas fa-search"></i> بحث</button>
+                </div>
+                
+                <div class="advanced-filters">
+                    <div class="advanced-filters-header">
+                        <h3>التصفية المتقدمة</h3>
+                        <button class="toggle-filters" id="toggleFilters">
+                            <i class="fas fa-sliders-h"></i> إظهار/إخفاء التصفية المتقدمة
+                        </button>
+                    </div>
+                    <div class="filters-content" id="filtersContent">
+                        <div class="range-filters">
+                            <div class="range-filter">
+                                <label for="filterFeesMin">الرسوم ($)</label>
+                                <input type="range" id="filterFeesMin" min="0" max="1000" value="0">
+                                <input type="range" id="filterFeesMax" min="0" max="1000" value="1000">
+                                <div class="range-values">
+                                    <span id="feesMinValue">0</span>
+                                    <span id="feesMaxValue">1000</span>
+                                </div>
+                            </div>
+                            
+                            <div class="range-filter">
+                                <label for="filterProcessingMin">مدة المعالجة (أيام)</label>
+                                <input type="range" id="filterProcessingMin" min="0" max="90" value="0">
+                                <input type="range" id="filterProcessingMax" min="0" max="90" value="90">
+                                <div class="range-values">
+                                    <span id="processingMinValue">0</span>
+                                    <span id="processingMaxValue">90</span>
+                                </div>
+                            </div>
+                            
+                            <div class="range-filter">
+                                <label for="filterValidityMin">فترة الصلاحية (أيام)</label>
+                                <input type="range" id="filterValidityMin" min="0" max="365" value="0">
+                                <input type="range" id="filterValidityMax" min="0" max="365" value="365">
+                                <div class="range-values">
+                                    <span id="validityMinValue">0</span>
+                                    <span id="validityMaxValue">365</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="filters">
@@ -1187,6 +1310,31 @@
         </div>
     </div>
 
+    <!-- نموذج استيراد البيانات -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-import"></i> استيراد بيانات التأشيرات</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="importFile">اختر ملف JSON لاستيراد البيانات</label>
+                <input type="file" id="importFile" accept=".json">
+            </div>
+            <div class="form-group">
+                <label for="importMethod">طريقة الاستيراد</label>
+                <select id="importMethod">
+                    <option value="merge">دمج البيانات (إضافة جديدة فقط)</option>
+                    <option value="replace">استبدال جميع البيانات</option>
+                </select>
+            </div>
+            <div class="actions">
+                <button class="btn btn-success" id="confirmImport"><i class="fas fa-file-import"></i> استيراد البيانات</button>
+                <button class="btn btn-danger" id="cancelImport"><i class="fas fa-times"></i> إلغاء</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // بيانات التطبيق
         let visaData = [];
@@ -1244,6 +1392,7 @@
         const clearAllBtn = document.getElementById('clearAllBtn');
         const editModal = document.getElementById('editModal');
         const detailsModal = document.getElementById('detailsModal');
+        const importModal = document.getElementById('importModal');
         const resetFormBtn = document.getElementById('resetForm');
         const autoFillBtn = document.getElementById('autoFillBtn');
         const successAlert = document.getElementById('successAlert');
@@ -1265,6 +1414,28 @@
         const copyVisaDetailsBtn = document.getElementById('copyVisaDetails');
         const shareVisaDetailsBtn = document.getElementById('shareVisaDetails');
         const printVisaDetailsBtn = document.getElementById('printVisaDetails');
+        const importDataBtn = document.getElementById('importData');
+        const importFile = document.getElementById('importFile');
+        const importMethod = document.getElementById('importMethod');
+        const confirmImportBtn = document.getElementById('confirmImport');
+        const cancelImportBtn = document.getElementById('cancelImport');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const toggleFiltersBtn = document.getElementById('toggleFilters');
+        const filtersContent = document.getElementById('filtersContent');
+
+        // عناصر التصفية المتقدمة
+        const filterFeesMin = document.getElementById('filterFeesMin');
+        const filterFeesMax = document.getElementById('filterFeesMax');
+        const filterProcessingMin = document.getElementById('filterProcessingMin');
+        const filterProcessingMax = document.getElementById('filterProcessingMax');
+        const filterValidityMin = document.getElementById('filterValidityMin');
+        const filterValidityMax = document.getElementById('filterValidityMax');
+        const feesMinValue = document.getElementById('feesMinValue');
+        const feesMaxValue = document.getElementById('feesMaxValue');
+        const processingMinValue = document.getElementById('processingMinValue');
+        const processingMaxValue = document.getElementById('processingMaxValue');
+        const validityMinValue = document.getElementById('validityMinValue');
+        const validityMaxValue = document.getElementById('validityMaxValue');
 
         // إحصائيات
         const totalCountriesElement = document.getElementById('totalCountries');
@@ -1275,6 +1446,7 @@
         // تهيئة التطبيق
         document.addEventListener('DOMContentLoaded', function() {
             initializeRequirements();
+            initializeAdvancedFilters();
             loadDataFromFile(); // تحميل البيانات تلقائياً عند فتح الصفحة
             
             // إضافة مستمعي الأحداث
@@ -1297,6 +1469,10 @@
             copyVisaDetailsBtn.addEventListener('click', copyVisaDetailsToClipboard);
             shareVisaDetailsBtn.addEventListener('click', shareVisaDetails);
             printVisaDetailsBtn.addEventListener('click', printVisaDetails);
+            importDataBtn.addEventListener('click', showImportModal);
+            confirmImportBtn.addEventListener('click', handleImport);
+            cancelImportBtn.addEventListener('click', () => importModal.style.display = 'none');
+            toggleFiltersBtn.addEventListener('click', toggleAdvancedFilters);
             
             // إغلاق النماذج
             document.querySelectorAll('.close').forEach(closeBtn => {
@@ -1327,6 +1503,14 @@
             
             // البحث أثناء الكتابة
             searchInput.addEventListener('input', handleSearch);
+            
+            // التصفية المتقدمة
+            filterFeesMin.addEventListener('input', updateFeesRange);
+            filterFeesMax.addEventListener('input', updateFeesRange);
+            filterProcessingMin.addEventListener('input', updateProcessingRange);
+            filterProcessingMax.addEventListener('input', updateProcessingRange);
+            filterValidityMin.addEventListener('input', updateValidityRange);
+            filterValidityMax.addEventListener('input', updateValidityRange);
         });
         
         // تهيئة متطلبات التأشيرة
@@ -1356,6 +1540,40 @@
             visaTipsContainer.innerHTML = visaTips.map(tip => `
                 <li><i class="fas fa-lightbulb"></i> ${tip}</li>
             `).join('');
+        }
+        
+        // تهيئة التصفية المتقدمة
+        function initializeAdvancedFilters() {
+            // تحديث قيم النطاقات
+            updateFeesRange();
+            updateProcessingRange();
+            updateValidityRange();
+        }
+        
+        // تحديث نطاق الرسوم
+        function updateFeesRange() {
+            feesMinValue.textContent = filterFeesMin.value;
+            feesMaxValue.textContent = filterFeesMax.value;
+            renderTable();
+        }
+        
+        // تحديث نطاق مدة المعالجة
+        function updateProcessingRange() {
+            processingMinValue.textContent = filterProcessingMin.value;
+            processingMaxValue.textContent = filterProcessingMax.value;
+            renderTable();
+        }
+        
+        // تحديث نطاق فترة الصلاحية
+        function updateValidityRange() {
+            validityMinValue.textContent = filterValidityMin.value;
+            validityMaxValue.textContent = filterValidityMax.value;
+            renderTable();
+        }
+        
+        // تبديل التصفية المتقدمة
+        function toggleAdvancedFilters() {
+            filtersContent.classList.toggle('active');
         }
         
         // معالجة إرسال النموذج
@@ -1431,6 +1649,7 @@
         
         // تحميل البيانات من ملف JSON
         function loadDataFromFile() {
+            showLoading();
             databaseStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري تحميل البيانات...';
             
             // استخدام fetch لتحميل البيانات من ملف trip_data.json في نفس المجلد
@@ -1453,6 +1672,7 @@
                     updateLastUpdateTime();
                     databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم تحميل البيانات بنجاح';
                     showAlert('تم تحميل البيانات بنجاح من trip_data.json', 'success');
+                    hideLoading();
                 })
                 .catch(error => {
                     console.error('Error loading data:', error);
@@ -1464,11 +1684,13 @@
                     updateLastUpdateTime();
                     databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في التحميل - استخدام البيانات المحلية';
                     showAlert('فشل في تحميل البيانات من trip_data.json: ' + error.message + '. استخدام البيانات المحلية.', 'error');
+                    hideLoading();
                 });
         }
         
         // حفظ البيانات إلى ملف JSON
         function saveDataToFile() {
+            showLoading();
             databaseStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري حفظ البيانات...';
             
             // في بيئة GitHub Pages، لا يمكننا حفظ البيانات مباشرة في الملف
@@ -1480,6 +1702,7 @@
             updateDashboard();
             updateLastUpdateTime();
             databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم حفظ البيانات محلياً';
+            hideLoading();
             
             // عرض تعليمات للحفظ في ملف GitHub
             showSaveInstructions();
@@ -1642,6 +1865,30 @@ ${dataStr}
             if (statusFilter) {
                 filteredData = filteredData.filter(item => item.status === statusFilter);
             }
+            
+            // التصفية حسب الرسوم
+            const feesMin = parseInt(filterFeesMin.value);
+            const feesMax = parseInt(filterFeesMax.value);
+            filteredData = filteredData.filter(item => {
+                const fees = parseFloat(item.fees) || 0;
+                return fees >= feesMin && fees <= feesMax;
+            });
+            
+            // التصفية حسب مدة المعالجة
+            const processingMin = parseInt(filterProcessingMin.value);
+            const processingMax = parseInt(filterProcessingMax.value);
+            filteredData = filteredData.filter(item => {
+                const processing = parseInt(item.processingTime) || 0;
+                return processing >= processingMin && processing <= processingMax;
+            });
+            
+            // التصفية حسب فترة الصلاحية
+            const validityMin = parseInt(filterValidityMin.value);
+            const validityMax = parseInt(filterValidityMax.value);
+            filteredData = filteredData.filter(item => {
+                const validity = parseInt(item.validity) || 0;
+                return validity >= validityMin && validity <= validityMax;
+            });
             
             // الترتيب
             const sortOption = sortBy.value;
@@ -2089,6 +2336,57 @@ ${visa.notes ? `ملاحظات: ${visa.notes}` : ''}
             if (tabId === 'dashboard') {
                 updateDashboard();
             }
+        }
+        
+        // عرض نموذج الاستيراد
+        function showImportModal() {
+            importModal.style.display = 'flex';
+        }
+        
+        // معالجة الاستيراد
+        function handleImport() {
+            const file = importFile.files[0];
+            if (!file) {
+                showAlert('يرجى اختيار ملف JSON لاستيراده', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (!Array.isArray(importedData)) {
+                        throw new Error('الملف يجب أن يحتوي على مصفوفة من البيانات');
+                    }
+                    
+                    const method = importMethod.value;
+                    if (method === 'replace') {
+                        visaData = importedData;
+                    } else {
+                        // دمج البيانات - إضافة الجديدة فقط
+                        const existingIds = new Set(visaData.map(item => item.id));
+                        const newData = importedData.filter(item => !existingIds.has(item.id));
+                        visaData = [...visaData, ...newData];
+                    }
+                    
+                    saveDataToFile();
+                    importModal.style.display = 'none';
+                    showAlert(`تم استيراد البيانات بنجاح (${method === 'replace' ? 'استبدال' : 'دمج'})`, 'success');
+                } catch (error) {
+                    showAlert('خطأ في قراءة الملف: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        // عرض مؤشر التحميل
+        function showLoading() {
+            loadingOverlay.style.display = 'flex';
+        }
+        
+        // إخفاء مؤشر التحميل
+        function hideLoading() {
+            loadingOverlay.style.display = 'none';
         }
     </script>
 </body>
