@@ -539,7 +539,6 @@
             <div class="actions">
                 <button class="btn btn-success" id="loadData"><i class="fas fa-download"></i> تحميل البيانات من trip_data.json</button>
                 <button class="btn btn-info" id="downloadData"><i class="fas fa-file-download"></i> تحميل ملف البيانات</button>
-                <button class="btn btn-warning" id="uploadData"><i class="fas fa-file-upload"></i> رفع ملف بيانات جديد</button>
             </div>
             <p class="help-text">البيانات مخزنة في ملف <strong>trip_data.json</strong> في نفس مجلد الصفحة</p>
         </div>
@@ -658,7 +657,7 @@
                     </div>
                     
                     <div class="actions">
-                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> حفظ البيانات في trip_data.json</button>
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> حفظ البيانات</button>
                         <button type="button" class="btn" id="resetForm"><i class="fas fa-broom"></i> تفريغ النموذج</button>
                         <button type="button" class="btn btn-info" id="autoFillBtn"><i class="fas fa-magic"></i> تعبئة تلقائية (تجريبية)</button>
                     </div>
@@ -863,9 +862,6 @@
         </div>
     </div>
 
-    <!-- عنصر مخفي لرفع الملف -->
-    <input type="file" id="fileInput" accept=".json" style="display: none">
-
     <script>
         // بيانات التطبيق
         let visaData = [];
@@ -918,10 +914,8 @@
         const sortBy = document.getElementById('sortBy');
         const loadDataBtn = document.getElementById('loadData');
         const downloadDataBtn = document.getElementById('downloadData');
-        const uploadDataBtn = document.getElementById('uploadData');
         const refreshDataBtn = document.getElementById('refreshData');
         const clearAllBtn = document.getElementById('clearAllBtn');
-        const fileInput = document.getElementById('fileInput');
         const editModal = document.getElementById('editModal');
         const resetFormBtn = document.getElementById('resetForm');
         const autoFillBtn = document.getElementById('autoFillBtn');
@@ -945,7 +939,7 @@
         // تهيئة التطبيق
         document.addEventListener('DOMContentLoaded', function() {
             initializeRequirements();
-            loadDataFromFile();
+            loadDataFromFile(); // تحميل البيانات تلقائياً عند فتح الصفحة
             
             // إضافة مستمعي الأحداث
             visaForm.addEventListener('submit', handleFormSubmit);
@@ -957,10 +951,8 @@
             sortBy.addEventListener('change', renderTable);
             loadDataBtn.addEventListener('click', loadDataFromFile);
             downloadDataBtn.addEventListener('click', downloadDataFile);
-            uploadDataBtn.addEventListener('click', () => fileInput.click());
             refreshDataBtn.addEventListener('click', loadDataFromFile);
             clearAllBtn.addEventListener('click', handleClearAll);
-            fileInput.addEventListener('change', handleFileUpload);
             resetFormBtn.addEventListener('click', resetForm);
             autoFillBtn.addEventListener('click', autoFillForm);
             
@@ -1050,7 +1042,7 @@
             visaData.push(newVisa);
             saveDataToFile();
             resetForm();
-            showAlert('تم إضافة بيانات التأشيرة بنجاح وحفظها في trip_data.json', 'success');
+            showAlert('تم إضافة بيانات التأشيرة بنجاح', 'success');
             
             // الانتقال إلى تبويب العرض
             switchToTab('data-view');
@@ -1087,7 +1079,7 @@
                 
                 saveDataToFile();
                 editModal.style.display = 'none';
-                showAlert('تم تحديث بيانات التأشيرة بنجاح وحفظها في trip_data.json', 'success');
+                showAlert('تم تحديث بيانات التأشيرة بنجاح', 'success');
             }
         }
         
@@ -1095,38 +1087,14 @@
         function loadDataFromFile() {
             databaseStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري تحميل البيانات...';
             
-            // في بيئة حقيقية، هنا نستخدم fetch لتحميل البيانات من ملف trip_data.json
-            // هذا مثال لمحاكاة تحميل البيانات من ملف محلي
-            
-            // محاكاة تحميل البيانات من localStorage كبديل عن الملف
-            const savedData = localStorage.getItem('trip_data');
-            if (savedData) {
-                try {
-                    visaData = JSON.parse(savedData);
-                    renderTable();
-                    updateStats();
-                    updateLastUpdateTime();
-                    databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم تحميل البيانات بنجاح';
-                    showAlert('تم تحميل البيانات بنجاح من trip_data.json', 'success');
-                } catch (error) {
-                    databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> خطأ في تحميل البيانات';
-                    showAlert('خطأ في تحميل البيانات: ' + error.message, 'error');
-                }
-            } else {
-                // لا توجد بيانات محفوظة
-                visaData = [];
-                renderTable();
-                updateStats();
-                updateLastUpdateTime();
-                databaseStatus.innerHTML = '<i class="fas fa-database"></i> لا توجد بيانات';
-                showAlert('لا توجد بيانات محفوظة. يمكنك إضافة بيانات جديدة.', 'info');
-            }
-            
-            // في التطبيق الحقيقي على الخادم، نستخدم:
-            /*
+            // استخدام fetch لتحميل البيانات من ملف trip_data.json في نفس المجلد
             fetch('trip_data.json')
                 .then(response => {
                     if (!response.ok) {
+                        // إذا الملف غير موجود، نبدأ بمصفوفة فارغة
+                        if (response.status === 404) {
+                            return Promise.resolve([]);
+                        }
                         throw new Error('فشل في تحميل البيانات من الملف');
                     }
                     return response.json();
@@ -1141,54 +1109,61 @@
                 })
                 .catch(error => {
                     console.error('Error loading data:', error);
-                    databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في التحميل';
-                    showAlert('فشل في تحميل البيانات من trip_data.json: ' + error.message, 'error');
+                    // في حالة الخطأ، نبدأ بمصفوفة فارغة
+                    visaData = [];
+                    renderTable();
+                    updateStats();
+                    updateLastUpdateTime();
+                    databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في التحميل - استخدام البيانات المحلية';
+                    showAlert('فشل في تحميل البيانات من trip_data.json: ' + error.message + '. استخدام البيانات المحلية.', 'error');
                 });
-            */
         }
         
         // حفظ البيانات إلى ملف JSON
         function saveDataToFile() {
             databaseStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> جاري حفظ البيانات...';
             
-            // في بيئة حقيقية، هنا نستخدم fetch أو form submission لحفظ البيانات في ملف trip_data.json
-            // هذا مثال لمحاكاة حفظ البيانات في ملف محلي
-            
-            // محاكاة حفظ البيانات في localStorage كبديل عن الملف
+            // في بيئة GitHub Pages، لا يمكننا حفظ البيانات مباشرة في الملف
+            // لذلك سنستخدم localStorage كبديل، ونعرض تعليمات للحفظ اليدوي
             localStorage.setItem('trip_data', JSON.stringify(visaData));
             
             renderTable();
             updateStats();
             updateLastUpdateTime();
-            databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم حفظ البيانات بنجاح';
+            databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم حفظ البيانات محلياً';
             
-            // في التطبيق الحقيقي على الخادم، نستخدم:
-            /*
-            const formData = new FormData();
-            formData.append('data', JSON.stringify(visaData, null, 2));
+            // عرض تعليمات للحفظ في ملف GitHub
+            showSaveInstructions();
+        }
+        
+        // عرض تعليمات الحفظ
+        function showSaveInstructions() {
+            const dataStr = JSON.stringify(visaData, null, 2);
             
-            fetch('save_data.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    renderTable();
-                    updateStats();
-                    updateLastUpdateTime();
-                    databaseStatus.innerHTML = '<i class="fas fa-check-circle"></i> تم حفظ البيانات بنجاح';
-                    showAlert('تم حفظ البيانات بنجاح في trip_data.json', 'success');
-                } else {
-                    throw new Error(data.message || 'فشل في حفظ البيانات');
-                }
-            })
-            .catch(error => {
-                console.error('Error saving data:', error);
-                databaseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> فشل في الحفظ';
-                showAlert('فشل في حفظ البيانات: ' + error.message, 'error');
-            });
-            */
+            const instructions = `
+لحفظ البيانات في ملف trip_data.json على GitHub، يرجى اتباع الخطوات التالية:
+
+1. انسخ البيانات التالية:
+\`\`\`json
+${dataStr}
+\`\`\`
+
+2. اذهب إلى ملف trip_data.json في مستودع GitHub الخاص بك
+3. انقر على زر "Edit" (قلم التعديل)
+4. استبدل المحتوى الحالي بالبيانات أعلاه
+5. انزل إلى أسفل الصفحة وأضف رسالة commit مثل "تحديث بيانات التأشيرات"
+6. انقر على "Commit changes"
+
+بهذه الطريقة سيتم حفظ البيانات على GitHub ويمكن للموظفين رؤيتها فوراً.
+            `;
+            
+            // يمكنك إظهار التعليمات في alert أو في modal
+            // alert(instructions);
+            
+            // أو يمكنك عرضها في console للمطورين
+            console.log(instructions);
+            
+            showAlert('تم حفظ البيانات محلياً. راجع console للتعليمات الكاملة لحفظ البيانات على GitHub.', 'success');
         }
         
         // تحميل ملف البيانات
@@ -1202,32 +1177,6 @@
             linkElement.click();
             
             showAlert('تم تحميل ملف trip_data.json بنجاح', 'success');
-        }
-        
-        // رفع ملف بيانات جديد
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const uploadedData = JSON.parse(e.target.result);
-                    if (Array.isArray(uploadedData)) {
-                        visaData = uploadedData;
-                        saveDataToFile();
-                        showAlert('تم رفع ملف البيانات بنجاح', 'success');
-                    } else {
-                        throw new Error('بيانات JSON غير صالحة');
-                    }
-                } catch (error) {
-                    showAlert('خطأ في تحميل الملف: ' + error.message, 'error');
-                }
-            };
-            reader.readAsText(file);
-            
-            // Reset file input
-            event.target.value = '';
         }
         
         // عرض الجدول
