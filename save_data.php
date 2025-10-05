@@ -1,5 +1,9 @@
 <?php
-$data = json_decode(file_get_contents('php://input'), true);
-file_put_contents('trip_data.json', json_encode($data['data'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-echo json_encode(['success' => true]);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = $_POST['data'];
+    file_put_contents('trip_data.json', $data);
+    echo json_encode(['success' => true]);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+}
 ?>
