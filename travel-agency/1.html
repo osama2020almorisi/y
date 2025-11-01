@@ -254,7 +254,7 @@
             display: none;
             position: absolute;
             background-color: white;
-            min-width: 220px;
+            min-width: 300px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             border-radius: 8px;
             z-index: 1000;
@@ -262,6 +262,7 @@
             left: 0;
             margin-top: 5px;
             overflow: hidden;
+            padding: 15px;
         }
 
         .copy-dropdown-content.show {
@@ -269,13 +270,19 @@
             animation: fadeIn 0.3s ease-in;
         }
 
+        .copy-options-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
         .copy-option {
-            color: #333;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
             cursor: pointer;
-            border-bottom: 1px solid #eee;
             transition: background-color 0.2s;
         }
 
@@ -283,17 +290,44 @@
             background-color: #f8f9fa;
         }
 
-        .copy-option:last-child {
-            border-bottom: none;
+        .copy-option input {
+            margin-left: 10px;
         }
 
-        .copy-option.all {
-            background-color: #e9ecef;
+        .copy-option label {
+            flex: 1;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .copy-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .copy-action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
             font-weight: bold;
         }
 
-        .copy-option.all:hover {
-            background-color: #dee2e6;
+        .copy-action-btn.primary {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .copy-action-btn.secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .copy-action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
 
         /* أنماط الإشعارات */
@@ -381,6 +415,11 @@
             .copy-dropdown-content {
                 left: 50%;
                 transform: translateX(-50%);
+                min-width: 280px;
+            }
+            
+            .copy-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -435,11 +474,13 @@
                         📋 نسخ المعلومات
                     </button>
                     <div class="copy-dropdown-content" id="copyDropdown">
-                        <div class="copy-option" data-type="requirements">نسخ المتطلبات</div>
-                        <div class="copy-option" data-type="prices">نسخ الأسعار</div>
-                        <div class="copy-option" data-type="documents">نسخ الوثائق المطلوبة</div>
-                        <div class="copy-option" data-type="instructions">نسخ التعليمات العامة</div>
-                        <div class="copy-option all" data-type="all">نسخ الكل</div>
+                        <div class="copy-options-list" id="copyOptionsList">
+                            <!-- سيتم تعبئة الخيارات ديناميكياً -->
+                        </div>
+                        <div class="copy-actions">
+                            <button class="copy-action-btn secondary" id="selectAllBtn">تحديد الكل</button>
+                            <button class="copy-action-btn primary" id="copySelectedBtn">نسخ المحدد</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -457,6 +498,7 @@
     <script>
         // بيانات المتطلبات
         let travelData = {};
+        let selectedSections = new Set();
 
         // تحميل البيانات من ملف JSON
         async function loadData() {
@@ -503,12 +545,18 @@
         function setupCopyFunctionality() {
             const copyBtn = document.getElementById('copyBtn');
             const copyDropdown = document.getElementById('copyDropdown');
-            const copyOptions = document.querySelectorAll('.copy-option');
+            const selectAllBtn = document.getElementById('selectAllBtn');
+            const copySelectedBtn = document.getElementById('copySelectedBtn');
             
             // إظهار/إخفاء القائمة المنبثقة
             copyBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 copyDropdown.classList.toggle('show');
+                
+                // تحديث قائمة الخيارات عند فتح القائمة
+                if (copyDropdown.classList.contains('show')) {
+                    updateCopyOptions();
+                }
             });
             
             // إغلاق القائمة عند النقر خارجها
@@ -521,240 +569,170 @@
                 e.stopPropagation();
             });
             
-            // معالجة خيارات النسخ
-            copyOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    const type = this.getAttribute('data-type');
-                    copyContent(type);
-                    copyDropdown.classList.remove('show');
+            // تحديد الكل
+            selectAllBtn.addEventListener('click', function() {
+                const checkboxes = document.querySelectorAll('.copy-option input');
+                const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+                
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = !allChecked;
+                    updateSelectedSections(checkbox);
                 });
+                
+                selectAllBtn.textContent = allChecked ? 'تحديد الكل' : 'إلغاء الكل';
+            });
+            
+            // نسخ المحدد
+            copySelectedBtn.addEventListener('click', function() {
+                if (selectedSections.size === 0) {
+                    showNotification('يرجى اختيار قسم واحد على الأقل للنسخ', 'error');
+                    return;
+                }
+                
+                copySelectedContent();
+                copyDropdown.classList.remove('show');
             });
         }
 
-        // نسخ المحتوى حسب النوع
-        function copyContent(type) {
-            let contentToCopy = '';
+        // تحديث خيارات النسخ
+        function updateCopyOptions() {
+            const copyOptionsList = document.getElementById('copyOptionsList');
+            copyOptionsList.innerHTML = '';
             
-            switch(type) {
-                case 'requirements':
-                    contentToCopy = extractRequirements();
-                    break;
-                case 'prices':
-                    contentToCopy = extractPrices();
-                    break;
-                case 'documents':
-                    contentToCopy = extractDocuments();
-                    break;
-                case 'instructions':
-                    contentToCopy = extractInstructions();
-                    break;
-                case 'all':
-                    contentToCopy = extractAll();
-                    break;
+            const sections = document.querySelectorAll('.requirements-card .section, .general-info .section');
+            
+            if (sections.length === 0) {
+                copyOptionsList.innerHTML = '<div style="text-align: center; padding: 10px; color: #666;">لا توجد أقسام للنسخ</div>';
+                return;
             }
             
-            if (contentToCopy) {
-                copyToClipboard(contentToCopy);
-                showNotification(`تم نسخ ${getTypeName(type)} بنجاح`, 'success');
+            sections.forEach((section, index) => {
+                const title = section.querySelector('h3');
+                if (title) {
+                    const optionId = `section-${index}`;
+                    const option = document.createElement('div');
+                    option.className = 'copy-option';
+                    option.innerHTML = `
+                        <input type="checkbox" id="${optionId}" data-section-index="${index}">
+                        <label for="${optionId}">${title.textContent}</label>
+                    `;
+                    
+                    const checkbox = option.querySelector('input');
+                    checkbox.addEventListener('change', function() {
+                        updateSelectedSections(this);
+                    });
+                    
+                    // تحديد إذا كان القسم محدد مسبقاً
+                    if (selectedSections.has(index)) {
+                        checkbox.checked = true;
+                    }
+                    
+                    copyOptionsList.appendChild(option);
+                }
+            });
+            
+            // تحديث حالة زر تحديد الكل
+            const checkboxes = document.querySelectorAll('.copy-option input');
+            const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(checkbox => checkbox.checked);
+            document.getElementById('selectAllBtn').textContent = allChecked ? 'إلغاء الكل' : 'تحديد الكل';
+        }
+
+        // تحديث الأقسام المحددة
+        function updateSelectedSections(checkbox) {
+            const sectionIndex = parseInt(checkbox.getAttribute('data-section-index'));
+            
+            if (checkbox.checked) {
+                selectedSections.add(sectionIndex);
+            } else {
+                selectedSections.delete(sectionIndex);
+            }
+            
+            // تحديث حالة زر تحديد الكل
+            const checkboxes = document.querySelectorAll('.copy-option input');
+            const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(cb => cb.checked);
+            document.getElementById('selectAllBtn').textContent = allChecked ? 'إلغاء الكل' : 'تحديد الكل';
+        }
+
+        // نسخ المحتوى المحدد
+        function copySelectedContent() {
+            if (selectedSections.size === 0) return;
+            
+            let content = `🌍 متطلبات السفر الدولي - الخطوط الجوية اليمنية\n\n`;
+            
+            // إضافة العنوان الرئيسي إذا كان هناك نتائج بحث
+            const resultsSection = document.getElementById('results');
+            if (resultsSection.style.display !== 'none') {
+                const mainTitle = resultsSection.querySelector('.requirements-card h2');
+                if (mainTitle) {
+                    content += `📌 ${mainTitle.textContent}\n\n`;
+                }
+            }
+            
+            // جمع الأقسام المحددة
+            const allSections = document.querySelectorAll('.requirements-card .section, .general-info .section');
+            const selectedSectionIndices = Array.from(selectedSections).sort((a, b) => a - b);
+            
+            selectedSectionIndices.forEach((index, i) => {
+                if (index < allSections.length) {
+                    const section = allSections[index];
+                    content += extractSectionContent(section);
+                    
+                    // إضافة فاصل بين الأقسام (عدا الأخير)
+                    if (i < selectedSectionIndices.length - 1) {
+                        content += `────────────────────────\n\n`;
+                    }
+                }
+            });
+            
+            if (content) {
+                copyToClipboard(content);
+                showNotification(`تم نسخ ${selectedSections.size} قسم(أقسام) بنجاح`, 'success');
             } else {
                 showNotification('لا توجد بيانات للنسخ', 'error');
             }
         }
 
-        // استخراج المتطلبات
-        function extractRequirements() {
-            const resultsSection = document.getElementById('results');
-            if (resultsSection.style.display === 'none') return '';
+        // استخراج محتوى قسم معين
+        function extractSectionContent(section) {
+            let content = '';
             
-            const requirementsCard = resultsSection.querySelector('.requirements-card');
-            let content = `🌍 متطلبات السفر الدولي - الخطوط الجوية اليمنية\n\n`;
-            
-            // استخراج العنوان الرئيسي
-            const mainTitle = requirementsCard.querySelector('h2');
-            if (mainTitle) {
-                content += `📌 ${mainTitle.textContent}\n\n`;
-            }
-            
-            // استخراج الأقسام
-            const sections = requirementsCard.querySelectorAll('.section');
-            sections.forEach(section => {
-                const title = section.querySelector('h3');
-                if (title) {
-                    content += `📋 ${title.textContent}\n`;
-                    
-                    // استخراج النقاط
-                    const listItems = section.querySelectorAll('li');
-                    if (listItems.length > 0) {
-                        listItems.forEach(item => {
+            const title = section.querySelector('h3');
+            if (title) {
+                content += `📋 ${title.textContent}\n`;
+                
+                // استخراج النقاط
+                const listItems = section.querySelectorAll('li');
+                if (listItems.length > 0) {
+                    listItems.forEach(item => {
+                        content += `   • ${item.textContent}\n`;
+                    });
+                } else {
+                    // استخراج العناصر الأخرى
+                    const items = section.querySelectorAll('.baggage-item, .weight-item, .service-item, .sub-section');
+                    items.forEach(item => {
+                        if (item.classList.contains('sub-section')) {
+                            const subTitle = item.querySelector('h4, h5');
+                            if (subTitle) {
+                                content += `   ${subTitle.textContent}:\n`;
+                            }
+                            
+                            const subListItems = item.querySelectorAll('li');
+                            if (subListItems.length > 0) {
+                                subListItems.forEach(subItem => {
+                                    content += `     • ${subItem.textContent}\n`;
+                                });
+                            } else {
+                                content += `     • ${item.textContent.trim()}\n`;
+                            }
+                        } else {
                             content += `   • ${item.textContent}\n`;
-                        });
-                    } else {
-                        // استخراج العناصر الأخرى
-                        const items = section.querySelectorAll('.baggage-item, .weight-item, .service-item');
-                        items.forEach(item => {
-                            content += `   • ${item.textContent}\n`;
-                        });
-                    }
-                    content += '\n';
+                        }
+                    });
                 }
-            });
-            
-            // استخراج الملاحظات
-            const notes = requirementsCard.querySelectorAll('.note');
-            if (notes.length > 0) {
-                content += `📝 ملاحظات هامة:\n`;
-                notes.forEach(note => {
-                    content += `   • ${note.textContent.trim()}\n`;
-                });
-            }
-            
-            return content;
-        }
-
-        // استخراج الأسعار
-        function extractPrices() {
-            const resultsSection = document.getElementById('results');
-            if (resultsSection.style.display === 'none') return '';
-            
-            const requirementsCard = resultsSection.querySelector('.requirements-card');
-            let content = `💵 أسعار السفر - الخطوط الجوية اليمنية\n\n`;
-            
-            // استخراج العنوان الرئيسي
-            const mainTitle = requirementsCard.querySelector('h2');
-            if (mainTitle) {
-                content += `📌 ${mainTitle.textContent}\n\n`;
-            }
-            
-            // استخراج أسعار الوزن الزائد
-            const weightItems = requirementsCard.querySelectorAll('.weight-item');
-            if (weightItems.length > 0) {
-                content += `💰 أسعار الوزن الزائد:\n`;
-                weightItems.forEach(item => {
-                    content += `   • ${item.textContent}\n`;
-                });
-                content += '\n';
-            }
-            
-            // استخراج أسعار الخدمات الخاصة
-            const serviceItems = requirementsCard.querySelectorAll('.service-item');
-            if (serviceItems.length > 0) {
-                content += `♿ أسعار الخدمات الخاصة:\n`;
-                serviceItems.forEach(item => {
-                    content += `   • ${item.textContent}\n`;
-                });
                 content += '\n';
             }
             
             return content;
-        }
-
-        // استخراج الوثائق المطلوبة
-        function extractDocuments() {
-            const resultsSection = document.getElementById('results');
-            if (resultsSection.style.display === 'none') return '';
-            
-            const requirementsCard = resultsSection.querySelector('.requirements-card');
-            let content = `📄 الوثائق المطلوبة - الخطوط الجوية اليمنية\n\n`;
-            
-            // استخراج العنوان الرئيسي
-            const mainTitle = requirementsCard.querySelector('h2');
-            if (mainTitle) {
-                content += `📌 ${mainTitle.textContent}\n\n`;
-            }
-            
-            // استخراج المستندات المطلوبة
-            const documentSections = requirementsCard.querySelectorAll('.section');
-            documentSections.forEach(section => {
-                const title = section.querySelector('h3');
-                if (title && (title.textContent.includes('المستندات') || title.textContent.includes('الوثائق'))) {
-                    content += `📋 ${title.textContent}\n`;
-                    
-                    const listItems = section.querySelectorAll('li');
-                    if (listItems.length > 0) {
-                        listItems.forEach(item => {
-                            content += `   • ${item.textContent}\n`;
-                        });
-                    }
-                    content += '\n';
-                }
-            });
-            
-            return content;
-        }
-
-        // استخراج التعليمات العامة
-        function extractInstructions() {
-            const generalInstructions = document.getElementById('generalInstructions');
-            if (!generalInstructions) return '';
-            
-            let content = `📜 التعليمات العامة - الخطوط الجوية اليمنية\n\n`;
-            
-            // استخراج الأقسام
-            const sections = generalInstructions.querySelectorAll('.section');
-            sections.forEach(section => {
-                const title = section.querySelector('h3');
-                if (title) {
-                    content += `📋 ${title.textContent}\n`;
-                    
-                    // استخراج النقاط
-                    const listItems = section.querySelectorAll('li');
-                    if (listItems.length > 0) {
-                        listItems.forEach(item => {
-                            content += `   • ${item.textContent}\n`;
-                        });
-                    } else {
-                        // استخراج العناصر الأخرى
-                        const items = section.querySelectorAll('.baggage-item');
-                        items.forEach(item => {
-                            content += `   • ${item.textContent}\n`;
-                        });
-                    }
-                    content += '\n';
-                }
-            });
-            
-            // استخراج الملاحظات
-            const notes = generalInstructions.querySelectorAll('.note');
-            if (notes.length > 0) {
-                content += `📝 ملاحظات هامة:\n`;
-                notes.forEach(note => {
-                    content += `   • ${note.textContent.trim()}\n`;
-                });
-            }
-            
-            return content;
-        }
-
-        // استخراج كل المحتوى
-        function extractAll() {
-            const requirements = extractRequirements();
-            const prices = extractPrices();
-            const documents = extractDocuments();
-            const instructions = extractInstructions();
-            
-            let allContent = `🌍 متطلبات السفر الدولي - الخطوط الجوية اليمنية\n\n`;
-            allContent += `══════════════════════════════════════\n\n`;
-            
-            if (requirements) {
-                allContent += requirements;
-                allContent += `══════════════════════════════════════\n\n`;
-            }
-            
-            if (prices) {
-                allContent += prices;
-                allContent += `══════════════════════════════════════\n\n`;
-            }
-            
-            if (documents) {
-                allContent += documents;
-                allContent += `══════════════════════════════════════\n\n`;
-            }
-            
-            if (instructions) {
-                allContent += instructions;
-            }
-            
-            return allContent;
         }
 
         // نسخ النص إلى الحافظة
@@ -765,18 +743,6 @@
             textarea.select();
             document.execCommand('copy');
             document.body.removeChild(textarea);
-        }
-
-        // الحصول على اسم النوع بالعربية
-        function getTypeName(type) {
-            const names = {
-                'requirements': 'المتطلبات',
-                'prices': 'الأسعار',
-                'documents': 'الوثائق المطلوبة',
-                'instructions': 'التعليمات العامة',
-                'all': 'جميع المعلومات'
-            };
-            return names[type] || type;
         }
 
         // عرض الإشعارات
@@ -899,6 +865,9 @@
             
             // إظهار إشعار نجاح البحث
             showNotification(`تم تحميل متطلبات السفر إلى ${destination} - ${city}`, 'success');
+            
+            // مسح التحديدات السابقة
+            selectedSections.clear();
         }
 
         // عرض متطلبات الوجهة المحددة
