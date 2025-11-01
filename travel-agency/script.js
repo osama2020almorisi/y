@@ -103,25 +103,33 @@ function searchRequirements() {
     }
 
     const destinationData = travelData.destinations[destination];
-    if (!destinationData) return;
+    
+    // تصحيح للتأكد من البيانات
+    console.log('بيانات الوجهة:', destinationData);
+    if (!destinationData) {
+        alert('لا توجد بيانات لهذه الوجهة');
+        return;
+    }
 
     // عرض النتائج
     document.getElementById('results').style.display = 'block';
     document.getElementById('destinationTitle').textContent = `متطلبات السفر إلى ${destination} - ${city}`;
 
     // عرض البيانات حسب الوجهة
-    displayDestinationRequirements(destinationData, city);
+    displayDestinationRequirements(destinationData, destination, city);
     
     // التمرير إلى النتائج
     document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
 }
 
 // عرض متطلبات الوجهة المحددة
-function displayDestinationRequirements(destinationData, city) {
+function displayDestinationRequirements(destinationData, destinationName, city) {
+    console.log('عرض بيانات جيبوتي:', destinationData);
+    
     let html = '';
 
-    // المتطلبات الأساسية
-    if (destinationData.requirements) {
+    // المتطلبات الأساسية - الإصلاح هنا
+    if (destinationData.requirements && Array.isArray(destinationData.requirements)) {
         html += `
             <div class="section">
                 <h3>📋 المتطلبات الأساسية</h3>
@@ -176,17 +184,20 @@ function displayDestinationRequirements(destinationData, city) {
     }
 
     // المواد المسموحة
-    if (destinationData.allowed_items && destinationData.allowed_items[city]) {
-        html += `
-            <div class="section">
-                <h3>📦 المواد المسموحة</h3>
-                ${Object.entries(destinationData.allowed_items[city]).map(([item, description]) => `
-                    <div class="baggage-item">
-                        <strong>${item.replace(/_/g, ' ')}:</strong> ${description}
-                    </div>
-                `).join('')}
-            </div>
-        `;
+    if (destinationData.allowed_items) {
+        const cityItems = destinationData.allowed_items[city];
+        if (cityItems) {
+            html += `
+                <div class="section">
+                    <h3>📦 المواد المسموحة</h3>
+                    ${Object.entries(cityItems).map(([item, description]) => `
+                        <div class="baggage-item">
+                            <strong>${item.replace(/_/g, ' ')}:</strong> ${description}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
     }
 
     // أسعار الوزن الزائد
@@ -215,8 +226,6 @@ function displayDestinationRequirements(destinationData, city) {
                                 <strong>${service.replace(/_/g, ' ')} - ${subService.replace(/_/g, ' ')}:</strong> ${subPrice}
                             </div>
                         `).join('');
-                    } else if (typeof price === 'string' && price.includes(city)) {
-                        return `<div class="service-item"><strong>${service.replace(/_/g, ' ')}:</strong> ${price[city]}</div>`;
                     } else {
                         return `<div class="service-item"><strong>${service.replace(/_/g, ' ')}:</strong> ${price}</div>`;
                     }
@@ -370,38 +379,10 @@ function displayDestinationRequirements(destinationData, city) {
     }
 
     document.getElementById('results').querySelector('.requirements-card').innerHTML = `
-        <h2 id="destinationTitle">متطلبات السفر إلى ${document.getElementById('destination').value} - ${city}</h2>
+        <h2 id="destinationTitle">متطلبات السفر إلى ${destinationName} - ${city}</h2>
         ${html}
     `;
 }
-// البحث عن المتطلبات
-function searchRequirements() {
-    const nationality = document.getElementById('nationality').value;
-    const destination = document.getElementById('destination').value;
-    const city = document.getElementById('city').value;
 
-    if (!nationality || !destination || !city) {
-        alert('يرجى اختيار جميع الخيارات');
-        return;
-    }
-
-    const destinationData = travelData.destinations[destination];
-    
-    // 🔍 إضافة تصحيح للتأكد من البيانات
-    console.log('بيانات الوجهة:', destinationData);
-    if (!destinationData) {
-        alert('لا توجد بيانات لهذه الوجهة');
-        return;
-    }
-
-    // عرض النتائج
-    document.getElementById('results').style.display = 'block';
-    
-    // عرض البيانات حسب الوجهة
-    displayDestinationRequirements(destinationData, city);
-    
-    // التمرير إلى النتائج
-    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-}
 // تحميل البيانات عند فتح الصفحة
 document.addEventListener('DOMContentLoaded', loadData);
