@@ -374,6 +374,34 @@ function displayDestinationRequirements(destinationData, city) {
         ${html}
     `;
 }
+// البحث عن المتطلبات
+function searchRequirements() {
+    const nationality = document.getElementById('nationality').value;
+    const destination = document.getElementById('destination').value;
+    const city = document.getElementById('city').value;
 
+    if (!nationality || !destination || !city) {
+        alert('يرجى اختيار جميع الخيارات');
+        return;
+    }
+
+    const destinationData = travelData.destinations[destination];
+    
+    // 🔍 إضافة تصحيح للتأكد من البيانات
+    console.log('بيانات الوجهة:', destinationData);
+    if (!destinationData) {
+        alert('لا توجد بيانات لهذه الوجهة');
+        return;
+    }
+
+    // عرض النتائج
+    document.getElementById('results').style.display = 'block';
+    
+    // عرض البيانات حسب الوجهة
+    displayDestinationRequirements(destinationData, city);
+    
+    // التمرير إلى النتائج
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
 // تحميل البيانات عند فتح الصفحة
 document.addEventListener('DOMContentLoaded', loadData);
