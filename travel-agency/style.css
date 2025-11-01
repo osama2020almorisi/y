@@ -202,3 +202,60 @@ button:hover {
         padding: 20px;
     }
 }
+/* الإضافات الجديدة للـ CSS */
+.sub-section {
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border-right: 3px solid #764ba2;
+}
+
+.sub-section h4 {
+    color: #667eea;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.sub-section h5 {
+    color: #555;
+    margin: 10px 0 5px 0;
+    font-size: 1rem;
+}
+
+.service-item {
+    padding: 10px;
+    margin: 5px 0;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    border-right: 3px solid #28a745;
+}
+
+.baggage-item.note {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+.requirements-card .section {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* تحسينات للعرض على الجوال */
+@media (max-width: 768px) {
+    .sub-section {
+        padding: 10px;
+        margin: 8px 0;
+    }
+    
+    .service-item {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
