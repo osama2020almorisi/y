@@ -35,6 +35,7 @@
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
         }
 
         header h1 {
@@ -151,6 +152,7 @@
             border-radius: 12px;
             border-right: 4px solid #667eea;
             transition: transform 0.3s;
+            position: relative;
         }
 
         .section:hover {
@@ -276,6 +278,97 @@
             color: #667eea;
         }
 
+        /* نافذة النسخ المحسنة */
+        .copy-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .copy-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .copy-modal h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.4rem;
+        }
+
+        .copy-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .copy-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .copy-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .copy-option label {
+            font-weight: 600;
+            color: #2c3e50;
+            cursor: pointer;
+            margin: 0;
+            flex: 1;
+        }
+
+        .copy-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .copy-actions button {
+            flex: 1;
+            padding: 12px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #5a6268, #4e555b);
+        }
+
         .toast {
             position: fixed;
             top: 20px;
@@ -290,11 +383,31 @@
             display: none;
             align-items: center;
             gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+
+        .toast.info {
+            background: #17a2b8;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
         }
 
         @keyframes fadeOut {
@@ -304,6 +417,56 @@
 
         .requirements-card .section {
             animation: fadeIn 0.5s ease-in;
+        }
+
+        /* تحسينات إضافية */
+        .section-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-copy-btn {
+            background: transparent;
+            color: #667eea;
+            border: 1px solid #667eea;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .section-copy-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .stats-bar {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .stat-item {
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
         }
 
         @media (max-width: 768px) {
@@ -339,6 +502,20 @@
                 left: 0;
                 margin-bottom: 20px;
                 width: 100%;
+            }
+
+            .copy-modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .copy-actions {
+                flex-direction: column;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 10px;
             }
         }
 
@@ -426,6 +603,32 @@
         </div>
     </div>
 
+    <!-- نافذة النسخ المحسنة -->
+    <div class="copy-modal" id="copyModal">
+        <div class="copy-modal-content">
+            <h3><i class="fas fa-copy"></i> اختر المحتوى المطلوب نسخه</h3>
+            
+            <div class="copy-options" id="copyOptions">
+                <!-- سيتم تعبئة الخيارات ديناميكياً -->
+            </div>
+
+            <div class="copy-actions">
+                <button id="selectAllBtn" class="btn-secondary">
+                    <i class="fas fa-check-double"></i>
+                    تحديد الكل
+                </button>
+                <button id="copySelectedBtn">
+                    <i class="fas fa-copy"></i>
+                    نسخ المحدد
+                </button>
+                <button id="closeCopyModal" class="btn-secondary">
+                    <i class="fas fa-times"></i>
+                    إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toastMessage">تم نسخ المحتوى بنجاح!</span>
@@ -434,6 +637,9 @@
     <script>
         // بيانات المتطلبات
         let travelData = {};
+        let currentDestinationData = null;
+        let currentDestinationName = '';
+        let currentCity = '';
 
         // عناصر DOM
         const elements = {
@@ -444,12 +650,17 @@
             results: document.getElementById('results'),
             generalInstructions: document.getElementById('generalInstructions'),
             copyBtn: document.getElementById('copyBtn'),
+            copyModal: document.getElementById('copyModal'),
+            copyOptions: document.getElementById('copyOptions'),
+            selectAllBtn: document.getElementById('selectAllBtn'),
+            copySelectedBtn: document.getElementById('copySelectedBtn'),
+            closeCopyModal: document.getElementById('closeCopyModal'),
             toast: document.getElementById('toast'),
             toastMessage: document.getElementById('toastMessage'),
             loading: document.getElementById('loading')
         };
 
-        // بيانات وهمية للاختبار (يمكن استبدالها بملف JSON خارجي)
+        // بيانات وهمية للاختبار
         const mockData = {
             "general_requirements": {
                 "title": "لوائح وشروط السفر",
@@ -505,32 +716,6 @@
                         "سيئون": "25 SAR",
                         "الريان": "25 SAR"
                     }
-                },
-                "الأردن": {
-                    "cities": ["عمان"],
-                    "requirements": [
-                        "المسافرين اليمنيين إلى الأردن: تعفى الفئات والحالات المذكورة أدناه من التأشيرة المسبقة",
-                        "المسافرين لغرض العلاج للذكور أقل من 15 سنة وأكثر من 50 سنة",
-                        "الزامية شهادة تطعيم شلل الأطفال للأطفال من 15 سنة فما دون",
-                        "يسمح للمسافرات من النساء اليمنيات بالسفر ولجميع الأعمار أخذ مرافقين اثنين"
-                    ],
-                    "excess_weight": {
-                        "عدن": "11.30$ = 8 JOD",
-                        "صنعاء": "11.30$ = 8 JOD"
-                    }
-                },
-                "مصر": {
-                    "cities": ["القاهرة"],
-                    "requirements": [
-                        "موافقة أمنية لجميع المسافرين والمرافقين الذين أعمارهم مابين 16-50 سنة",
-                        "جواز سفر صالح لأكثر من 6 أشهر",
-                        "يسمح للمسافرين الذين تزيد أعمارهم عن 50 سنة وأقل من 16 سنة بالدخول بدون فيزا مسبقة",
-                        "الأطفال دون سن السادسة يتوجب إحضار شهادة التحصين الصحي لمرض شلل الأطفال"
-                    ],
-                    "excess_weight": {
-                        "عدن": "5$ = 240 EGP",
-                        "سيئون": "5$ = 240 EGP"
-                    }
                 }
             },
             "general_note": "بسبب الوضع الحالي للبلد فإن الخطوط الجوية اليمنية لا تقدم ضمانات بدخول أو خروج أي مسافر لليمن أو دولة أخرى ، حيث قد يتم رفضه لأي سبب ومن أي جهة حتى وإن كان مكتمل الشروط والوثائق."
@@ -546,7 +731,6 @@
                 if (response.ok) {
                     travelData = await response.json();
                 } else {
-                    // استخدام البيانات الوهمية إذا فشل التحميل
                     travelData = mockData;
                 }
                 
@@ -554,7 +738,6 @@
                 elements.loading.style.display = 'none';
             } catch (error) {
                 console.error('Error loading data:', error);
-                // استخدام البيانات الوهمية في حالة الخطأ
                 travelData = mockData;
                 initializePage();
                 elements.loading.style.display = 'none';
@@ -581,7 +764,10 @@
             // إضافة المستمعين للأحداث
             elements.destination.addEventListener('change', updateCities);
             elements.searchBtn.addEventListener('click', searchRequirements);
-            elements.copyBtn.addEventListener('click', copyContent);
+            elements.copyBtn.addEventListener('click', showCopyModal);
+            elements.selectAllBtn.addEventListener('click', selectAllOptions);
+            elements.copySelectedBtn.addEventListener('click', copySelectedContent);
+            elements.closeCopyModal.addEventListener('click', closeCopyModal);
         }
 
         // تحديث قائمة المدن
@@ -606,6 +792,20 @@
             
             if (travelData.general_requirements) {
                 let html = `
+                    <div class="stats-bar">
+                        <div class="stat-item">
+                            <span class="stat-number">${travelData.general_requirements.instructions.length}</span>
+                            <span class="stat-label">تعليمات عامة</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">${Object.keys(travelData.destinations).length}</span>
+                            <span class="stat-label">وجهات متاحة</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">${getTotalCities()}</span>
+                            <span class="stat-label">مدن مدعومة</span>
+                        </div>
+                    </div>
                     <div class="section">
                         <h3><i class="fas fa-list-check"></i> ${travelData.general_requirements.title}</h3>
                         <ul>
@@ -641,6 +841,15 @@
             }
         }
 
+        // حساب إجمالي المدن
+        function getTotalCities() {
+            let total = 0;
+            Object.values(travelData.destinations).forEach(destination => {
+                total += destination.cities.length;
+            });
+            return total;
+        }
+
         // البحث عن المتطلبات
         function searchRequirements() {
             const nationality = elements.nationality.value;
@@ -652,16 +861,17 @@
                 return;
             }
 
-            const destinationData = travelData.destinations[destination];
+            currentDestinationData = travelData.destinations[destination];
+            currentDestinationName = destination;
+            currentCity = city;
             
-            if (!destinationData) {
+            if (!currentDestinationData) {
                 showToast('لا توجد بيانات لهذه الوجهة', 'error');
                 return;
             }
 
-            // عرض النتائج
             elements.results.style.display = 'block';
-            displayDestinationRequirements(destinationData, destination, city);
+            displayDestinationRequirements(currentDestinationData, destination, city);
             elements.results.scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -672,8 +882,13 @@
             // المتطلبات الأساسية
             if (destinationData.requirements && Array.isArray(destinationData.requirements)) {
                 html += `
-                    <div class="section">
-                        <h3><i class="fas fa-requirements"></i> المتطلبات الأساسية</h3>
+                    <div class="section" data-section="requirements">
+                        <div class="section-header">
+                            <h3><i class="fas fa-requirements"></i> المتطلبات الأساسية</h3>
+                            <button class="section-copy-btn" onclick="copySection('requirements')">
+                                <i class="fas fa-copy"></i> نسخ
+                            </button>
+                        </div>
                         <ul>
                             ${destinationData.requirements.map(req => `<li>${req}</li>`).join('')}
                         </ul>
@@ -684,8 +899,13 @@
             // أسعار الوزن الزائد
             if (destinationData.excess_weight) {
                 html += `
-                    <div class="section">
-                        <h3><i class="fas fa-weight-hanging"></i> أسعار الوزن الزائد</h3>
+                    <div class="section" data-section="prices">
+                        <div class="section-header">
+                            <h3><i class="fas fa-weight-hanging"></i> أسعار الوزن الزائد</h3>
+                            <button class="section-copy-btn" onclick="copySection('prices')">
+                                <i class="fas fa-copy"></i> نسخ
+                            </button>
+                        </div>
                         ${Object.entries(destinationData.excess_weight).map(([to, price]) => `
                             <div class="weight-item">
                                 <strong>إلى ${to}:</strong> ${price}
@@ -698,8 +918,13 @@
             // الخدمات الخاصة
             if (destinationData.special_services) {
                 html += `
-                    <div class="section">
-                        <h3><i class="fas fa-wheelchair"></i> الخدمات الخاصة</h3>
+                    <div class="section" data-section="services">
+                        <div class="section-header">
+                            <h3><i class="fas fa-wheelchair"></i> الخدمات الخاصة</h3>
+                            <button class="section-copy-btn" onclick="copySection('services')">
+                                <i class="fas fa-copy"></i> نسخ
+                            </button>
+                        </div>
                         ${Object.entries(destinationData.special_services).map(([service, price]) => {
                             if (typeof price === 'object') {
                                 return Object.entries(price).map(([subService, subPrice]) => `
@@ -720,9 +945,17 @@
 
             // الملاحظة النهائية
             html += `
-                <div class="note">
-                    <strong>ملاحظة هامة:</strong>
-                    <p>${destinationData.note || travelData.general_note}</p>
+                <div class="section" data-section="notes">
+                    <div class="section-header">
+                        <h3><i class="fas fa-exclamation-circle"></i> ملاحظات هامة</h3>
+                        <button class="section-copy-btn" onclick="copySection('notes')">
+                            <i class="fas fa-copy"></i> نسخ
+                        </button>
+                    </div>
+                    <div class="note">
+                        <strong>ملاحظة هامة:</strong>
+                        <p>${destinationData.note || travelData.general_note}</p>
+                    </div>
                 </div>
             `;
 
@@ -732,15 +965,117 @@
             `;
         }
 
-        // نسخ المحتوى
-        function copyContent() {
-            const content = elements.results.querySelector('.requirements-card').innerText;
-            navigator.clipboard.writeText(content).then(() => {
-                showToast('تم نسخ المحتوى بنجاح!', 'success');
+        // عرض نافذة النسخ
+        function showCopyModal() {
+            if (!currentDestinationData) {
+                showToast('يرجى البحث عن وجهة أولاً', 'error');
+                return;
+            }
+
+            const options = [
+                { id: 'requirements', label: 'المتطلبات الأساسية', icon: 'fas fa-requirements' },
+                { id: 'prices', label: 'أسعار الوزن الزائد', icon: 'fas fa-weight-hanging' },
+                { id: 'services', label: 'الخدمات الخاصة', icon: 'fas fa-wheelchair' },
+                { id: 'notes', label: 'الملاحظات الهامة', icon: 'fas fa-exclamation-circle' },
+                { id: 'all', label: 'جميع المحتويات', icon: 'fas fa-copy' }
+            ];
+
+            elements.copyOptions.innerHTML = options.map(option => `
+                <div class="copy-option">
+                    <input type="checkbox" id="copy-${option.id}" value="${option.id}">
+                    <label for="copy-${option.id}">
+                        <i class="${option.icon}"></i>
+                        ${option.label}
+                    </label>
+                </div>
+            `).join('');
+
+            elements.copyModal.style.display = 'block';
+        }
+
+        // إغلاق نافذة النسخ
+        function closeCopyModal() {
+            elements.copyModal.style.display = 'none';
+        }
+
+        // تحديد كل الخيارات
+        function selectAllOptions() {
+            const checkboxes = elements.copyOptions.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        }
+
+        // نسخ المحتوى المحدد
+        function copySelectedContent() {
+            const selectedOptions = Array.from(elements.copyOptions.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (selectedOptions.length === 0) {
+                showToast('يرجى اختيار محتوى للنسخ', 'error');
+                return;
+            }
+
+            let contentToCopy = `متطلبات السفر إلى ${currentDestinationName} - ${currentCity}\n\n`;
+            contentToCopy += `تاريخ الاستعلام: ${new Date().toLocaleDateString('ar-SA')}\n`;
+            contentToCopy += '='.repeat(50) + '\n\n';
+
+            if (selectedOptions.includes('all')) {
+                // نسخ كل المحتوى
+                const sections = elements.results.querySelectorAll('.section');
+                sections.forEach(section => {
+                    const title = section.querySelector('h3').textContent;
+                    const content = section.textContent.replace(/\s+/g, ' ').trim();
+                    contentToCopy += `${title}\n${content}\n\n`;
+                });
+            } else {
+                // نسخ الأقسام المحددة
+                selectedOptions.forEach(optionId => {
+                    const section = elements.results.querySelector(`[data-section="${optionId}"]`);
+                    if (section) {
+                        const title = section.querySelector('h3').textContent;
+                        const content = section.textContent.replace(/\s+/g, ' ').trim();
+                        contentToCopy += `${title}\n${content}\n\n`;
+                    }
+                });
+            }
+
+            contentToCopy += '='.repeat(50) + '\n';
+            contentToCopy += 'الخطوط الجوية اليمنية - نظام متطلبات السفر\n';
+
+            navigator.clipboard.writeText(contentToCopy).then(() => {
+                showToast(`تم نسخ ${selectedOptions.length} قسم بنجاح!`, 'success');
+                closeCopyModal();
             }).catch(err => {
                 showToast('فشل نسخ المحتوى', 'error');
                 console.error('Failed to copy: ', err);
             });
+        }
+
+        // نسخ قسم معين
+        function copySection(sectionId) {
+            const section = elements.results.querySelector(`[data-section="${sectionId}"]`);
+            if (section) {
+                const title = section.querySelector('h3').textContent;
+                let content = `${title}\n\n`;
+                
+                if (sectionId === 'prices' || sectionId === 'services') {
+                    const items = section.querySelectorAll('.weight-item, .service-item');
+                    items.forEach(item => {
+                        content += `${item.textContent.trim()}\n`;
+                    });
+                } else {
+                    content += section.textContent.replace(/\s+/g, ' ').trim();
+                }
+
+                content += `\n\nتاريخ النسخ: ${new Date().toLocaleDateString('ar-SA')}`;
+
+                navigator.clipboard.writeText(content).then(() => {
+                    showToast('تم نسخ القسم بنجاح!', 'success');
+                }).catch(err => {
+                    showToast('فشل نسخ القسم', 'error');
+                });
+            }
         }
 
         // عرض الإشعارات
@@ -748,11 +1083,11 @@
             const toast = elements.toast;
             const toastMessage = elements.toastMessage;
             
-            toast.style.background = type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8';
+            toast.className = `toast ${type}`;
             toastMessage.textContent = message;
             
             toast.style.display = 'flex';
-            toast.style.animation = 'fadeIn 0.3s ease-in';
+            toast.style.animation = 'slideIn 0.3s ease';
             
             setTimeout(() => {
                 toast.style.animation = 'fadeOut 0.3s ease-out';
@@ -761,6 +1096,13 @@
                 }, 300);
             }, 3000);
         }
+
+        // إغلاق النافذة عند النقر خارجها
+        window.addEventListener('click', (event) => {
+            if (event.target === elements.copyModal) {
+                closeCopyModal();
+            }
+        });
 
         // تحميل البيانات عند فتح الصفحة
         document.addEventListener('DOMContentLoaded', loadData);
