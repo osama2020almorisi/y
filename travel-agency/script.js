@@ -15,10 +15,11 @@ async function loadData() {
 
 // تهيئة الصفحة
 function initializePage() {
-    // تعبئة خيارات الوجهات
+    // تعبئة خيارات الوجهات من JSON
     const destinationSelect = document.getElementById('destination');
     destinationSelect.innerHTML = '<option value="">-- اختر الوجهة --</option>';
     
+    // أخذ الدول من keys الكائن destinations في JSON
     Object.keys(travelData.destinations).forEach(destination => {
         const option = document.createElement('option');
         option.value = destination;
@@ -41,6 +42,7 @@ function updateCities() {
     citySelect.innerHTML = '<option value="">-- اختر المدينة --</option>';
 
     if (destination && travelData.destinations[destination]) {
+        // أخذ المدن من الوجهة المختارة في JSON
         travelData.destinations[destination].cities.forEach(city => {
             const option = document.createElement('option');
             option.value = city;
@@ -97,15 +99,16 @@ function searchRequirements() {
     const destination = document.getElementById('destination').value;
     const city = document.getElementById('city').value;
 
-    if (!nationality || !destination || !city) {
-        alert('يرجى اختيار جميع الخيارات');
+    if (!nationality || !destination) {
+        alert('يرجى اختيار الجنسية والوجهة');
         return;
     }
 
     const destinationData = travelData.destinations[destination];
     
-    // تصحيح للتأكد من البيانات
-    console.log('بيانات الوجهة:', destinationData);
+    // إذا لم تكن هناك مدن محددة، استخدم الوجهة كمدينة
+    const selectedCity = city || destination;
+    
     if (!destinationData) {
         alert('لا توجد بيانات لهذه الوجهة');
         return;
@@ -113,10 +116,9 @@ function searchRequirements() {
 
     // عرض النتائج
     document.getElementById('results').style.display = 'block';
-    document.getElementById('destinationTitle').textContent = `متطلبات السفر إلى ${destination} - ${city}`;
 
     // عرض البيانات حسب الوجهة
-    displayDestinationRequirements(destinationData, destination, city);
+    displayDestinationRequirements(destinationData, destination, selectedCity);
     
     // التمرير إلى النتائج
     document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
@@ -124,12 +126,10 @@ function searchRequirements() {
 
 // عرض متطلبات الوجهة المحددة
 function displayDestinationRequirements(destinationData, destinationName, city) {
-    console.log('عرض بيانات جيبوتي:', destinationData);
-    
     let html = '';
 
-    // المتطلبات الأساسية - الإصلاح هنا
-    if (destinationData.requirements && Array.isArray(destinationData.requirements)) {
+    // المتطلبات الأساسية
+    if (destinationData.requirements && Array.isArray(destinationData.requirements) && destinationData.requirements.length > 0) {
         html += `
             <div class="section">
                 <h3>📋 المتطلبات الأساسية</h3>
@@ -166,27 +166,29 @@ function displayDestinationRequirements(destinationData, destinationName, city) 
         html += `
             <div class="section">
                 <h3>🔄 متطلبات الترانزيت</h3>
-                <ul>
-                    ${Array.isArray(destinationData.transit_requirements) 
-                        ? destinationData.transit_requirements.map(req => `<li>${req}</li>`).join('')
-                        : Object.entries(destinationData.transit_requirements).map(([key, requirements]) => `
-                            <div class="sub-section">
-                                <h4>${key.replace(/_/g, ' ')}:</h4>
-                                <ul>
-                                    ${requirements.map(req => `<li>${req}</li>`).join('')}
-                                </ul>
-                            </div>
-                        `).join('')
-                    }
-                </ul>
+                ${Array.isArray(destinationData.transit_requirements) 
+                    ? `<ul>${destinationData.transit_requirements.map(req => `<li>${req}</li>`).join('')}</ul>`
+                    : Object.entries(destinationData.transit_requirements).map(([key, requirements]) => `
+                        <div class="sub-section">
+                            <h4>${key.replace(/_/g, ' ')}:</h4>
+                            <ul>
+                                ${requirements.map(req => `<li>${req}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `).join('')
+                }
             </div>
         `;
     }
 
     // المواد المسموحة
     if (destinationData.allowed_items) {
-        const cityItems = destinationData.allowed_items[city];
-        if (cityItems) {
+        let cityItems = destinationData.allowed_items[city];
+        if (!cityItems && typeof destinationData.allowed_items === 'object') {
+            cityItems = destinationData.allowed_items;
+        }
+        
+        if (cityItems && Object.keys(cityItems).length > 0) {
             html += `
                 <div class="section">
                     <h3>📦 المواد المسموحة</h3>
@@ -362,24 +364,15 @@ function displayDestinationRequirements(destinationData, destinationName, city) 
     }
 
     // الملاحظة النهائية
-    if (destinationData.note) {
-        html += `
-            <div class="note">
-                <strong>ملاحظة هامة:</strong>
-                <p>${destinationData.note}</p>
-            </div>
-        `;
-    } else {
-        html += `
-            <div class="note">
-                <strong>ملاحظة هامة:</strong>
-                <p>${travelData.general_note}</p>
-            </div>
-        `;
-    }
+    html += `
+        <div class="note">
+            <strong>ملاحظة هامة:</strong>
+            <p>${destinationData.note || travelData.general_note}</p>
+        </div>
+    `;
 
     document.getElementById('results').querySelector('.requirements-card').innerHTML = `
-        <h2 id="destinationTitle">متطلبات السفر إلى ${destinationName} - ${city}</h2>
+        <h2>متطلبات السفر إلى ${destinationName}${city && city !== destinationName ? ' - ' + city : ''}</h2>
         ${html}
     `;
 }
